@@ -1,5 +1,6 @@
 package uet.ppvan.mangareader.database;
 
+import java.time.LocalDate;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import uet.ppvan.mangareader.entities.Chapter;
 import uet.ppvan.mangareader.entities.Manga;
 import uet.ppvan.mangareader.entities.enums.Status;
+import uet.ppvan.mangareader.repositories.ChapterRepository;
 import uet.ppvan.mangareader.repositories.MangaRepository;
 
 @Configuration
@@ -18,7 +21,10 @@ public class Database {
 
     @Bean
     @Autowired
-    public CommandLineRunner initDatabase(MangaRepository mangaRepository) {
+    public CommandLineRunner initDatabase(
+        MangaRepository mangaRepository,
+        ChapterRepository chapterRepository
+    ) {
         return new CommandLineRunner() {
             @Override
             public void run(String... args) throws Exception {
@@ -38,19 +44,20 @@ public class Database {
                 manga2.setDescription("Ahihi");
                 manga2.setStatus(Status.CONTINUE);
 
-                for (int i = 0; i < 10; i++) {
-                    Manga manga = new Manga();
-                    manga.setOtherName("Ten khac" + i);
-                    manga.setName("Teen Titans " + i);
-                    manga.setCover("Cover " + i);
-                    manga.setAuthor("ABC " + i);
-                    manga.setDescription("Ahihi " + i);
-                    manga.setStatus(Status.CONTINUE);
-                    mangaRepository.save(manga);
-                }
-
                 logger.info("Insert data:");
                 mangaRepository.saveAll(List.of(manga1, manga2));
+
+                var chap1 = new Chapter();
+                chap1.setName("Chapter 1");
+                chap1.setManga(manga1);
+                chap1.setUploadDate(LocalDate.now());
+
+                var chap2 = new Chapter();
+                chap2.setName("Chapter 2");
+                chap2.setManga(manga1);
+                chap2.setUploadDate(LocalDate.now());
+
+                chapterRepository.saveAll(List.of(chap1, chap2));
             }
         };
     }
