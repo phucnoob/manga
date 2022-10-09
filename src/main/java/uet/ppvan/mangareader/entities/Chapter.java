@@ -1,8 +1,10 @@
 package uet.ppvan.mangareader.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,7 +30,8 @@ public class Chapter {
     @Column(name = "upload_date")
     private LocalDate uploadDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manga_id", referencedColumnName = "id")
+    @JsonBackReference
     private Manga manga;
 }

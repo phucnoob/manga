@@ -3,7 +3,6 @@ package uet.ppvan.mangareader.controllers;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import uet.ppvan.mangareader.dto.MangaDTO;
 import uet.ppvan.mangareader.dto.ObjectResponse;
-import uet.ppvan.mangareader.entities.Manga;
+import uet.ppvan.mangareader.entities.Chapter;
 import uet.ppvan.mangareader.repositories.MangaRepository;
+import uet.ppvan.mangareader.services.MangaService;
 
 @AllArgsConstructor
 @RestController
@@ -25,10 +26,11 @@ import uet.ppvan.mangareader.repositories.MangaRepository;
 public class MangaController {
 
     private final MangaRepository mangaRepository;
+    private final MangaService mangaService;
 
     @GetMapping("/{id}")
     public ResponseEntity<ObjectResponse> getById(@PathVariable Integer id) {
-        Optional<Manga> foundedManga = mangaRepository.findById(id);
+        Optional<MangaDTO> foundedManga = mangaService.getMangaById(id);
         return foundedManga.map(manga -> ResponseEntity.ok()
             .body(new ObjectResponse(
                 "success",
@@ -44,44 +46,30 @@ public class MangaController {
 
 
     @GetMapping("/all")
-    public List<Manga> getAll(
+    public List<MangaDTO> getAll(
         @RequestParam(required = false, defaultValue = "0") Integer page,
         @RequestParam(required = false, defaultValue = "5") Integer size
     ) {
-        return mangaRepository.findAll(PageRequest.of(page, size)).getContent();
+        return mangaService.getAll(page, size);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ObjectResponse> post(@RequestBody Manga manga) {
-        Manga savedData = mangaRepository.save(manga);
-        return ResponseEntity.ok(new ObjectResponse("success", "Manga saved", savedData));
+    public ResponseEntity<ObjectResponse> post(@RequestBody MangaDTO manga) {
+        mangaService.addNewManga(manga);
+        return ResponseEntity.ok(new ObjectResponse("success", "Manga saved", manga));
     }
 
     @PutMapping("/{id}/update")
     public ResponseEntity<ObjectResponse> update(
         @PathVariable Integer id,
-        @RequestBody Manga updateManga
+        @RequestBody MangaDTO updateManga
     ) {
-        Optional<Manga> founndedManga = mangaRepository.findById(id);
-        Manga savedManga = founndedManga.map(manga -> {
-            manga.setStatus(updateManga.getStatus());
-            manga.setAuthor(updateManga.getAuthor());
-            manga.setName(updateManga.getName());
-            manga.setDescription(updateManga.getDescription());
-            manga.setCover(updateManga.getCover());
-            manga.setOtherName(updateManga.getOtherName());
-
-            return mangaRepository.save(manga);
-        }).orElseGet(() -> {
-            updateManga.setId(id);
-            return updateManga;
-        });
-
+        mangaService.updateManga(id, updateManga);
         return ResponseEntity.ok(
             new ObjectResponse(
                 "success",
                 "Update manga successfull",
-                savedManga
+                updateManga
             )
         );
     }
@@ -90,23 +78,20 @@ public class MangaController {
     public ResponseEntity<ObjectResponse> deleteById(
         @PathVariable Integer id
     ) {
-        if (mangaRepository.existsById(id)) {
-            mangaRepository.deleteById(id);
-            return ResponseEntity.ok(
-                new ObjectResponse(
-                    "success",
-                    "Manga deleted successfully",
-                    ""
-                )
-            );
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ObjectResponse(
-                    "failed",
-                    "Can not found manga with id =" + id,
-                    ""
-                )
-            );
-        }
+        mangaService.deleteManga(id);
+        return ResponseEntity.ok(
+            new ObjectResponse(
+                "success",
+                "Manga deleted successfully",
+                ""
+            )
+        );
+    }
+
+    @GetMapping("/{id}/chapters")
+    public List<Chapter> chapters(
+        @PathVariable Integer id
+    ) {
+        return mangaService.getAllChapters(id);
     }
 }
