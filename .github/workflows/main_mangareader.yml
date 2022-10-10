@@ -22,6 +22,10 @@ jobs:
           java-version: '17'
 
       - name: Build with Maven
+        env:
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
         run: mvn clean install
 
       - name: Upload artifact for deployment job
