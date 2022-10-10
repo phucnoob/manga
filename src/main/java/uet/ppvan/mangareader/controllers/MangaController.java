@@ -17,15 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 import uet.ppvan.mangareader.dto.MangaDTO;
 import uet.ppvan.mangareader.dto.ObjectResponse;
 import uet.ppvan.mangareader.entities.Chapter;
-import uet.ppvan.mangareader.repositories.MangaRepository;
 import uet.ppvan.mangareader.services.MangaService;
 
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/v1/manga")
 public class MangaController {
-
-    private final MangaRepository mangaRepository;
     private final MangaService mangaService;
 
     @GetMapping("/{id}")
@@ -33,12 +30,12 @@ public class MangaController {
         Optional<MangaDTO> foundedManga = mangaService.getMangaById(id);
         return foundedManga.map(manga -> ResponseEntity.ok()
             .body(new ObjectResponse(
-                "success",
+                ObjectResponse.SUCCESS,
                 "Query successfull",
                 manga
             ))).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
             .body(new ObjectResponse(
-                "failed",
+                ObjectResponse.FAILED,
                 "Not found manga with id = " + id,
                 ""
             )));
@@ -56,7 +53,7 @@ public class MangaController {
     @PostMapping("/add")
     public ResponseEntity<ObjectResponse> post(@RequestBody MangaDTO manga) {
         mangaService.addNewManga(manga);
-        return ResponseEntity.ok(new ObjectResponse("success", "Manga saved", manga));
+        return ResponseEntity.ok(new ObjectResponse(ObjectResponse.SUCCESS, "Manga saved", manga));
     }
 
     @PutMapping("/{id}/update")
@@ -67,7 +64,7 @@ public class MangaController {
         mangaService.updateManga(id, updateManga);
         return ResponseEntity.ok(
             new ObjectResponse(
-                "success",
+                ObjectResponse.SUCCESS,
                 "Update manga successfull",
                 updateManga
             )
@@ -81,7 +78,7 @@ public class MangaController {
         mangaService.deleteManga(id);
         return ResponseEntity.ok(
             new ObjectResponse(
-                "success",
+                ObjectResponse.SUCCESS,
                 "Manga deleted successfully",
                 ""
             )

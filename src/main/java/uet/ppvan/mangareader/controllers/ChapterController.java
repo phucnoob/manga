@@ -30,13 +30,13 @@ public class ChapterController {
         return chapterRepository.findById(id).map(
             chapter -> ResponseEntity.ok(
                 new ObjectResponse(
-                    "success",
+                    ObjectResponse.SUCCESS,
                     "Query successfull",
                     chapter
                 )
             )).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 new ObjectResponse(
-                    "failed",
+                    ObjectResponse.FAILED,
                     "Not such chapter with id = " + id,
                     ""
                 )
@@ -49,7 +49,7 @@ public class ChapterController {
 
         return ResponseEntity.ok(
             new ObjectResponse(
-                "success",
+                ObjectResponse.SUCCESS,
                 "Add new chapter success",
                 savedChapter
             )
@@ -73,7 +73,7 @@ public class ChapterController {
                 chapterRepository.save(foundedChapter);
                 return ResponseEntity.ok(
                     new ObjectResponse(
-                        "success",
+                        ObjectResponse.SUCCESS,
                         "Query successfull",
                         chapterRepository
                     )
@@ -81,7 +81,7 @@ public class ChapterController {
             }
         ).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(
             new ObjectResponse(
-                "failed",
+                ObjectResponse.FAILED,
                 "Not fould chapter with id = " + id,
                 ""
             )
@@ -95,7 +95,7 @@ public class ChapterController {
         chapterRepository.deleteById(id);
         return ResponseEntity.ok(
             new ObjectResponse(
-                "success",
+                ObjectResponse.SUCCESS,
                 "Delete chapter successfull",
                 ""
             )
