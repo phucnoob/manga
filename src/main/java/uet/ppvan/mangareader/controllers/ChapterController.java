@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import uet.ppvan.mangareader.dto.ObjectResponse;
 import uet.ppvan.mangareader.entities.Chapter;
 import uet.ppvan.mangareader.repositories.ChapterRepository;
-import uet.ppvan.mangareader.repositories.MangaRepository;
 
 @RestController
 @RequestMapping("api/v1/manga/*/chapter/")

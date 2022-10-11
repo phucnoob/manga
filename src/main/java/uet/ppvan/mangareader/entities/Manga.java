@@ -31,10 +31,19 @@ public class Manga {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(nullable = false, length = 127)
     private String name;
+
+    @Column(nullable = false, unique = true)
     private String cover;
+
+    @Column(nullable = false)
     private String description;
-    private String author;
+
+    @Column(nullable = false)
+    private String author = "";
+    private String genre = "";
     @Column(name = "other_name")
     private String otherName;
 

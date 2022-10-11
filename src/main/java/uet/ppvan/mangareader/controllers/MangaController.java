@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import uet.ppvan.mangareader.dto.MangaDTO;
 import uet.ppvan.mangareader.dto.ObjectResponse;
 import uet.ppvan.mangareader.entities.Chapter;
+import uet.ppvan.mangareader.exceptions.NoSuchElementFound;
 import uet.ppvan.mangareader.services.MangaService;
 
 @AllArgsConstructor
@@ -27,18 +28,13 @@ public class MangaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ObjectResponse> getById(@PathVariable Integer id) {
-        Optional<MangaDTO> foundedManga = mangaService.getMangaById(id);
-        return foundedManga.map(manga -> ResponseEntity.ok()
+        MangaDTO foundedManga = mangaService.getMangaById(id);
+        return ResponseEntity.ok()
             .body(new ObjectResponse(
                 ObjectResponse.SUCCESS,
                 "Query successfull",
-                manga
-            ))).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
-            .body(new ObjectResponse(
-                ObjectResponse.FAILED,
-                "Not found manga with id = " + id,
-                ""
-            )));
+                foundedManga)
+            );
     }
 
 

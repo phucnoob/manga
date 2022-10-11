@@ -15,6 +15,8 @@ public class ChapterService {
     private final ChapterRepository chapterRepository;
     private final MangaRepository mangaRepository;
 
+    private final MangaService mangaService;
+
     public void addNewChapter(ChapterDTO requestData, Integer mangaId) {
         Chapter chapter = mangaRepository.findById(mangaId).map(
             manga -> ChapterService.toChapter(requestData, manga)

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import uet.ppvan.mangareader.dto.MangaDTO;
 import uet.ppvan.mangareader.entities.Chapter;
 import uet.ppvan.mangareader.entities.Manga;
+import uet.ppvan.mangareader.exceptions.NoSuchElementFound;
 import uet.ppvan.mangareader.repositories.MangaRepository;
 
 @Service
@@ -41,13 +42,20 @@ public class MangaService {
     }
 
 
-    public Optional<MangaDTO> getMangaById(Integer id) {
+    public MangaDTO getMangaById(Integer id) {
         return mangaRepository.findById(id)
-            .map(MangaService::toDTO);
+            .map(MangaService::toDTO)
+            .orElseThrow(() -> new NoSuchElementFound(
+                String.format("Manga with id = %s not found.", id)
+            ));
     }
 
     public List<Chapter> getAllChapters(Integer id) {
-        return mangaRepository.getReferenceById(id).getChapters();
+        return mangaRepository.findById(id)
+            .map(Manga::getChapters)
+            .orElseThrow(() -> new NoSuchElementFound(
+                String.format("Manga with id = %s not found.", id)
+            ));
     }
 
     private static MangaDTO toDTO(Manga manga) {
