@@ -1,47 +1,55 @@
 package uet.ppvan.mangareader.exceptions.advice;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.lang.NonNullApi;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import uet.ppvan.mangareader.dto.ObjectResponse;
-import uet.ppvan.mangareader.exceptions.NoSuchElementFound;
-import uet.ppvan.mangareader.exceptions.ServiceException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.http.ResponseEntity;
+import uet.ppvan.mangareader.exceptions.NoSuchElementFound;
+import uet.ppvan.mangareader.exceptions.BaseException;
 
 @RestControllerAdvice
 public class ResponseAdvice extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler({NoSuchElementFound.class})
-    public ResponseEntity<Object> handleException(
-        ServiceException exception,
-        WebRequest request,
+    @ExceptionHandler(NoSuchElementFound.class)
+    public ResponseEntity<Object> handleNotFoundException(
+        BaseException exception,
         HttpServletRequest httpRequest
     ) {
-        System.out.println("Hi");
-        var response = new ExceptionResponse(
+        logger.info(exception.getMessage());
+        var response = new ErrorResponse(
             exception.getStatus(),
             exception.getStatus().value(),
             exception.getMessage(),
+            LocalDateTime.now(ZoneOffset.UTC),
             httpRequest.getRequestURI()
         );
-        return new ResponseEntity<>(response, new HttpHeaders(), response.status());
+        return buildResponseFromException(response);
     }
 
-    @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(
-        HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status,
-        WebRequest request) {
-        String error = "JSON invalid";
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(BaseException.class)
+    protected ResponseEntity<Object> handleCustomAPIException(BaseException ex,
+        HttpHeaders headers, HttpStatus status, HttpServletRequest request) {
+        logger.info(ex.getMessage());
+        String message = ex.getMessage();
+        var response = new ErrorResponse(
+            status,
+            status.value(),
+            message,
+            LocalDateTime.now(ZoneOffset.UTC),
+            request.getRequestURI()
+        );
+
+        return new ResponseEntity<>(response, headers, status);
     }
 
-    private ResponseEntity<Object> buildResponseFromException(ExceptionResponse response) {
+    private ResponseEntity<Object> buildResponseFromException(ErrorResponse response) {
         return new ResponseEntity<>(response, response.status());
     }
 }

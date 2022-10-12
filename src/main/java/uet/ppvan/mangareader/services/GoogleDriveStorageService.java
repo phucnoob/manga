@@ -1,14 +1,21 @@
 package uet.ppvan.mangareader.services;
 
 import com.google.api.client.http.FileContent;
+import com.google.api.client.http.InputStreamContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+import io.github.cdimascio.dotenv.Dotenv;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,20 +28,54 @@ public class GoogleDriveStorageService implements IStorageService {
 
     @Override
     public String storeFile(MultipartFile file) throws Exception {
+        try {
+            if (validateUploadFile(file)) {
+                File metaData = new File();
+                metaData.setParents(Collections.singletonList(driveFolderID));
+                metaData.setName(UUID.randomUUID().toString());
+                metaData.setMimeType(file.getContentType());
 
-        file.getInputStream();
+                File uploadedFile = googleDrive.files()
+                    .create(metaData, new InputStreamContent(
+                        file.getContentType(),
+                        new ByteArrayInputStream(file.getBytes())
+                ))
+                    .setFields("id")
+                    .execute();
+
+                return uploadedFile.getId();
+            } else {
+                System.out.println("Error");
+            }
+
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+        }
+
         return null;
     }
 
-    @Override
-    public Stream<String> loadAll() throws Exception {
-        return getAllGoogleDriveFiles().stream()
-            .map(File::getId);
+    private boolean validateUploadFile(MultipartFile file) {
+        if (file == null || file.isEmpty()) return false;
+
+        return true;
     }
 
     @Override
-    public byte[] readFileContent(String filename) throws IOException {
-        return new byte[0];
+    public void deleteFile(String imageURI) throws Exception {
+        googleDrive.files().delete(imageURI).execute();
+    }
+
+
+
+    @Override
+    public byte[] readFileContent(String imageURI) throws IOException {
+
+        if (imageURI == null) return null;
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        googleDrive.files().get(imageURI).executeMediaAndDownloadTo(outputStream);
+
+        return outputStream.toByteArray();
     }
 
     private List<File> getAllGoogleDriveFiles() throws IOException {

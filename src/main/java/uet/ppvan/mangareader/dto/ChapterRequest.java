@@ -2,7 +2,7 @@ package uet.ppvan.mangareader.dto;
 
 import java.time.LocalDate;
 
-public record ChapterDTO(
+public record ChapterRequest(
     String name,
     LocalDate uploadDate)
 { }

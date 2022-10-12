@@ -6,7 +6,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface IStorageService {
     String storeFile(MultipartFile file) throws Exception;
-    Stream<String> loadAll() throws Exception;
 
-    byte[] readFileContent(String filename) throws IOException;
+    void deleteFile(String imageURI) throws Exception;
+
+    byte[] readFileContent(String imageURI) throws IOException;
 }

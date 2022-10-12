@@ -1,11 +1,10 @@
 package uet.ppvan.mangareader.services;
 
 import java.util.List;
-import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import uet.ppvan.mangareader.dto.MangaDTO;
+import uet.ppvan.mangareader.dto.MangaRequest;
 import uet.ppvan.mangareader.entities.Chapter;
 import uet.ppvan.mangareader.entities.Manga;
 import uet.ppvan.mangareader.exceptions.NoSuchElementFound;
@@ -16,11 +15,11 @@ import uet.ppvan.mangareader.repositories.MangaRepository;
 public class MangaService {
     private final MangaRepository mangaRepository;
 
-    public void addNewManga(MangaDTO requestData) {
+    public void addNewManga(MangaRequest requestData) {
         mangaRepository.save(MangaService.toManga(requestData));
     }
 
-    public void updateManga(Integer id, MangaDTO requestData) {
+    public void updateManga(Integer id, MangaRequest requestData) {
         Manga manga = MangaService.toManga(requestData);
 
         if (mangaRepository.existsById(id)) {
@@ -36,13 +35,13 @@ public class MangaService {
         mangaRepository.deleteById(id);
     }
 
-    public List<MangaDTO> getAll(int page, int size) {
+    public List<MangaRequest> getAll(int page, int size) {
        return mangaRepository.findAll(PageRequest.of(page, size))
            .map(MangaService::toDTO).getContent();
     }
 
 
-    public MangaDTO getMangaById(Integer id) {
+    public MangaRequest getMangaById(Integer id) {
         return mangaRepository.findById(id)
             .map(MangaService::toDTO)
             .orElseThrow(() -> new NoSuchElementFound(
@@ -58,8 +57,8 @@ public class MangaService {
             ));
     }
 
-    private static MangaDTO toDTO(Manga manga) {
-        return new MangaDTO(
+    private static MangaRequest toDTO(Manga manga) {
+        return new MangaRequest(
             manga.getName(),
             manga.getCover(),
             manga.getDescription(),
@@ -69,14 +68,14 @@ public class MangaService {
         );
     }
 
-    private static Manga toManga(MangaDTO mangaDTO) {
+    private static Manga toManga(MangaRequest mangaRequest) {
         Manga manga = new Manga();
-        manga.setName(mangaDTO.name());
-        manga.setAuthor(mangaDTO.author());
-        manga.setDescription(mangaDTO.description());
-        manga.setCover(mangaDTO.cover());
-        manga.setStatus(mangaDTO.status());
-        manga.setOtherName(mangaDTO.otherName());
+        manga.setName(mangaRequest.name());
+        manga.setAuthor(mangaRequest.author());
+        manga.setDescription(mangaRequest.description());
+        manga.setCover(mangaRequest.cover());
+        manga.setStatus(mangaRequest.status());
+        manga.setOtherName(mangaRequest.otherName());
 
         return manga;
     }
