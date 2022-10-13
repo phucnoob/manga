@@ -2,9 +2,11 @@ package uet.ppvan.mangareader.controllers;
 
 import java.io.IOException;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +23,7 @@ import uet.ppvan.mangareader.services.ImageService;
 @RestController
 @AllArgsConstructor
 @RequestMapping(path = "/api/v1/image")
-public class ImageStorageController {
+public class ImageController {
 
     private final GoogleDriveStorageService driveStorageService;
     private final ImageService imageService;
@@ -32,6 +34,8 @@ public class ImageStorageController {
         @RequestParam(name = "file") MultipartFile file
     ) {
         try {
+
+
             String uri = driveStorageService.storeFile(file);
             String alt = file.getOriginalFilename();
             var imageRequest = new ImageRequest(uri, alt);
@@ -61,15 +65,40 @@ public class ImageStorageController {
     }
 
     @GetMapping(
-        value = "/{filename}",
+        value = "view/{filename}",
         produces = {  MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE }
     )
     @ResponseBody
     public byte[] viewImage(@PathVariable String filename) {
-        try {
-            return driveStorageService.readFileContent(filename);
-        } catch (IOException e) {
-            throw new RuntimeException("Not found");
-        }
+        return driveStorageService.readFileContent(filename);
+    }
+
+    @GetMapping(
+        value = "/preview/{filename}"
+    )
+    public ResponseEntity<Object> previewImage(
+        @PathVariable String filename
+    ) {
+        var uri = driveStorageService.getFileDownloadLink(filename);
+        var headers = new HttpHeaders();
+        headers.setLocation(uri);
+
+        return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<ObjectResponse> deleteImage(
+        @RequestParam(name = "image_id") String imageID
+    ) {
+        imageService.deleteImage(imageID);
+        driveStorageService.deleteFile(imageID);
+
+        return ResponseEntity.ok(
+            new ObjectResponse(
+                ObjectResponse.SUCCESS,
+                "Delete image successfully.",
+                ""
+            )
+        );
     }
 }

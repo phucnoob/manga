@@ -39,8 +39,8 @@ public class ResponseAdvice extends ResponseEntityExceptionHandler {
         logger.info(ex.getMessage());
         String message = ex.getMessage();
         var response = new ErrorResponse(
-            status,
-            status.value(),
+            ex.getStatus(),
+            ex.getStatus().value(),
             message,
             LocalDateTime.now(ZoneOffset.UTC),
             request.getRequestURI()

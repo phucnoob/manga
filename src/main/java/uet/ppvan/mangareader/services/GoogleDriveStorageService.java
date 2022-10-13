@@ -5,19 +5,19 @@ import com.google.api.client.http.InputStreamContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
-import io.github.cdimascio.dotenv.Dotenv;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import uet.ppvan.mangareader.exceptions.ImageNotFound;
+import uet.ppvan.mangareader.exceptions.NoSuchElementFound;
+import uet.ppvan.mangareader.exceptions.UploadFileInterupt;
 
 @Service
 @AllArgsConstructor
@@ -27,32 +27,25 @@ public class GoogleDriveStorageService implements IStorageService {
     private final String driveFolderID;
 
     @Override
-    public String storeFile(MultipartFile file) throws Exception {
+    public String storeFile(MultipartFile file) {
         try {
-            if (validateUploadFile(file)) {
-                File metaData = new File();
-                metaData.setParents(Collections.singletonList(driveFolderID));
-                metaData.setName(UUID.randomUUID().toString());
-                metaData.setMimeType(file.getContentType());
+            File metaData = new File();
+            metaData.setParents(Collections.singletonList(driveFolderID));
+            metaData.setName(UUID.randomUUID().toString());
+            metaData.setMimeType(file.getContentType());
 
-                File uploadedFile = googleDrive.files()
-                    .create(metaData, new InputStreamContent(
-                        file.getContentType(),
-                        new ByteArrayInputStream(file.getBytes())
+            File uploadedFile = googleDrive.files()
+                .create(metaData, new InputStreamContent(
+                    file.getContentType(),
+                    new ByteArrayInputStream(file.getBytes())
                 ))
-                    .setFields("id")
-                    .execute();
-
-                return uploadedFile.getId();
-            } else {
-                System.out.println("Error");
-            }
-
-        } catch (Exception exception) {
-            System.out.println(exception.getMessage());
+                .setFields("id")
+                .execute();
+            return uploadedFile.getId();
+        } catch (IOException ex) {
+            // TODO log details.
+            throw UploadFileInterupt.withMessage("Image upload interrupted.");
         }
-
-        return null;
     }
 
     private boolean validateUploadFile(MultipartFile file) {
@@ -62,20 +55,38 @@ public class GoogleDriveStorageService implements IStorageService {
     }
 
     @Override
-    public void deleteFile(String imageURI) throws Exception {
-        googleDrive.files().delete(imageURI).execute();
+    public void deleteFile(String imageURI) {
+        try {
+            googleDrive.files().delete(imageURI).execute();
+        } catch (IOException e) {
+            throw ImageNotFound.withUri(imageURI);
+        }
     }
 
 
 
     @Override
-    public byte[] readFileContent(String imageURI) throws IOException {
+    public byte[] readFileContent(String imageURI) {
 
-        if (imageURI == null) return null;
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        googleDrive.files().get(imageURI).executeMediaAndDownloadTo(outputStream);
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            googleDrive.files().get(imageURI).executeMediaAndDownloadTo(outputStream);
 
-        return outputStream.toByteArray();
+            return outputStream.toByteArray();
+        } catch (IOException exception) {
+            throw ImageNotFound.withUri(imageURI);
+        }
+    }
+
+    @Override
+    public URI getFileDownloadLink(String imageURI) {
+        try {
+            File fileInfo = googleDrive.files().get(imageURI)
+                .setFields("id,webContentLink").execute();
+            return URI.create(fileInfo.getWebContentLink());
+        } catch (IOException exception) {
+            throw ImageNotFound.withUri(imageURI);
+        }
     }
 
     private List<File> getAllGoogleDriveFiles() throws IOException {
