@@ -3,10 +3,9 @@ package uet.ppvan.mangareader.services;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import uet.ppvan.mangareader.dto.ImageRequest;
-import uet.ppvan.mangareader.entities.Image;
+import uet.ppvan.mangareader.entities.ChapterImage;
 import uet.ppvan.mangareader.exceptions.ChapterNotFound;
 import uet.ppvan.mangareader.exceptions.ImageNotFound;
-import uet.ppvan.mangareader.exceptions.NoSuchElementFound;
 import uet.ppvan.mangareader.repositories.ChapterRepository;
 import uet.ppvan.mangareader.repositories.ImageRepository;
 
@@ -17,10 +16,10 @@ public class ImageService {
     private final ImageRepository imageRepository;
     private final ChapterRepository chapterRepository;
 
-    public void saveImage(ImageRequest requestData, Integer id) {
+    public void saveImage(ImageRequest requestData, Integer chapterId) {
         var image = ImageService.toImage(requestData);
-        var chapter = chapterRepository.findById(id)
-            .orElseThrow(() -> ChapterNotFound.withId(id));
+        var chapter = chapterRepository.findById(chapterId)
+            .orElseThrow(() -> ChapterNotFound.withId(chapterId));
         image.setChapter(chapter);
         imageRepository.save(image);
     }
@@ -33,15 +32,15 @@ public class ImageService {
         imageRepository.deleteImageByUri(imageID);
     }
 
-    public static ImageRequest toImageDTO(Image image) {
+    public static ImageRequest toImageDTO(ChapterImage chapterImage) {
         return new ImageRequest(
-            image.getUri(),
-            image.getAlt()
+            chapterImage.getUri(),
+            chapterImage.getAlt()
         );
     }
 
-    public static Image toImage(ImageRequest imageRequest) {
-        return new Image(
+    public static ChapterImage toImage(ImageRequest imageRequest) {
+        return new ChapterImage(
             imageRequest.uri(),
             imageRequest.alt()
         );

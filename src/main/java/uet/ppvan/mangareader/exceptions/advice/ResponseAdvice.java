@@ -3,16 +3,14 @@ package uet.ppvan.mangareader.exceptions.advice;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import javax.servlet.http.HttpServletRequest;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.ServletWebRequest;
-import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import org.springframework.http.ResponseEntity;
-import uet.ppvan.mangareader.exceptions.NoSuchElementFound;
 import uet.ppvan.mangareader.exceptions.BaseException;
+import uet.ppvan.mangareader.exceptions.InvalidUploadFile;
+import uet.ppvan.mangareader.exceptions.NoSuchElementFound;
 
 @RestControllerAdvice
 public class ResponseAdvice extends ResponseEntityExceptionHandler {
@@ -23,19 +21,24 @@ public class ResponseAdvice extends ResponseEntityExceptionHandler {
         HttpServletRequest httpRequest
     ) {
         logger.info(exception.getMessage());
-        var response = new ErrorResponse(
-            exception.getStatus(),
-            exception.getStatus().value(),
-            exception.getMessage(),
-            LocalDateTime.now(ZoneOffset.UTC),
-            httpRequest.getRequestURI()
-        );
-        return buildResponseFromException(response);
+        return buildResponse(exception, httpRequest);
     }
 
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<Object> handleMaxSizeExceed(
+        MaxUploadSizeExceededException ex,
+        HttpServletRequest request
+    ) {
+        String message = "Filesize can't exceed 5MB";
+        logger.info(ex.getMessage());
+
+        return buildResponse(new InvalidUploadFile(message), request);
+    }
     @ExceptionHandler(BaseException.class)
-    protected ResponseEntity<Object> handleCustomAPIException(BaseException ex,
-        HttpHeaders headers, HttpStatus status, HttpServletRequest request) {
+    public ResponseEntity<Object> handleCustomAPIException(
+        BaseException ex,
+        HttpServletRequest request
+    ) {
         logger.info(ex.getMessage());
         String message = ex.getMessage();
         var response = new ErrorResponse(
@@ -46,10 +49,19 @@ public class ResponseAdvice extends ResponseEntityExceptionHandler {
             request.getRequestURI()
         );
 
-        return new ResponseEntity<>(response, headers, status);
+        return new ResponseEntity<>(response, ex.getStatus());
     }
 
-    private ResponseEntity<Object> buildResponseFromException(ErrorResponse response) {
+    private ResponseEntity<Object> buildResponse(BaseException ex, HttpServletRequest request) {
+
+        var response = new ErrorResponse(
+            ex.getStatus(),
+            ex.getStatus().value(),
+            ex.getMessage(),
+            LocalDateTime.now(ZoneOffset.UTC),
+            request.getRequestURI()
+        );
+
         return new ResponseEntity<>(response, response.status());
     }
 }

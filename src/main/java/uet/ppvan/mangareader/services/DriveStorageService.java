@@ -13,22 +13,27 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import uet.ppvan.mangareader.exceptions.ImageNotFound;
-import uet.ppvan.mangareader.exceptions.NoSuchElementFound;
+import uet.ppvan.mangareader.exceptions.InvalidUploadFile;
 import uet.ppvan.mangareader.exceptions.UploadFileInterupt;
 
 @Service
 @AllArgsConstructor
-public class GoogleDriveStorageService implements IStorageService {
+public class DriveStorageService implements IStorageService {
 
     private final Drive googleDrive;
     private final String driveFolderID;
 
+    private static final Logger logger = LoggerFactory.getLogger(DriveStorageService.class);
+
     @Override
     public String storeFile(MultipartFile file) {
         try {
+            validateUploadFile(file);
             File metaData = new File();
             metaData.setParents(Collections.singletonList(driveFolderID));
             metaData.setName(UUID.randomUUID().toString());
@@ -43,15 +48,24 @@ public class GoogleDriveStorageService implements IStorageService {
                 .execute();
             return uploadedFile.getId();
         } catch (IOException ex) {
-            // TODO log details.
+            logger.debug(ex.getMessage());
             throw UploadFileInterupt.withMessage("Image upload interrupted.");
         }
     }
 
-    private boolean validateUploadFile(MultipartFile file) {
-        if (file == null || file.isEmpty()) return false;
+    private void validateUploadFile(MultipartFile file) {
 
-        return true;
+        if (file.getContentType() == null) {
+            throw new InvalidUploadFile("Unknown filetype");
+        }
+
+        if (file.isEmpty()) {
+            throw new InvalidUploadFile("File can't be empty.");
+        }
+
+        if (!file.getContentType().startsWith("image/")) {
+            throw new InvalidUploadFile("Not an image file.");
+        }
     }
 
     @Override

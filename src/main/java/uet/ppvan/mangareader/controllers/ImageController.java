@@ -1,6 +1,7 @@
 package uet.ppvan.mangareader.controllers;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import uet.ppvan.mangareader.dto.ImageRequest;
 import uet.ppvan.mangareader.dto.ObjectResponse;
-import uet.ppvan.mangareader.services.GoogleDriveStorageService;
+import uet.ppvan.mangareader.services.DriveStorageService;
 import uet.ppvan.mangareader.services.ImageService;
 
 @RestController
@@ -25,43 +26,31 @@ import uet.ppvan.mangareader.services.ImageService;
 @RequestMapping(path = "/api/v1/image")
 public class ImageController {
 
-    private final GoogleDriveStorageService driveStorageService;
+    private final DriveStorageService driveStorageService;
     private final ImageService imageService;
 
     @PostMapping("/upload")
     public ResponseEntity<ObjectResponse> uploadImage(
-        @RequestParam(name = "chapter_id") Integer id,
-        @RequestParam(name = "file") MultipartFile file
+        @RequestParam(name = "chapter_id") Integer chapterId,
+        @RequestParam(name = "files") MultipartFile[] files
     ) {
-        try {
+        List<ImageRequest> savedImages = new ArrayList<>(files.length);
 
-
+        for (var file : files) {
             String uri = driveStorageService.storeFile(file);
             String alt = file.getOriginalFilename();
-            var imageRequest = new ImageRequest(uri, alt);
-            imageService.saveImage(imageRequest, id);
-
-            return ResponseEntity.status(HttpStatus.OK).body(
-                new ObjectResponse(
-                    ObjectResponse.SUCCESS,
-                    "Image saved successfully.",
-                    imageRequest
-                )
-            );
-
-        } catch (Exception exception) {
-            System.out.println(exception.getMessage());
-            exception.printStackTrace();
-
-            return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(
-                new ObjectResponse(
-                    ObjectResponse.FAILED,
-                    exception.getMessage(),
-                    ""
-                )
-            );
+            var request = new ImageRequest(uri, alt);
+            imageService.saveImage(request, chapterId);
+            savedImages.add(request);
         }
 
+        return ResponseEntity.status(HttpStatus.OK).body(
+            new ObjectResponse(
+                ObjectResponse.SUCCESS,
+                "Images saved successfully.",
+                savedImages
+            )
+        );
     }
 
     @GetMapping(
