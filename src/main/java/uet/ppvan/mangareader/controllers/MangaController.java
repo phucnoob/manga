@@ -1,9 +1,7 @@
 package uet.ppvan.mangareader.controllers;
 
 import java.util.List;
-import java.util.Optional;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,10 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import uet.ppvan.mangareader.dto.MangaDTO;
+import uet.ppvan.mangareader.dto.MangaRequest;
 import uet.ppvan.mangareader.dto.ObjectResponse;
 import uet.ppvan.mangareader.entities.Chapter;
-import uet.ppvan.mangareader.exceptions.NoSuchElementFound;
 import uet.ppvan.mangareader.services.MangaService;
 
 @AllArgsConstructor
@@ -28,7 +25,7 @@ public class MangaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ObjectResponse> getById(@PathVariable Integer id) {
-        MangaDTO foundedManga = mangaService.getMangaById(id);
+        MangaRequest foundedManga = mangaService.getMangaById(id);
         return ResponseEntity.ok()
             .body(new ObjectResponse(
                 ObjectResponse.SUCCESS,
@@ -39,7 +36,7 @@ public class MangaController {
 
 
     @GetMapping("/all")
-    public List<MangaDTO> getAll(
+    public List<MangaRequest> getAll(
         @RequestParam(required = false, defaultValue = "0") Integer page,
         @RequestParam(required = false, defaultValue = "5") Integer size
     ) {
@@ -47,7 +44,7 @@ public class MangaController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ObjectResponse> post(@RequestBody MangaDTO manga) {
+    public ResponseEntity<ObjectResponse> post(@RequestBody MangaRequest manga) {
         mangaService.addNewManga(manga);
         return ResponseEntity.ok(new ObjectResponse(ObjectResponse.SUCCESS, "Manga saved", manga));
     }
@@ -55,7 +52,7 @@ public class MangaController {
     @PutMapping("/{id}/update")
     public ResponseEntity<ObjectResponse> update(
         @PathVariable Integer id,
-        @RequestBody MangaDTO updateManga
+        @RequestBody MangaRequest updateManga
     ) {
         mangaService.updateManga(id, updateManga);
         return ResponseEntity.ok(

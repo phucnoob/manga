@@ -26,10 +26,10 @@ public class ProjectConfig {
     public Dotenv loadEnv() {
         return Dotenv.load();
     }
-
     @Bean
-    public String driveFolderID() {
-        return loadEnv().get("DRIVE_FOLDER");
+    @Autowired
+    public String driveFolderID(Dotenv dotenv) {
+        return dotenv.get("DRIVE_FOLDER");
     }
     @Bean
     public Drive getService(

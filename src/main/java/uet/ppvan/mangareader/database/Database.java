@@ -26,7 +26,22 @@ public class Database {
         ChapterRepository chapterRepository
     ) {
         return args -> {
-            System.out.println("Hello");
+            Manga manga = new Manga();
+            manga.setName("Komi không thể giao tiếp");
+            manga.setAuthor("Tomohito Oda");
+            manga.setStatus(Status.fromString("Đang tiến hành").get());
+            manga.setCover("https://st.ntcdntempv3.com/data/comics/42/komi-khong-the-giao-tiep.jpg");
+            manga.setDescription("Một em dở giao tiếp, nhưng 1 khi đã nói thì.......");
+            manga.setOtherName("Komi-san can't speak well.; Komi-san has a communication disease.; Komi-san has poor communication skills.; Komi-san is asocial.; Komi-san is socially ill");
+            manga.setGenre("Comic");
+
+            Chapter chapter = new Chapter();
+            chapter.setManga(manga);
+            chapter.setUploadDate(LocalDate.now());
+            chapter.setName("Chap 371");
+
+            mangaRepository.save(manga);
+            chapterRepository.save(chapter);
         };
     }
 

@@ -1,47 +1,67 @@
 package uet.ppvan.mangareader.exceptions.advice;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import javax.servlet.http.HttpServletRequest;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.lang.NonNullApi;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import uet.ppvan.mangareader.dto.ObjectResponse;
-import uet.ppvan.mangareader.exceptions.NoSuchElementFound;
-import uet.ppvan.mangareader.exceptions.ServiceException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import uet.ppvan.mangareader.exceptions.BaseException;
+import uet.ppvan.mangareader.exceptions.InvalidUploadFile;
+import uet.ppvan.mangareader.exceptions.NoSuchElementFound;
 
 @RestControllerAdvice
 public class ResponseAdvice extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler({NoSuchElementFound.class})
-    public ResponseEntity<Object> handleException(
-        ServiceException exception,
-        WebRequest request,
+    @ExceptionHandler(NoSuchElementFound.class)
+    public ResponseEntity<Object> handleNotFoundException(
+        BaseException exception,
         HttpServletRequest httpRequest
     ) {
-        System.out.println("Hi");
-        var response = new ExceptionResponse(
-            exception.getStatus(),
-            exception.getStatus().value(),
-            exception.getMessage(),
-            httpRequest.getRequestURI()
+        logger.info(exception.getMessage());
+        return buildResponse(exception, httpRequest);
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<Object> handleMaxSizeExceed(
+        MaxUploadSizeExceededException ex,
+        HttpServletRequest request
+    ) {
+        String message = "Filesize can't exceed 5MB";
+        logger.info(ex.getMessage());
+
+        return buildResponse(new InvalidUploadFile(message), request);
+    }
+    @ExceptionHandler(BaseException.class)
+    public ResponseEntity<Object> handleCustomAPIException(
+        BaseException ex,
+        HttpServletRequest request
+    ) {
+        logger.info(ex.getMessage());
+        String message = ex.getMessage();
+        var response = new ErrorResponse(
+            ex.getStatus(),
+            ex.getStatus().value(),
+            message,
+            LocalDateTime.now(ZoneOffset.UTC),
+            request.getRequestURI()
         );
-        return new ResponseEntity<>(response, new HttpHeaders(), response.status());
+
+        return new ResponseEntity<>(response, ex.getStatus());
     }
 
-    @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(
-        HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status,
-        WebRequest request) {
-        String error = "JSON invalid";
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-    }
+    private ResponseEntity<Object> buildResponse(BaseException ex, HttpServletRequest request) {
 
-    private ResponseEntity<Object> buildResponseFromException(ExceptionResponse response) {
+        var response = new ErrorResponse(
+            ex.getStatus(),
+            ex.getStatus().value(),
+            ex.getMessage(),
+            LocalDateTime.now(ZoneOffset.UTC),
+            request.getRequestURI()
+        );
+
         return new ResponseEntity<>(response, response.status());
     }
 }

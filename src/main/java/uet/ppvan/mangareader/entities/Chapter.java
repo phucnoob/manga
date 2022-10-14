@@ -39,5 +39,5 @@ public class Chapter {
 
 
     @OneToMany(mappedBy = "chapter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Image> images;
+    private List<ChapterImage> images;
 }

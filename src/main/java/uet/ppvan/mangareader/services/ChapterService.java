@@ -2,7 +2,7 @@ package uet.ppvan.mangareader.services;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import uet.ppvan.mangareader.dto.ChapterDTO;
+import uet.ppvan.mangareader.dto.ChapterRequest;
 import uet.ppvan.mangareader.entities.Chapter;
 import uet.ppvan.mangareader.entities.Manga;
 import uet.ppvan.mangareader.repositories.ChapterRepository;
@@ -17,7 +17,7 @@ public class ChapterService {
 
     private final MangaService mangaService;
 
-    public void addNewChapter(ChapterDTO requestData, Integer mangaId) {
+    public void addNewChapter(ChapterRequest requestData, Integer mangaId) {
         Chapter chapter = mangaRepository.findById(mangaId).map(
             manga -> ChapterService.toChapter(requestData, manga)
         ).orElseThrow();
@@ -29,22 +29,22 @@ public class ChapterService {
         chapterRepository.deleteById(id);
     }
 
-    public ChapterDTO getChapter(Integer id) {
+    public ChapterRequest getChapter(Integer id) {
         return chapterRepository.findById(id)
             .map(ChapterService::toChapterDTO).orElseThrow();
     }
 
-    public static Chapter toChapter(ChapterDTO chapterDTO, Manga manga) {
+    public static Chapter toChapter(ChapterRequest chapterRequest, Manga manga) {
         Chapter chapter = new Chapter();
-        chapter.setName(chapterDTO.name());
-        chapter.setUploadDate(chapterDTO.uploadDate());
+        chapter.setName(chapterRequest.name());
+        chapter.setUploadDate(chapterRequest.uploadDate());
         chapter.setManga(manga);
 
         return chapter;
     }
 
-    public static ChapterDTO toChapterDTO(Chapter chapter) {
-        return new ChapterDTO(
+    public static ChapterRequest toChapterDTO(Chapter chapter) {
+        return new ChapterRequest(
             chapter.getName(),
             chapter.getUploadDate()
         );
