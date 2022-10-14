@@ -29,7 +29,7 @@ public class ProjectConfig {
     @Value("${config.google-api-key}")
     String googleAPIKey;
 
-    @Value("${config.drive-folder}")
+    @Value("${config.account-id}")
     String accountID;
 
     @Bean
