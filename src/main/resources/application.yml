@@ -30,5 +30,11 @@ server:
 
   tomcat:
     max-swallow-size: 100MB
+
+config:
+  account-id: ${env.ACCOUNT_ID}
+  google-api-pass: ${env.GOOGLE_API_PASS}
+  google-api-key: ${env.GOOGLE_API_KEY}
+  drive-folder: ${env.DRIVE_FOLDER}
 debug: true
 

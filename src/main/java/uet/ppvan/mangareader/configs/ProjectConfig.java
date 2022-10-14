@@ -7,29 +7,34 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.Drive;
-import io.github.cdimascio.dotenv.Dotenv;
-import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.Collection;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ProjectConfig {
 
+
+    @Value("${config.drive-folder}")
+    String driveFolder;
+    @Value("${config.google-api-pass}")
+    String googleAPIPass;
+
+    @Value("${config.google-api-key}")
+    String googleAPIKey;
+
+    @Value("${config.drive-folder}")
+    String accountID;
+
     @Bean
-    public Dotenv loadEnv() {
-        return Dotenv.load();
-    }
-    @Bean
-    @Autowired
-    public String driveFolderID(Dotenv dotenv) {
-        return dotenv.get("DRIVE_FOLDER");
+    public String driveFolderID() {
+        return driveFolder;
     }
     @Bean
     public Drive getService(
@@ -42,16 +47,13 @@ public class ProjectConfig {
     }
 
     @Bean
-    @Autowired
-    public GoogleCredential googleCredential(Dotenv dotenv) throws GeneralSecurityException, IOException {
+    public GoogleCredential googleCredential() throws GeneralSecurityException, IOException {
         Collection<String> elenco = new ArrayList<String>();
-        String accountID = dotenv.get("ACCOUNT_ID");
-        String password = dotenv.get("GOOGLE_API_PASS");
-        String privateK = dotenv.get("GOOGLE_API_KEY");
+
 
         KeyStore keystore = KeyStore.getInstance("PKCS12");
-        keystore.load(getClass().getResourceAsStream("/testing.p12"), password.toCharArray());
-        PrivateKey privateKey = (PrivateKey) keystore.getKey(privateK, password.toCharArray());
+        keystore.load(getClass().getResourceAsStream("/testing.p12"), googleAPIPass.toCharArray());
+        PrivateKey privateKey = (PrivateKey) keystore.getKey(googleAPIKey, googleAPIPass.toCharArray());
 
         elenco.add("https://www.googleapis.com/auth/drive");
         HttpTransport httpTransport = new NetHttpTransport();
