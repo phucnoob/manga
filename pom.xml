@@ -27,6 +27,11 @@
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
     <dependency>
+      <groupId>me.paulschwarz</groupId>
+      <artifactId>spring-dotenv</artifactId>
+      <version>2.5.4</version>
+    </dependency>
+    <dependency>
       <groupId>com.google.apis</groupId>
       <artifactId>google-api-services-drive</artifactId>
       <version>v3-rev197-1.25.0</version>
@@ -36,12 +41,6 @@
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
       <version>31.1-jre</version>
-    </dependency>
-
-    <dependency>
-      <groupId>io.github.cdimascio</groupId>
-      <artifactId>dotenv-java</artifactId>
-      <version>2.2.4</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
     <dependency>

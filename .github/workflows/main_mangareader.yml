@@ -26,6 +26,10 @@ jobs:
           DB_NAME: ${{ secrets.DB_NAME }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASS: ${{ secrets.DB_PASS }}
+          ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
+          GOOGLE_API_PASS: ${{ secrets.GOOGLE_API_PASS }}
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          DRIVE_FOLDER: ${{ secrets.DRIVE_FOLDER }}
         run: mvn clean install
 
       - name: Upload artifact for deployment job
