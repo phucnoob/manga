@@ -30,6 +30,7 @@ jobs:
           GOOGLE_API_PASS: ${{ secrets.GOOGLE_API_PASS }}
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           DRIVE_FOLDER: ${{ secrets.DRIVE_FOLDER }}
+          DOMAIN_NAME: ${{ secrets.DOMAIN_NAME }}
         run: mvn clean install
 
       - name: Upload artifact for deployment job
