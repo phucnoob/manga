@@ -1,4 +1,4 @@
-package uet.ppvan.mangareader.controllers;
+package uet.ppvan.mangareader.chapters;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,34 +12,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uet.ppvan.mangareader.dto.ObjectResponse;
-import uet.ppvan.mangareader.entities.Chapter;
-import uet.ppvan.mangareader.repositories.ChapterRepository;
 
 @RestController
-@RequestMapping("api/v1/manga/*/chapter/")
+@RequestMapping("api/v1/chapter/")
 @AllArgsConstructor
 public class ChapterController {
 
     private final ChapterRepository chapterRepository;
+    private final ChapterService chapterService;
 
     @GetMapping("/{id}")
     public ResponseEntity<ObjectResponse> getById(
         @PathVariable Integer id
     ) {
-        return chapterRepository.findById(id).map(
-            chapter -> ResponseEntity.ok(
+        return ResponseEntity.ok(
                 new ObjectResponse(
-                    ObjectResponse.SUCCESS,
-                    "Query successfull",
-                    chapter
+                        ObjectResponse.SUCCESS,
+                        "Query successfully.",
+                        chapterService.getChapter(id)
                 )
-            )).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ObjectResponse(
-                    ObjectResponse.FAILED,
-                    "Not such chapter with id = " + id,
-                    ""
-                )
-        ));
+        );
     }
 
     @PostMapping("/add")
@@ -95,7 +87,7 @@ public class ChapterController {
         return ResponseEntity.ok(
             new ObjectResponse(
                 ObjectResponse.SUCCESS,
-                "Delete chapter successfull",
+                "Delete chapter successfully",
                 ""
             )
         );

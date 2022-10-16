@@ -1,4 +1,4 @@
-package uet.ppvan.mangareader.dto;
+package uet.ppvan.mangareader.chapters;
 
 import java.time.LocalDate;
 

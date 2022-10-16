@@ -13,7 +13,6 @@ public class MangaReaderApplication {
     public String index() {
         return "Hello World";
     }
-
     public static void main(String[] args) {
         SpringApplication.run(MangaReaderApplication.class, args);
     }

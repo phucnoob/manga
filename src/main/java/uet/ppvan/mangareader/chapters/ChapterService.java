@@ -1,12 +1,10 @@
-package uet.ppvan.mangareader.services;
+package uet.ppvan.mangareader.chapters;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import uet.ppvan.mangareader.dto.ChapterRequest;
-import uet.ppvan.mangareader.entities.Chapter;
-import uet.ppvan.mangareader.entities.Manga;
-import uet.ppvan.mangareader.repositories.ChapterRepository;
-import uet.ppvan.mangareader.repositories.MangaRepository;
+import uet.ppvan.mangareader.mangas.Manga;
+import uet.ppvan.mangareader.mangas.interfaces.MangaRepository;
+import uet.ppvan.mangareader.mangas.interfaces.MangaService;
 
 @Service
 @AllArgsConstructor

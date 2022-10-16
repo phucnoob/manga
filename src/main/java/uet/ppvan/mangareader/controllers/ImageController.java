@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import uet.ppvan.mangareader.dto.ImageRequest;
 import uet.ppvan.mangareader.dto.ObjectResponse;
-import uet.ppvan.mangareader.services.DriveStorageService;
+import uet.ppvan.mangareader.upload.DriveStorageService;
 import uet.ppvan.mangareader.services.ImageService;
 
 @RestController

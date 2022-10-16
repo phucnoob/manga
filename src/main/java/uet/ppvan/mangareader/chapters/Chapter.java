@@ -1,4 +1,4 @@
-package uet.ppvan.mangareader.entities;
+package uet.ppvan.mangareader.chapters;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.time.LocalDate;
@@ -17,6 +17,8 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import uet.ppvan.mangareader.entities.ChapterImage;
+import uet.ppvan.mangareader.mangas.Manga;
 
 @Entity
 @NoArgsConstructor

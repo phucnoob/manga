@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import uet.ppvan.mangareader.dto.ImageRequest;
 import uet.ppvan.mangareader.entities.ChapterImage;
-import uet.ppvan.mangareader.exceptions.ChapterNotFound;
+import uet.ppvan.mangareader.chapters.ChapterNotFound;
 import uet.ppvan.mangareader.exceptions.ImageNotFound;
-import uet.ppvan.mangareader.repositories.ChapterRepository;
+import uet.ppvan.mangareader.chapters.ChapterRepository;
 import uet.ppvan.mangareader.repositories.ImageRepository;
 
 @AllArgsConstructor

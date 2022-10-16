@@ -12,7 +12,7 @@ import uet.ppvan.mangareader.exceptions.BaseException;
 import uet.ppvan.mangareader.exceptions.InvalidUploadFile;
 import uet.ppvan.mangareader.exceptions.NoSuchElementFound;
 
-@RestControllerAdvice
+
 public class ResponseAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(NoSuchElementFound.class)

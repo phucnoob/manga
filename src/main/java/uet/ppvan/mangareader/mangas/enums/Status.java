@@ -1,12 +1,11 @@
-package uet.ppvan.mangareader.entities.enums;
+package uet.ppvan.mangareader.mangas.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 public enum Status {
     CONTINUE("Đang tiến hành"),
@@ -16,11 +15,14 @@ public enum Status {
     ;
 
     private static final Map<String, Status> reverseValues;
+    private static final String defaultErrorMessage;
     static {
         reverseValues = new HashMap<>();
         Arrays.stream(values()).forEach(status -> {
-            reverseValues.put(status.getStatus(), status);
+            reverseValues.put(status.value(), status);
         });
+
+        defaultErrorMessage = "Status must be one of: " + String.join(", ", reverseValues.keySet());
     }
     private final String status;
 
@@ -28,11 +30,15 @@ public enum Status {
         this.status = status;
     }
     @JsonValue
-    public String getStatus() {
+    public String value() {
         return status;
     }
 
-    public static Optional<Status> fromString(String value) {
-        return Optional.ofNullable(reverseValues.get(value));
+    @JsonCreator
+    public static Status fromString(String value) {
+        if (!reverseValues.containsKey(value)) {
+            throw new EnumParseException(defaultErrorMessage);
+        }
+        return reverseValues.get(value);
     }
 }

@@ -1,4 +1,4 @@
-package uet.ppvan.mangareader.services;
+package uet.ppvan.mangareader.upload;
 
 import java.io.IOException;
 import java.net.URI;
