@@ -1,37 +1,31 @@
-package uet.ppvan.mangareader.entities;
+package uet.ppvan.mangareader.chapters.image;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.URL;
 import uet.ppvan.mangareader.chapters.Chapter;
+
+import javax.persistence.*;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "images")
-public class ChapterImage {
+public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Integer id;
 
+    @URL(message = "Chapter image must be an url")
     private String uri;
-    private String alt;
 
     @Column(name = "chapter_order")
     private Integer chapterOrder;
 
-    public ChapterImage(String uri, String alt) {
+    public Image(String uri) {
         this.uri = uri;
-        this.alt = alt;
     }
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -42,7 +36,7 @@ public class ChapterImage {
     @JsonIgnore
     private Chapter chapter;
 
-    public ChapterImage() {
+    public Image() {
 
     }
 }

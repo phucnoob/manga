@@ -1,8 +1,11 @@
 package uet.ppvan.mangareader.chapters;
 
-import java.time.LocalDate;
+import uet.ppvan.mangareader.chapters.image.ImageRequest;
+
+import java.util.List;
 
 public record ChapterRequest(
     String name,
-    LocalDate uploadDate)
+    List<ImageRequest> images
+)
 { }

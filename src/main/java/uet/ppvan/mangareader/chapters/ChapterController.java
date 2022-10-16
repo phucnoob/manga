@@ -1,25 +1,17 @@
 package uet.ppvan.mangareader.chapters;
 
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uet.ppvan.mangareader.dto.ObjectResponse;
+import uet.ppvan.mangareader.dto.ResponseFactory;
 
 @RestController
-@RequestMapping("api/v1/chapter/")
+@RequestMapping("api/v2/chapter/")
 @AllArgsConstructor
 public class ChapterController {
 
-    private final ChapterRepository chapterRepository;
-    private final ChapterService chapterService;
+    private final ChapterService service;
 
     @GetMapping("/{id}")
     public ResponseEntity<ObjectResponse> getById(
@@ -29,61 +21,40 @@ public class ChapterController {
                 new ObjectResponse(
                         ObjectResponse.SUCCESS,
                         "Query successfully.",
-                        chapterService.getChapter(id)
+                        service.getChapter(id)
                 )
         );
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ObjectResponse> addChapter(@RequestBody Chapter chapter) {
-        var savedChapter = chapterRepository.save(chapter);
+    public ResponseEntity<ObjectResponse> addChapter(
+            @RequestParam(name = "manga_id") Integer mangaId,
+            @RequestBody ChapterRequest request
+    ) {
+        service.addNewChapter(request, mangaId);
 
         return ResponseEntity.ok(
-            new ObjectResponse(
-                ObjectResponse.SUCCESS,
-                "Add new chapter success",
-                savedChapter
-            )
+            ResponseFactory.success(request)
         );
     }
 
     /**
-     * Update if exsist else insert.
+     * Update
      */
-    @PutMapping("/{id}/update")
-    public ResponseEntity<ObjectResponse> updateChapter(
-        @PathVariable Integer id,
-        @RequestBody Chapter chapter
+    @PutMapping("/update")
+    public ResponseEntity<Object> updateChapter(
+            @RequestParam(name = "id") Integer id,
+            @RequestBody ChapterRequest chapter
     ) {
-        return chapterRepository.findById(id)
-            .map(
-            foundedChapter -> {
-                foundedChapter.setName(chapter.getName());
-                foundedChapter.setManga(chapter.getManga());
-                foundedChapter.setUploadDate(chapter.getUploadDate());
-                chapterRepository.save(foundedChapter);
-                return ResponseEntity.ok(
-                    new ObjectResponse(
-                        ObjectResponse.SUCCESS,
-                        "Query successfull",
-                        chapterRepository
-                    )
-                );
-            }
-        ).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-            new ObjectResponse(
-                ObjectResponse.FAILED,
-                "Not fould chapter with id = " + id,
-                ""
-            )
-        ));
+        service.updateChapter(chapter, id);
+        return ResponseEntity.ok(ResponseFactory.success("Chapter updated.", chapter));
     }
 
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<ObjectResponse> delete(
         @PathVariable Integer id
     ) {
-        chapterRepository.deleteById(id);
+        service.removeChapter(id);
         return ResponseEntity.ok(
             new ObjectResponse(
                 ObjectResponse.SUCCESS,

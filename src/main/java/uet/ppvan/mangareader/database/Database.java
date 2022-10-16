@@ -38,7 +38,7 @@ public class Database {
 
             Chapter chapter = new Chapter();
             chapter.setManga(manga);
-            chapter.setUploadDate(LocalDate.now());
+            chapter.setUpdatedDate(LocalDate.now());
             chapter.setName("Chap 371");
 
             mangaRepository.save(manga);

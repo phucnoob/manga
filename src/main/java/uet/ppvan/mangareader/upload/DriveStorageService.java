@@ -23,7 +23,7 @@ import uet.ppvan.mangareader.exceptions.UploadFileInterupt;
 
 @Service
 @AllArgsConstructor
-public class DriveStorageService implements IStorageService {
+public class DriveStorageService implements StorageService {
 
     private final Drive googleDrive;
     private final String driveFolderID;
@@ -44,7 +44,7 @@ public class DriveStorageService implements IStorageService {
                     file.getContentType(),
                     new ByteArrayInputStream(file.getBytes())
                 ))
-                .setFields("id")
+                .setFields("id,webContentLink")
                 .execute();
             return uploadedFile.getId();
         } catch (IOException ex) {
@@ -93,13 +93,13 @@ public class DriveStorageService implements IStorageService {
     }
 
     @Override
-    public URI getFileDownloadLink(String imageURI) {
+    public URI getLink(String id) {
         try {
-            File fileInfo = googleDrive.files().get(imageURI)
+            File fileInfo = googleDrive.files().get(id)
                 .setFields("id,webContentLink").execute();
             return URI.create(fileInfo.getWebContentLink());
         } catch (IOException exception) {
-            throw ImageNotFound.withUri(imageURI);
+            throw ImageNotFound.withUri(id);
         }
     }
 
