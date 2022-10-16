@@ -36,5 +36,6 @@ config:
   google-api-pass: ${env.GOOGLE_API_PASS}
   google-api-key: ${env.GOOGLE_API_KEY}
   drive-folder: ${env.DRIVE_FOLDER}
+  host: ${env.DOMAIN_NAME}
 debug: true
 

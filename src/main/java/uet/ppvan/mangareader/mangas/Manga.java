@@ -1,4 +1,4 @@
-package uet.ppvan.mangareader.entities;
+package uet.ppvan.mangareader.mangas;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.List;
@@ -10,17 +10,16 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import uet.ppvan.mangareader.entities.enums.Status;
+import org.hibernate.validator.constraints.URL;
+import uet.ppvan.mangareader.chapters.Chapter;
+import uet.ppvan.mangareader.mangas.enums.Genre;
+import uet.ppvan.mangareader.mangas.enums.Status;
 
 @NoArgsConstructor
 @Getter
@@ -36,7 +35,8 @@ public class Manga {
     @Column(nullable = false, length = 127)
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
+    @URL
     private String cover;
 
     @Column(nullable = false)
@@ -44,11 +44,13 @@ public class Manga {
 
     @Column(nullable = false)
     private String author = "";
-    private String genre = "";
+
+    @Enumerated(EnumType.STRING)
+    private Genre genre;
+
     @Column(name = "other_name")
     private String otherName;
 
-    @Enumerated(EnumType.STRING)
     private Status status;
 
     @OneToMany(mappedBy = "manga", fetch = FetchType.LAZY)
