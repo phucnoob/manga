@@ -29,9 +29,9 @@ public class ImageUpload {
     public ResponseEntity<Object> upload(@RequestParam MultipartFile file) {
         String id = storage.storeFile(file);
         // <host><api_path>/<id>
-        String uri = String.format("%s%s/%s", hostName, API_END_POINTS, id);
+//        String uri = String.format("%s%s/%s", hostName, API_END_POINTS, id);
         return ResponseEntity.ok(
-                ResponseFactory.success(uri)
+                ResponseFactory.success(id)
         );
     }
 

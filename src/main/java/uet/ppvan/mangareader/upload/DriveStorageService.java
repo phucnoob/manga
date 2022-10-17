@@ -13,8 +13,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import uet.ppvan.mangareader.exceptions.ImageNotFound;
@@ -22,11 +24,12 @@ import uet.ppvan.mangareader.exceptions.InvalidUploadFile;
 import uet.ppvan.mangareader.exceptions.UploadFileInterupt;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class DriveStorageService implements StorageService {
 
     private final Drive googleDrive;
-    private final String driveFolderID;
+    @Value("${config.drive-folder}")
+    private String driveFolderID;
 
     private static final Logger logger = LoggerFactory.getLogger(DriveStorageService.class);
 
@@ -96,7 +99,7 @@ public class DriveStorageService implements StorageService {
     public URI getLink(String id) {
         try {
             File fileInfo = googleDrive.files().get(id)
-                .setFields("id,webContentLink").execute();
+                .setFields("id,webContentLink,webViewLink").execute();
             return URI.create(fileInfo.getWebContentLink());
         } catch (IOException exception) {
             throw ImageNotFound.withUri(id);
