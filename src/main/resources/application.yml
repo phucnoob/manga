@@ -8,6 +8,8 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
+
+    defer-datasource-initialization: true
   servlet:
     multipart:
       max-file-size: 5MB
@@ -20,6 +22,9 @@ spring:
   h2:
     console:
       enabled: false
+  sql:
+    init:
+      mode: always
 server:
   error:
     whitelabel:
@@ -32,7 +37,6 @@ server:
     max-swallow-size: 100MB
 
 config:
-  account-id: ${env.ACCOUNT_ID}
   drive-folder: ${env.DRIVE_FOLDER}
   host: ${env.DOMAIN_NAME}
   credentials: ${env.CREDENTIALS}

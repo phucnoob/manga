@@ -2,24 +2,16 @@ package uet.ppvan.mangareader.mangas;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import java.util.Set;
+import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.URL;
 import uet.ppvan.mangareader.chapters.Chapter;
-import uet.ppvan.mangareader.mangas.enums.Genre;
 import uet.ppvan.mangareader.mangas.enums.Status;
+import uet.ppvan.mangareader.mangas.genres.GenreEntity;
 
 @NoArgsConstructor
 @Getter
@@ -45,8 +37,13 @@ public class Manga {
     @Column(nullable = false)
     private String author = "";
 
-    @Enumerated(EnumType.STRING)
-    private Genre genre;
+    @ManyToMany
+    @JoinTable(
+            name = "mangas_genres",
+            joinColumns = @JoinColumn(name = "genre_id"),
+            inverseJoinColumns = @JoinColumn(name = "manga_id")
+    )
+    private Set<GenreEntity> genres;
 
     @Column(name = "other_name")
     private String otherName;
