@@ -9,7 +9,7 @@ import uet.ppvan.mangareader.mangas.Manga;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -32,5 +32,5 @@ public class Chapter {
 
 
     @OneToMany(mappedBy = "chapter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Image> images;
+    private Set<Image> images;
 }

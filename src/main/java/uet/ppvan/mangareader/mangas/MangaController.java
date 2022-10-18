@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import uet.ppvan.mangareader.dto.ObjectResponse;
+import uet.ppvan.mangareader.comons.SuccessResponse;
 import uet.ppvan.mangareader.chapters.Chapter;
-import uet.ppvan.mangareader.dto.ResponseFactory;
+import uet.ppvan.mangareader.comons.ResponseFactory;
 import uet.ppvan.mangareader.mangas.interfaces.MangaService;
 
 import javax.validation.Valid;
@@ -26,7 +26,7 @@ public class MangaController {
     private final MangaService service;
 
     @GetMapping("/{id}")
-    public ResponseEntity<ObjectResponse> getById(@PathVariable Integer id) {
+    public ResponseEntity<SuccessResponse> getById(@PathVariable Integer id) {
         MangaRequest foundedManga = service.getMangaById(id);
         return ResponseEntity.ok(
                 ResponseFactory.success(foundedManga)
@@ -35,7 +35,7 @@ public class MangaController {
 
 
     @GetMapping("/all")
-    public ResponseEntity<ObjectResponse> getAll(
+    public ResponseEntity<SuccessResponse> getAll(
         @RequestParam(required = false, defaultValue = "0") Integer page,
         @RequestParam(required = false, defaultValue = "5") Integer size
     ) {
@@ -44,7 +44,7 @@ public class MangaController {
         );
     }
     @PostMapping("/add")
-    public ResponseEntity<ObjectResponse> post(@RequestBody @Valid MangaRequest manga) {
+    public ResponseEntity<SuccessResponse> post(@RequestBody @Valid MangaRequest manga) {
         service.addNewManga(manga);
         return ResponseEntity.ok(
                 ResponseFactory.success("Manga saved", manga)
@@ -52,7 +52,7 @@ public class MangaController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ObjectResponse> update(
+    public ResponseEntity<SuccessResponse> update(
         @PathVariable Integer id,
         @RequestBody MangaRequest updateManga
     ) {
@@ -63,7 +63,7 @@ public class MangaController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ObjectResponse> deleteById(
+    public ResponseEntity<SuccessResponse> deleteById(
         @PathVariable Integer id
     ) {
         service.deleteManga(id);
@@ -73,7 +73,7 @@ public class MangaController {
     }
 
     @GetMapping("/{id}/chapters")
-    public ResponseEntity<ObjectResponse> chapters(
+    public ResponseEntity<SuccessResponse> chapters(
         @PathVariable Integer id
     ) {
         List<Chapter> chapters = service.getAllChapters(id);

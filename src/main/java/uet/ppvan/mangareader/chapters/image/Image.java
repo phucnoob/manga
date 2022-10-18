@@ -3,7 +3,6 @@ package uet.ppvan.mangareader.chapters.image;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.URL;
 import uet.ppvan.mangareader.chapters.Chapter;
 
 import javax.persistence.*;
@@ -18,7 +17,6 @@ public class Image {
     @JsonIgnore
     private Integer id;
 
-    @URL(message = "Chapter image must be an url")
     private String uri;
 
     @Column(name = "chapter_order")

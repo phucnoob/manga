@@ -26,6 +26,6 @@ public record MangaRequest(
 
     Status status,
 
-    Set<Genre> genre
+    Set<Genre> genres
 ) {
 }

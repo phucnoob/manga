@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import uet.ppvan.mangareader.chapters.Chapter;
-import uet.ppvan.mangareader.exceptions.NoSuchElementFound;
+import uet.ppvan.mangareader.comons.exceptions.NoSuchElementFound;
 import uet.ppvan.mangareader.mangas.genres.GenreEntity;
 import uet.ppvan.mangareader.mangas.genres.GenreRepository;
 import uet.ppvan.mangareader.mangas.interfaces.MangaRepository;
@@ -86,7 +86,7 @@ public class MangaServiceImpl implements uet.ppvan.mangareader.mangas.interfaces
         manga.setCover(mangaRequest.cover());
         manga.setStatus(mangaRequest.status());
         manga.setOtherName(mangaRequest.otherName());
-        var genres = mangaRequest.genre().stream()
+        var genres = mangaRequest.genres().stream()
             .map(genreRepository::findGenreEntityByGenre)
             .collect(Collectors.toSet());
 

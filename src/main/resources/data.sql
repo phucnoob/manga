@@ -1,4 +1,4 @@
--- Insert genre (which is fixed)
+-- Insert genres (which is fixed)
 
 INSERT INTO mangadb.genres (id, genre) VALUES (1, '16+');
 INSERT INTO mangadb.genres (id, genre) VALUES (2, '18+');

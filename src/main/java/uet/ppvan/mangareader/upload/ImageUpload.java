@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import uet.ppvan.mangareader.dto.ResponseFactory;
+import uet.ppvan.mangareader.comons.ResponseFactory;
 
 @RestController
 @RequestMapping("/api/v2/image")

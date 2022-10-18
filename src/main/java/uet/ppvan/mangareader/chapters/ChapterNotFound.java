@@ -1,6 +1,6 @@
 package uet.ppvan.mangareader.chapters;
 
-import uet.ppvan.mangareader.exceptions.NoSuchElementFound;
+import uet.ppvan.mangareader.comons.exceptions.NoSuchElementFound;
 
 public class ChapterNotFound {
     public static NoSuchElementFound withId(Integer id) {

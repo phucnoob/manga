@@ -1,6 +1,7 @@
-package uet.ppvan.mangareader.exceptions;
+package uet.ppvan.mangareader.upload.exceptions;
 
 import org.springframework.http.HttpStatus;
+import uet.ppvan.mangareader.comons.exceptions.BaseException;
 
 public class UploadFileInterupt extends BaseException {
 
