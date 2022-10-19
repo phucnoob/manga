@@ -31,7 +31,7 @@ public class Manga {
     @URL
     private String cover;
 
-    @Column(nullable = false, length = 1024)
+    @Column(nullable = false, length = 2048)
     private String description;
 
     @Column(nullable = false)

@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public enum Genre {
     SIXTEEN_PLUS("16+"),
@@ -34,7 +33,7 @@ public enum Genre {
     JOSEI("Josei"),
     LIVE_ACTION("Live action"),
     MAGIC("Magic"),
-    MANGA("manga"),
+    MANGA("Manga"),
     MANHUA("Manhua"),
     MANHWA("Manhwa"),
     MARTIAL_ARTS("Martial Arts"),
@@ -54,7 +53,7 @@ public enum Genre {
     SHOUJO_AI("Shoujo Ai"),
     SHOUNEN("Shounen"),
     SHOUNEN_AI("Shounen Ai"),
-    SLICE_OF_LIFE("Slice of life"),
+    SLICE_OF_LIFE("Slice of Life"),
     SMUT("Smut"),
     SOFT_YAOI("Soft Yaoi"),
     SOFT_YURI("Soft Yuri"),
@@ -72,15 +71,18 @@ public enum Genre {
     YURI("Yuri"),
     ;
     private static final Map<String, Genre> reverseValues;
+    private static final Map<String, Genre> reverseValuesCaseInsensitive;
     private static final String defaultErrorMessage;
 
     static {
         reverseValues = new HashMap<>();
+        reverseValuesCaseInsensitive = new HashMap<>();
         Arrays.stream(values()).forEach(genre -> {
             reverseValues.put(genre.getValue(), genre);
+            reverseValuesCaseInsensitive.put(genre.getValue().toLowerCase(), genre);
         });
 
-        defaultErrorMessage = "Genre must be one of: " + String.join(", ", reverseValues.keySet());
+        defaultErrorMessage = "'%s' is not valid genre.Must be one of: " + String.join(", ", reverseValues.keySet());
     }
     private final String value;
 
@@ -94,9 +96,9 @@ public enum Genre {
 
     @JsonCreator
     public static Genre fromString(String value) {
-        if (!reverseValues.containsKey(value)) {
-            throw new EnumParseException(defaultErrorMessage);
+        if (!reverseValuesCaseInsensitive.containsKey(value.toLowerCase())) {
+            throw new EnumParseException(String.format(defaultErrorMessage, value));
         }
-        return reverseValues.get(value);
+        return reverseValuesCaseInsensitive.get(value.toLowerCase());
     }
 }
