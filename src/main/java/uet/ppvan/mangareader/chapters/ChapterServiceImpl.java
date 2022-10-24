@@ -2,8 +2,6 @@ package uet.ppvan.mangareader.chapters;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import uet.ppvan.mangareader.chapters.image.ImageService;
-import uet.ppvan.mangareader.chapters.image.ImageServiceImpl;
 import uet.ppvan.mangareader.chapters.interfaces.ChapterRepository;
 import uet.ppvan.mangareader.chapters.interfaces.ChapterService;
 import uet.ppvan.mangareader.mangas.Manga;
@@ -19,7 +17,6 @@ public class ChapterServiceImpl implements ChapterService {
     private final ChapterRepository chapterRepository;
     private final MangaRepository mangaRepository;
 
-    private final ImageService imageService;
 
 
     @Override
@@ -30,8 +27,6 @@ public class ChapterServiceImpl implements ChapterService {
         ).orElseThrow();
 
         chapterRepository.save(chapter);
-
-        imageService.saveImages(requestData.images(), chapter.getId());
     }
 
     @Override
@@ -40,7 +35,7 @@ public class ChapterServiceImpl implements ChapterService {
         if (founded.isPresent()) {
             var chapter = founded.get();
             chapter.setName(request.name());
-            chapter.setImages(ImageServiceImpl.toImages(request.images(), chapter));
+            chapter.setImages(request.images());
             chapter.setUpdatedDate(LocalDate.now(ZoneOffset.UTC));
 
             chapterRepository.save(chapter);
@@ -80,7 +75,7 @@ public class ChapterServiceImpl implements ChapterService {
     public static ChapterRequest toChapterDTO(Chapter chapter) {
         return new ChapterRequest(
             chapter.getName(),
-            ImageServiceImpl.toImageRequest(chapter.getImages())
+            chapter.getImages()
         );
     }
 }

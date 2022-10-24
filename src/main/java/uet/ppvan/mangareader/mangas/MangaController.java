@@ -43,6 +43,15 @@ public class MangaController {
             ResponseFactory.success("Query mangas successfully.", service.getAll(page, size))
         );
     }
+
+    @GetMapping("/latest")
+    public ResponseEntity<SuccessResponse> getLatest(
+        @RequestParam(required = false, defaultValue = "0") Integer page
+    ) {
+        return ResponseEntity.ok(
+            ResponseFactory.success("Latest manga.", service.getLatest(page, 5))
+        );
+    }
     @PostMapping("/add")
     public ResponseEntity<SuccessResponse> post(@RequestBody @Valid MangaRequest manga) {
         service.addNewManga(manga);

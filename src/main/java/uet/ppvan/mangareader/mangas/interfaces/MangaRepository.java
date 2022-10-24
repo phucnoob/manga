@@ -6,5 +6,4 @@ import uet.ppvan.mangareader.mangas.Manga;
 
 @Repository
 public interface MangaRepository extends JpaRepository<Manga, Integer> {
-
 }

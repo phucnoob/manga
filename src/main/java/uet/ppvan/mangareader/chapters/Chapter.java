@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import uet.ppvan.mangareader.chapters.image.Image;
 import uet.ppvan.mangareader.mangas.Manga;
 
 import javax.persistence.*;
@@ -31,6 +30,8 @@ public class Chapter {
     private Manga manga;
 
 
-    @OneToMany(mappedBy = "chapter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Image> images;
+//    @OneToMany(mappedBy = "chapter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ElementCollection
+    @JoinTable(name = "chapter_images", joinColumns = @JoinColumn(name = "chapter_id"))
+    private Set<String> images;
 }

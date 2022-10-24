@@ -2,6 +2,7 @@ package uet.ppvan.mangareader.mangas;
 
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import uet.ppvan.mangareader.chapters.Chapter;
 import uet.ppvan.mangareader.comons.exceptions.NoSuchElementFound;
@@ -9,6 +10,8 @@ import uet.ppvan.mangareader.mangas.genres.GenreEntity;
 import uet.ppvan.mangareader.mangas.genres.GenreRepository;
 import uet.ppvan.mangareader.mangas.interfaces.MangaRepository;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,7 +69,18 @@ public class MangaServiceImpl implements uet.ppvan.mangareader.mangas.interfaces
             ));
     }
 
-    private MangaRequest toDTO(Manga manga) {
+    @Override
+    public List<MangaRequest> getLatest(Integer page, int size) {
+
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("lastUpdate").descending());
+
+        return mangaRepository.findAll(pageRequest)
+            .getContent()
+            .stream().map(this::toDTO)
+            .collect(Collectors.toList());
+    }
+
+    private MangaRequest    toDTO(Manga manga) {
         return new MangaRequest(
             manga.getName(),
             manga.getCover(),
@@ -86,6 +100,7 @@ public class MangaServiceImpl implements uet.ppvan.mangareader.mangas.interfaces
         manga.setCover(mangaRequest.cover());
         manga.setStatus(mangaRequest.status());
         manga.setOtherName(mangaRequest.otherName());
+        manga.setLastUpdate(LocalDateTime.now(ZoneOffset.UTC));
         var genres = mangaRequest.genres().stream()
             .map(genreRepository::findGenreEntityByGenre)
             .collect(Collectors.toSet());

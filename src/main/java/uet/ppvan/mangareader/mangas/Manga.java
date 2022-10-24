@@ -1,6 +1,8 @@
 package uet.ppvan.mangareader.mangas;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
@@ -37,7 +39,7 @@ public class Manga {
     @Column(nullable = false)
     private String author = "";
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "mangas_genres",
             joinColumns = @JoinColumn(name = "genre_id"),
@@ -49,6 +51,9 @@ public class Manga {
     private String otherName;
 
     private Status status;
+
+    @Column(name = "last_update")
+    private LocalDateTime lastUpdate;
 
     @OneToMany(mappedBy = "manga", fetch = FetchType.LAZY)
     @JsonManagedReference
