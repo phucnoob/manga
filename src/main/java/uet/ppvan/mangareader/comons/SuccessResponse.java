@@ -1,6 +1,6 @@
-package uet.ppvan.mangareader.dto;
+package uet.ppvan.mangareader.comons;
 
-public record ObjectResponse
+public record SuccessResponse
     (
         Boolean success,
         String message,

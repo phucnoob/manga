@@ -2,7 +2,8 @@ package uet.ppvan.mangareader.chapters;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import uet.ppvan.mangareader.chapters.image.ImageService;
+import uet.ppvan.mangareader.chapters.interfaces.ChapterRepository;
+import uet.ppvan.mangareader.chapters.interfaces.ChapterService;
 import uet.ppvan.mangareader.mangas.Manga;
 import uet.ppvan.mangareader.mangas.interfaces.MangaRepository;
 
@@ -11,31 +12,30 @@ import java.time.ZoneOffset;
 
 @Service
 @AllArgsConstructor
-public class ChapterService {
+public class ChapterServiceImpl implements ChapterService {
 
     private final ChapterRepository chapterRepository;
     private final MangaRepository mangaRepository;
 
-    private final ImageService imageService;
 
 
+    @Override
     public void addNewChapter(ChapterRequest requestData, Integer mangaId) {
 
         Chapter chapter = mangaRepository.findById(mangaId).map(
-            manga -> ChapterService.toChapter(requestData, manga)
+            manga -> ChapterServiceImpl.toChapter(requestData, manga)
         ).orElseThrow();
 
         chapterRepository.save(chapter);
-
-        imageService.saveImages(requestData.images(), chapter.getId());
     }
 
+    @Override
     public void updateChapter(ChapterRequest request, Integer id) {
         var founded = chapterRepository.findById(id);
         if (founded.isPresent()) {
             var chapter = founded.get();
             chapter.setName(request.name());
-            chapter.setImages(ImageService.toImages(request.images(), chapter));
+            chapter.setImages(request.images());
             chapter.setUpdatedDate(LocalDate.now(ZoneOffset.UTC));
 
             chapterRepository.save(chapter);
@@ -44,6 +44,7 @@ public class ChapterService {
         }
     }
 
+    @Override
     public void removeChapter(Integer id) {
         if (chapterRepository.existsById(id)) {
             chapterRepository.deleteById(id);
@@ -52,9 +53,10 @@ public class ChapterService {
         }
     }
 
+    @Override
     public ChapterRequest getChapter(Integer id) {
         return chapterRepository.findById(id)
-            .map(ChapterService::toChapterDTO)
+            .map(ChapterServiceImpl::toChapterDTO)
                 .orElseThrow(() -> ChapterNotFound.withId(id));
     }
 
@@ -73,7 +75,7 @@ public class ChapterService {
     public static ChapterRequest toChapterDTO(Chapter chapter) {
         return new ChapterRequest(
             chapter.getName(),
-            ImageService.toImageRequest(chapter.getImages())
+            chapter.getImages()
         );
     }
 }

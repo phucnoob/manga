@@ -17,4 +17,6 @@ public interface MangaService {
     MangaRequest getMangaById(Integer id);
 
     List<Chapter> getAllChapters(Integer id);
+
+    List<MangaRequest> getLatest(Integer page, int i);
 }

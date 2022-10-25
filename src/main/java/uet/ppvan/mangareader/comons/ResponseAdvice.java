@@ -1,16 +1,15 @@
-package uet.ppvan.mangareader.exceptions.advice;
+package uet.ppvan.mangareader.comons;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import uet.ppvan.mangareader.exceptions.BaseException;
-import uet.ppvan.mangareader.exceptions.InvalidUploadFile;
-import uet.ppvan.mangareader.exceptions.NoSuchElementFound;
+import uet.ppvan.mangareader.comons.exceptions.BaseException;
+import uet.ppvan.mangareader.comons.exceptions.NoSuchElementFound;
+import uet.ppvan.mangareader.upload.exceptions.InvalidUploadFile;
 
 
 public class ResponseAdvice extends ResponseEntityExceptionHandler {

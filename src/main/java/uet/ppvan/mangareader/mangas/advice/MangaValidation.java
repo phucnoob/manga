@@ -1,7 +1,6 @@
 package uet.ppvan.mangareader.mangas.advice;
 
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -10,11 +9,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import uet.ppvan.mangareader.dto.ObjectResponse;
-import uet.ppvan.mangareader.dto.ResponseFactory;
-import uet.ppvan.mangareader.exceptions.BaseException;
-import uet.ppvan.mangareader.exceptions.NoSuchElementFound;
+import uet.ppvan.mangareader.comons.SuccessResponse;
+import uet.ppvan.mangareader.comons.ResponseFactory;
+import uet.ppvan.mangareader.comons.exceptions.BaseException;
+import uet.ppvan.mangareader.comons.exceptions.NoSuchElementFound;
 import uet.ppvan.mangareader.mangas.enums.EnumParseException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +24,7 @@ public class MangaValidation {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<ObjectResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, WebRequest request) {
+    protected ResponseEntity<SuccessResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, WebRequest request) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
