@@ -3,7 +3,6 @@ package uet.ppvan.mangareader.chapters;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import uet.ppvan.mangareader.chapters.interfaces.ChapterService;
 import uet.ppvan.mangareader.comons.SuccessResponse;
 import uet.ppvan.mangareader.comons.ResponseFactory;
 

@@ -1,4 +1,4 @@
-package uet.ppvan.mangareader.chapters.interfaces;
+package uet.ppvan.mangareader.chapters;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -2,8 +2,6 @@ package uet.ppvan.mangareader.chapters;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import uet.ppvan.mangareader.chapters.interfaces.ChapterRepository;
-import uet.ppvan.mangareader.chapters.interfaces.ChapterService;
 import uet.ppvan.mangareader.mangas.Manga;
 import uet.ppvan.mangareader.mangas.interfaces.MangaRepository;
 
