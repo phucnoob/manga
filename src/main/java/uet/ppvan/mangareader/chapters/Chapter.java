@@ -4,12 +4,11 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import uet.ppvan.mangareader.chapters.image.Image;
 import uet.ppvan.mangareader.mangas.Manga;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -31,6 +30,8 @@ public class Chapter {
     private Manga manga;
 
 
-    @OneToMany(mappedBy = "chapter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Image> images;
+//    @OneToMany(mappedBy = "chapter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ElementCollection
+    @JoinTable(name = "chapter_images", joinColumns = @JoinColumn(name = "chapter_id"))
+    private Set<String> images;
 }

@@ -1,11 +1,9 @@
 package uet.ppvan.mangareader.chapters;
 
-import uet.ppvan.mangareader.chapters.image.ImageRequest;
-
-import java.util.List;
+import java.util.Set;
 
 public record ChapterRequest(
     String name,
-    List<ImageRequest> images
+    Set<String> images
 )
 { }

@@ -1,8 +1,8 @@
-package uet.ppvan.mangareader.exceptions.advice;
+package uet.ppvan.mangareader.comons;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import java.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
+
+import java.time.LocalDateTime;
 
 public record ErrorResponse(
     HttpStatus status,

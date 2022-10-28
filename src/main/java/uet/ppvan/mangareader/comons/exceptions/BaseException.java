@@ -1,4 +1,4 @@
-package uet.ppvan.mangareader.exceptions;
+package uet.ppvan.mangareader.comons.exceptions;
 
 import org.springframework.http.HttpStatus;
 

@@ -1,4 +1,6 @@
-package uet.ppvan.mangareader.exceptions;
+package uet.ppvan.mangareader.upload.exceptions;
+
+import uet.ppvan.mangareader.comons.exceptions.NoSuchElementFound;
 
 public class ImageNotFound {
     public static NoSuchElementFound withUri(String uri) {

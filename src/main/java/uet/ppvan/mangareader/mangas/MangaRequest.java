@@ -6,6 +6,7 @@ import uet.ppvan.mangareader.mangas.enums.Status;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 public record MangaRequest(
     @NotBlank(message = "Manga name can't be blank.")
@@ -25,6 +26,6 @@ public record MangaRequest(
 
     Status status,
 
-    Genre genre
+    Set<Genre> genres
 ) {
 }
