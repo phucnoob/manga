@@ -3,6 +3,7 @@ package uet.ppvan.mangareader.mangas;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,9 +19,12 @@ import uet.ppvan.mangareader.comons.ResponseFactory;
 import uet.ppvan.mangareader.mangas.interfaces.MangaService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 @AllArgsConstructor
 @RestController
+@Validated
 @RequestMapping("/api/v1/manga")
 public class MangaController {
     private final MangaService service;
@@ -35,22 +39,20 @@ public class MangaController {
 
 
     @GetMapping("/all")
-    public ResponseEntity<SuccessResponse> getAll(
-        @RequestParam(required = false, defaultValue = "0") Integer page,
-        @RequestParam(required = false, defaultValue = "5") Integer size
+    public ResponseEntity<SuccessResponse> getOverview(
+        @RequestParam(required = false, defaultValue = "0") @Valid @Min(0) @Max(Integer.MAX_VALUE) Integer page,
+        @RequestParam(required = false, defaultValue = "5") @Valid @Min(0) @Max(Integer.MAX_VALUE) Integer size,
+        @RequestParam(required = false, defaultValue = "false") @Valid Boolean details
     ) {
-        return ResponseEntity.ok(
-            ResponseFactory.success("Query mangas successfully.", service.getAll(page, size))
-        );
-    }
-
-    @GetMapping("/latest")
-    public ResponseEntity<SuccessResponse> getLatest(
-        @RequestParam(required = false, defaultValue = "0") Integer page
-    ) {
-        return ResponseEntity.ok(
-            ResponseFactory.success("Latest manga.", service.getLatest(page, 5))
-        );
+        if (details) {
+            return ResponseEntity.ok(
+                ResponseFactory.success(service.getAll(page, size))
+            );
+        } else {
+            return ResponseEntity.ok(
+                ResponseFactory.success(service.getAllOverview(page, size))
+            );
+        }
     }
     @PostMapping("/add")
     public ResponseEntity<SuccessResponse> post(@RequestBody @Valid MangaRequest manga) {
