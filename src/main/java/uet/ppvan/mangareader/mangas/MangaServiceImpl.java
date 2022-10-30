@@ -80,17 +80,7 @@ public class MangaServiceImpl implements uet.ppvan.mangareader.mangas.interfaces
         return mangaRepository.findBy(MangaOverview.class, PageRequest.of(page, size)).getContent();
     }
 
-    private List<MangaRequest> getLatest(Integer page, int size) {
-
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("lastUpdate").descending());
-
-        return mangaRepository.findAll(pageRequest)
-            .getContent()
-            .stream().map(this::toDTO)
-            .collect(Collectors.toList());
-    }
-
-    private MangaRequest    toDTO(Manga manga) {
+    private MangaRequest toDTO(Manga manga) {
         return new MangaRequest(
             manga.getName(),
             manga.getCover(),
