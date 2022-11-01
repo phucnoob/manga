@@ -7,7 +7,7 @@ import uet.ppvan.mangareader.mangas.MangaRequest;
 import java.util.List;
 
 public interface MangaService {
-    void addNewManga(MangaRequest requestData);
+    Integer addNewManga(MangaRequest requestData);
 
     void updateManga(Integer id, MangaRequest requestData);
 
