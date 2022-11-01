@@ -49,5 +49,5 @@ jobs:
         with:
           app-name: 'mahiru'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8790D025167944879A73E65CFD4E0542 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4564A5CA8E9C4D6B96FBDC3582BFB516 }}
           package: '*.jar'

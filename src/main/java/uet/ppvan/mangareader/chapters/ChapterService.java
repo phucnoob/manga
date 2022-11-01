@@ -1,4 +1,4 @@
-package uet.ppvan.mangareader.chapters.interfaces;
+package uet.ppvan.mangareader.chapters;
 
 import uet.ppvan.mangareader.chapters.ChapterRequest;
 

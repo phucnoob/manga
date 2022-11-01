@@ -3,8 +3,12 @@ package uet.ppvan.mangareader.comons;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolationException;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import uet.ppvan.mangareader.comons.exceptions.BaseException;
@@ -13,6 +17,15 @@ import uet.ppvan.mangareader.upload.exceptions.InvalidUploadFile;
 
 
 public class ResponseAdvice extends ResponseEntityExceptionHandler {
+
+//    Global -fallback
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handleUnknownException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(ResponseFactory.failure(ex.getMessage()));
+    }
+
 
     @ExceptionHandler(NoSuchElementFound.class)
     public ResponseEntity<Object> handleNotFoundException(
@@ -63,4 +76,20 @@ public class ResponseAdvice extends ResponseEntityExceptionHandler {
 
         return new ResponseEntity<>(response, response.status());
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Object> handleDataValidation(ConstraintViolationException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(ResponseFactory.failure(ex.getMessage()));
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(ResponseFactory.failure(ex.getMessage()));
+    }
+
+
 }

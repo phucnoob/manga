@@ -46,10 +46,17 @@ public class MangaServiceImpl implements uet.ppvan.mangareader.mangas.interfaces
 
     @Override
     public List<MangaRequest> getAll(int page, int size) {
-       return mangaRepository.findAll(PageRequest.of(page, size))
-           .map(this::toDTO).getContent();
+       return mangaRepository.findAll(PageRequest.of(page, size,
+               Sort.by("lastUpdate").descending()))
+                    .map(this::toDTO).getContent();
     }
 
+    @Override
+    public List<MangaOverview> getAllOverview(int page, int size) {
+        return mangaRepository.findBy(MangaOverview.class, PageRequest.of(page, size,
+            Sort.by("lastUpdate").descending()))
+            .getContent();
+    }
 
     @Override
     public MangaRequest getMangaById(Integer id) {
@@ -69,18 +76,11 @@ public class MangaServiceImpl implements uet.ppvan.mangareader.mangas.interfaces
             ));
     }
 
-    @Override
-    public List<MangaRequest> getLatest(Integer page, int size) {
-
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("lastUpdate").descending());
-
-        return mangaRepository.findAll(pageRequest)
-            .getContent()
-            .stream().map(this::toDTO)
-            .collect(Collectors.toList());
+    private List<MangaOverview> getAllOverview(Integer page, Integer size) {
+        return mangaRepository.findBy(MangaOverview.class, PageRequest.of(page, size)).getContent();
     }
 
-    private MangaRequest    toDTO(Manga manga) {
+    private MangaRequest toDTO(Manga manga) {
         return new MangaRequest(
             manga.getName(),
             manga.getCover(),
@@ -102,7 +102,10 @@ public class MangaServiceImpl implements uet.ppvan.mangareader.mangas.interfaces
         manga.setOtherName(mangaRequest.otherName());
         manga.setLastUpdate(LocalDateTime.now(ZoneOffset.UTC));
         var genres = mangaRequest.genres().stream()
-            .map(genreRepository::findGenreEntityByGenre)
+            .map(g -> {
+                System.out.println(g);
+                return genreRepository.findGenreEntityByGenre(g);
+            })
             .collect(Collectors.toSet());
 
         manga.setGenres(genres);
