@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.Map;
+
 @SpringBootApplication
 @RestController
 public class MangaReaderApplication {
@@ -15,6 +17,18 @@ public class MangaReaderApplication {
     @GetMapping("/")
     public String index() {
         return "<h1>Hello world</h1>";
+    }
+
+    @GetMapping("/info")
+    public String info() {
+
+        StringBuilder builder = new StringBuilder();
+        for (Map.Entry<String, String> entry : System.getenv().entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+            builder.append(entry.getKey() + ": " + entry.getValue()).append(System.lineSeparator());
+        }
+
+        return builder.toString();
     }
     public static void main(String[] args) {
         SpringApplication.run(MangaReaderApplication.class, args);
