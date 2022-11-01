@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import uet.ppvan.mangareader.chapters.Chapter;
+import uet.ppvan.mangareader.chapters.ChapterRepository;
 import uet.ppvan.mangareader.comons.exceptions.NoSuchElementFound;
 import uet.ppvan.mangareader.mangas.genres.GenreEntity;
 import uet.ppvan.mangareader.mangas.genres.GenreRepository;
@@ -21,9 +22,14 @@ public class MangaServiceImpl implements uet.ppvan.mangareader.mangas.interfaces
     private final MangaRepository mangaRepository;
     private final GenreRepository genreRepository;
 
+    private final ChapterRepository chapterRepository;
+
     @Override
-    public void addNewManga(MangaRequest requestData) {
-        mangaRepository.save(toManga(requestData));
+    public Integer addNewManga(MangaRequest requestData) {
+        Manga manga = toManga(requestData);
+        mangaRepository.save(manga);
+
+        return manga.getId();
     }
 
     @Override
@@ -69,11 +75,13 @@ public class MangaServiceImpl implements uet.ppvan.mangareader.mangas.interfaces
 
     @Override
     public List<Chapter> getAllChapters(Integer id) {
-        return mangaRepository.findById(id)
-            .map(Manga::getChapters)
-            .orElseThrow(() -> new NoSuchElementFound(
-                String.format("Manga with id = %s not found.", id)
-            ));
+//        return mangaRepository.findById(id)
+//            .map(Manga::getChapters)
+//            .orElseThrow(() -> new NoSuchElementFound(
+//                String.format("Manga with id = %s not found.", id)
+//            ));
+
+        return chapterRepository.findByManga_Id(id);
     }
 
     private List<MangaOverview> getAllOverview(Integer page, Integer size) {

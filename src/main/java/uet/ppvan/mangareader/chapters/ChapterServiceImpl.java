@@ -66,6 +66,7 @@ public class ChapterServiceImpl implements ChapterService {
         chapter.setUpdatedDate(LocalDate.now(ZoneOffset.UTC)); // Auto now
         // TODO Maybe need timezone fix.
         chapter.setManga(manga);
+        chapter.setImages(chapterRequest.images());
 
         return chapter;
     }

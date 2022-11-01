@@ -7,7 +7,7 @@ import uet.ppvan.mangareader.comons.SuccessResponse;
 import uet.ppvan.mangareader.comons.ResponseFactory;
 
 @RestController
-@RequestMapping("api/v2/chapter/")
+@RequestMapping("api/v1/chapter/")
 @AllArgsConstructor
 public class ChapterController {
 

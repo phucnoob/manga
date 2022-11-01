@@ -29,4 +29,16 @@ public class MangaReaderApplication {
             }
         };
     }
+
+//    @Bean
+//    @Autowired
+//    public CommandLineRunner init(GenreRepository genreRepository) {
+//        return args -> {
+//            for (var genre: Genre.values()) {
+//                var dbGenre = new GenreEntity();
+//                dbGenre.setGenre(genre);
+//                genreRepository.save(dbGenre);
+//            }
+//        };
+//    }
 }

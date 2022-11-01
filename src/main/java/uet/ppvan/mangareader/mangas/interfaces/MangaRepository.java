@@ -10,4 +10,5 @@ import uet.ppvan.mangareader.mangas.Manga;
 public interface MangaRepository extends JpaRepository<Manga, Integer> {
 
     <T> Page<T> findBy(Class<T> type, Pageable pageable);
+
 }

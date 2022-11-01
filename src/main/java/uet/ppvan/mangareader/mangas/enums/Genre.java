@@ -4,14 +4,13 @@ package uet.ppvan.mangareader.mangas.enums;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public enum Genre {
     SIXTEEN_PLUS("16+"),
     EIGHTEEN_PLUS("18+"),
     ACTION("Action"),
+    ANCIENT("Cổ Đại"),
     ADULT("Adult"),
     ADVENTURE("Adventure"),
     ANIME("Anime"),
@@ -23,13 +22,13 @@ public enum Genre {
     ECCHI("Ecchi"),
     EVENT_BT("Event BT"),
     FANTASY("Fantasy"),
-    FULL_COLOR("Full màu"),
+    FULL_COLOR("Full màu", "Truyện Màu"),
     GAME("Game"),
     GENDER_BENDER("Gender Bender"),
     HAREM("Harem"),
     HISTORICAL("Historical"),
     HORROR("Horror"),
-    ISEKAI("Isekai"),
+    ISEKAI("Isekai", "Chuyển Sinh", "Xuyên Không"),
     JOSEI("Josei"),
     LIVE_ACTION("Live action"),
     MAGIC("Magic"),
@@ -71,34 +70,37 @@ public enum Genre {
     YURI("Yuri"),
     ;
     private static final Map<String, Genre> reverseValues;
-    private static final Map<String, Genre> reverseValuesCaseInsensitive;
     private static final String defaultErrorMessage;
 
     static {
         reverseValues = new HashMap<>();
-        reverseValuesCaseInsensitive = new HashMap<>();
         Arrays.stream(values()).forEach(genre -> {
-            reverseValues.put(genre.getValue(), genre);
-            reverseValuesCaseInsensitive.put(genre.getValue().toLowerCase(), genre);
+
+            // Many name of genres but point to same enum.
+            for (var value: genre.values) {
+                reverseValues.put(value, genre);
+                reverseValues.put(value.toLowerCase(), genre);
+            }
         });
 
         defaultErrorMessage = "'%s' is not valid genre.Must be one of: " + String.join(", ", reverseValues.keySet());
     }
-    private final String value;
+    private final ArrayList<String> values;
 
-    Genre(String value) {
-        this.value = value;
+    Genre(String ...values) {
+        this.values = new ArrayList<>(values.length);
+        Collections.addAll(this.values, values);
     }
     @JsonValue
     public String getValue() {
-        return value;
+        return values.get(0);
     }
 
     @JsonCreator
     public static Genre fromString(String value) {
-        if (!reverseValuesCaseInsensitive.containsKey(value.toLowerCase())) {
+        if (!reverseValues.containsKey(value.toLowerCase())) {
             throw new EnumParseException(String.format(defaultErrorMessage, value));
         }
-        return reverseValuesCaseInsensitive.get(value.toLowerCase());
+        return reverseValues.get(value.toLowerCase());
     }
 }

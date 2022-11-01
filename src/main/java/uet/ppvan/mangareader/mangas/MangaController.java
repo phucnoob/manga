@@ -56,9 +56,9 @@ public class MangaController {
     }
     @PostMapping("/add")
     public ResponseEntity<SuccessResponse> post(@RequestBody @Valid MangaRequest manga) {
-        service.addNewManga(manga);
+        Integer newRowID = service.addNewManga(manga);
         return ResponseEntity.ok(
-                ResponseFactory.success("Manga saved", manga)
+                ResponseFactory.success("Manga saved", newRowID)
         );
     }
 

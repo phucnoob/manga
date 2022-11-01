@@ -31,7 +31,7 @@ public class Chapter {
 
 
 //    @OneToMany(mappedBy = "chapter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @JoinTable(name = "chapter_images", joinColumns = @JoinColumn(name = "chapter_id"))
     private Set<String> images;
 }
