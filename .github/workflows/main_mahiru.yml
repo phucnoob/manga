@@ -23,6 +23,10 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean install
+        env:
+          DRIVE_FOLDER: ${{ secrets.DRIVE_FOLDER }}
+          CREDENTIALS: ${{ secrets.CREDENTIALS }}
+          DOMAIN_NAME: ${{ secrets.DOMAIN_NAME }}
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
