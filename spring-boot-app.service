@@ -1,0 +1,16 @@
+[Unit]
+Description=Spring Boot App
+[Service]
+User=azureuser
+# The configuration file application.properties should be here:
+#change this to your workspace
+WorkingDirectory=/home/azureuser/manga-be
+#path to executable.
+#executable is a bash script which calls jar file
+ExecStart=/bin/bash /home/azureuser/manga-be/spring_run.sh
+SuccessExitStatus=143
+TimeoutStopSec=10
+Restart=on-failure
+RestartSec=5
+[Install]
+WantedBy=multi-user.target

@@ -1,3 +1,6 @@
+create database if not exists mangadb;
+use mangadb; 
+
 create table if not exists chapters
 (
     id           int auto_increment

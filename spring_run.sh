@@ -1,0 +1,1 @@
+SPRING_PROFILES_ACTIVE=vps java -jar target/MangaReader-0.0.1-SNAPSHOT.jar
