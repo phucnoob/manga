@@ -6,11 +6,11 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Java Auto Build and push deployment
+name: Java Run test on development branch
 
 on:
-  push:
-    branches: [ dev ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
