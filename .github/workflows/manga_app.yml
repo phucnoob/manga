@@ -28,7 +28,7 @@ jobs:
     - name: Build with Maven
       run: mvn clean install
       env:
-          SPRING_PROFILES_ACTIVE: 'vps'
+          SPRING_PROFILES_ACTIVE: 'production'
           DRIVE_FOLDER: ${{ secrets.DRIVE_FOLDER }}
           CREDENTIALS: ${{ secrets.CREDENTIALS }}
           DOMAIN_NAME: ${{ secrets.DOMAIN_NAME }}
