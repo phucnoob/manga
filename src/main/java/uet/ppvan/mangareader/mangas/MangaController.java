@@ -1,26 +1,18 @@
 package uet.ppvan.mangareader.mangas;
 
-import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import uet.ppvan.mangareader.comons.SuccessResponse;
-import uet.ppvan.mangareader.chapters.Chapter;
+import org.springframework.web.bind.annotation.*;
+import uet.ppvan.mangareader.chapters.ChapterOverview;
 import uet.ppvan.mangareader.comons.ResponseFactory;
+import uet.ppvan.mangareader.comons.SuccessResponse;
 import uet.ppvan.mangareader.mangas.interfaces.MangaService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -38,7 +30,7 @@ public class MangaController {
     }
 
 
-    @GetMapping("/all")
+    @GetMapping({ "/all", "/latest" })
     public ResponseEntity<SuccessResponse> getOverview(
         @RequestParam(required = false, defaultValue = "0") @Valid @Min(0) @Max(Integer.MAX_VALUE) Integer page,
         @RequestParam(required = false, defaultValue = "5") @Valid @Min(0) @Max(Integer.MAX_VALUE) Integer size,
@@ -87,7 +79,7 @@ public class MangaController {
     public ResponseEntity<SuccessResponse> chapters(
         @PathVariable Integer id
     ) {
-        List<Chapter> chapters = service.getAllChapters(id);
+        List<ChapterOverview> chapters = service.getAllChapters(id);
         return ResponseEntity.ok(
                 ResponseFactory.success(chapters)
         );

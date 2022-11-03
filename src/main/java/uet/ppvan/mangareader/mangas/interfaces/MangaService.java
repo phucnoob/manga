@@ -1,6 +1,7 @@
 package uet.ppvan.mangareader.mangas.interfaces;
 
 import uet.ppvan.mangareader.chapters.Chapter;
+import uet.ppvan.mangareader.chapters.ChapterOverview;
 import uet.ppvan.mangareader.mangas.MangaOverview;
 import uet.ppvan.mangareader.mangas.MangaRequest;
 
@@ -19,5 +20,5 @@ public interface MangaService {
 
     MangaRequest getMangaById(Integer id);
 
-    List<Chapter> getAllChapters(Integer id);
+    List<ChapterOverview> getAllChapters(Integer id);
 }

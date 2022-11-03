@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import uet.ppvan.mangareader.chapters.Chapter;
+import uet.ppvan.mangareader.chapters.ChapterOverview;
 import uet.ppvan.mangareader.chapters.ChapterRepository;
 import uet.ppvan.mangareader.comons.exceptions.NoSuchElementFound;
 import uet.ppvan.mangareader.mangas.genres.GenreEntity;
@@ -74,7 +75,7 @@ public class MangaServiceImpl implements uet.ppvan.mangareader.mangas.interfaces
     }
 
     @Override
-    public List<Chapter> getAllChapters(Integer id) {
+    public List<ChapterOverview> getAllChapters(Integer id) {
 //        return mangaRepository.findById(id)
 //            .map(Manga::getChapters)
 //            .orElseThrow(() -> new NoSuchElementFound(
