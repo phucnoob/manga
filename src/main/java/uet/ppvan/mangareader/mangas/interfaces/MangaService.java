@@ -20,5 +20,7 @@ public interface MangaService {
 
     MangaRequest getMangaById(Integer id);
 
+    MangaOverview getMangaOverviewById(Integer id);
+
     List<ChapterOverview> getAllChapters(Integer id);
 }

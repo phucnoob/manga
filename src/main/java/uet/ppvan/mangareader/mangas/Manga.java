@@ -10,6 +10,8 @@ import javax.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.hibernate.validator.constraints.URL;
 import uet.ppvan.mangareader.chapters.Chapter;
 import uet.ppvan.mangareader.mangas.enums.Status;
@@ -18,6 +20,7 @@ import uet.ppvan.mangareader.mangas.genres.GenreEntity;
 @NoArgsConstructor
 @Getter
 @Setter
+@Indexed
 @Entity
 @Table(name = "mangas")
 public class Manga {
@@ -26,6 +29,7 @@ public class Manga {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @FullTextField
     @Column(nullable = false, length = 127)
     private String name;
 
@@ -47,6 +51,7 @@ public class Manga {
     )
     private Set<GenreEntity> genres;
 
+    @FullTextField
     @Column(name = "other_name")
     private String otherName;
 

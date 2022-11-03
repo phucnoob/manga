@@ -8,6 +8,7 @@ import uet.ppvan.mangareader.chapters.ChapterOverview;
 import uet.ppvan.mangareader.comons.ResponseFactory;
 import uet.ppvan.mangareader.comons.SuccessResponse;
 import uet.ppvan.mangareader.mangas.interfaces.MangaService;
+import uet.ppvan.mangareader.search.SearchMangaService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
@@ -20,6 +21,7 @@ import java.util.List;
 @RequestMapping("/api/v1/manga")
 public class MangaController {
     private final MangaService service;
+    private final SearchMangaService searchService;
 
     @GetMapping("/{id}")
     public ResponseEntity<SuccessResponse> getById(@PathVariable Integer id) {
@@ -29,6 +31,11 @@ public class MangaController {
         );
     }
 
+
+    @GetMapping("/ajax/search")
+    public List<MangaOverview> searchMangaByName(@RequestParam String name) {
+        return searchService.searchByName(name);
+    }
 
     @GetMapping({ "/all", "/latest" })
     public ResponseEntity<SuccessResponse> getOverview(

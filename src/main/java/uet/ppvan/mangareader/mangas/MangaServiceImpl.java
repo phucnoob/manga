@@ -75,6 +75,14 @@ public class MangaServiceImpl implements uet.ppvan.mangareader.mangas.interfaces
     }
 
     @Override
+    public MangaOverview getMangaOverviewById(Integer id) {
+        return mangaRepository.findById(MangaOverview.class, id)
+            .orElseThrow(() -> new NoSuchElementFound(
+                String.format("Manga with id = %s not found.", id)
+            ));
+    }
+
+    @Override
     public List<ChapterOverview> getAllChapters(Integer id) {
 //        return mangaRepository.findById(id)
 //            .map(Manga::getChapters)
