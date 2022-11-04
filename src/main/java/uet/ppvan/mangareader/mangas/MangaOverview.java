@@ -1,9 +1,5 @@
 package uet.ppvan.mangareader.mangas;
 
 
-public interface MangaOverview {
-    Integer getId();
-    String getName();
-
-    String getCover();
+public record MangaOverview(Integer id, String name, String cover) {
 }
