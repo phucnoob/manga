@@ -24,13 +24,13 @@ public class Chapter {
     @Column(name = "updated_date")
     private LocalDate updatedDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "manga_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "manga_id", referencedColumnName = "id", nullable = false)
     @JsonBackReference
     private Manga manga;
 
 
-//    @OneToMany(mappedBy = "chapter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    //    @OneToMany(mappedBy = "chapter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @ElementCollection(fetch = FetchType.EAGER)
     @JoinTable(name = "chapter_images", joinColumns = @JoinColumn(name = "chapter_id"))
     private Set<String> images;

@@ -18,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 @Validated
-@RequestMapping("/api/v1/manga")
+@RequestMapping("/api/v1/mangas")
 public class MangaController {
     private final MangaService service;
     private final SearchMangaService searchService;
@@ -37,7 +37,7 @@ public class MangaController {
         return searchService.searchByName(name);
     }
 
-    @GetMapping({ "/all", "/latest" })
+    @GetMapping("")
     public ResponseEntity<SuccessResponse> getOverview(
         @RequestParam(required = false, defaultValue = "0") @Valid @Min(0) @Max(Integer.MAX_VALUE) Integer page,
         @RequestParam(required = false, defaultValue = "5") @Valid @Min(0) @Max(Integer.MAX_VALUE) Integer size,
@@ -53,7 +53,8 @@ public class MangaController {
             );
         }
     }
-    @PostMapping("/add")
+
+    @PostMapping("/")
     public ResponseEntity<SuccessResponse> post(@RequestBody @Valid MangaRequest manga) {
         Integer newRowID = service.addNewManga(manga);
         return ResponseEntity.ok(
@@ -61,7 +62,7 @@ public class MangaController {
         );
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}/update")
     public ResponseEntity<SuccessResponse> update(
         @PathVariable Integer id,
         @RequestBody MangaRequest updateManga
@@ -72,7 +73,7 @@ public class MangaController {
         );
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}/delete")
     public ResponseEntity<SuccessResponse> deleteById(
         @PathVariable Integer id
     ) {

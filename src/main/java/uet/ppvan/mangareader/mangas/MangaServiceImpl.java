@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import uet.ppvan.mangareader.chapters.Chapter;
 import uet.ppvan.mangareader.chapters.ChapterOverview;
 import uet.ppvan.mangareader.chapters.ChapterRepository;
 import uet.ppvan.mangareader.comons.exceptions.NoSuchElementFound;
@@ -60,8 +59,8 @@ public class MangaServiceImpl implements uet.ppvan.mangareader.mangas.interfaces
 
     @Override
     public List<MangaOverview> getAllOverview(int page, int size) {
-        return mangaRepository.findBy(MangaOverview.class, PageRequest.of(page, size,
-            Sort.by("lastUpdate").descending()))
+        return mangaRepository.findAllOverview(PageRequest.of(page, size,
+                Sort.by("lastUpdate").descending()))
             .getContent();
     }
 
@@ -76,7 +75,7 @@ public class MangaServiceImpl implements uet.ppvan.mangareader.mangas.interfaces
 
     @Override
     public MangaOverview getMangaOverviewById(Integer id) {
-        return mangaRepository.findById(MangaOverview.class, id)
+        return mangaRepository.findOverviewById(id)
             .orElseThrow(() -> new NoSuchElementFound(
                 String.format("Manga with id = %s not found.", id)
             ));
@@ -84,18 +83,9 @@ public class MangaServiceImpl implements uet.ppvan.mangareader.mangas.interfaces
 
     @Override
     public List<ChapterOverview> getAllChapters(Integer id) {
-//        return mangaRepository.findById(id)
-//            .map(Manga::getChapters)
-//            .orElseThrow(() -> new NoSuchElementFound(
-//                String.format("Manga with id = %s not found.", id)
-//            ));
-
         return chapterRepository.findByManga_Id(id);
     }
 
-    private List<MangaOverview> getAllOverview(Integer page, Integer size) {
-        return mangaRepository.findBy(MangaOverview.class, PageRequest.of(page, size)).getContent();
-    }
 
     private MangaRequest toDTO(Manga manga) {
         return new MangaRequest(
