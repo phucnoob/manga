@@ -65,9 +65,8 @@ public class MangaServiceImpl implements uet.ppvan.mangareader.mangas.interfaces
     }
 
     @Override
-    public MangaRequest getMangaById(Integer id) {
-        return mangaRepository.findById(id)
-            .map(this::toDTO)
+    public MangaDetails getMangaById(Integer id) {
+        return mangaRepository.findMangaById(id)
             .orElseThrow(() -> new NoSuchElementFound(
                 String.format("Manga with id = %s not found.", id)
             ));

@@ -25,7 +25,7 @@ public class MangaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<SuccessResponse> getById(@PathVariable Integer id) {
-        MangaRequest foundedManga = service.getMangaById(id);
+        MangaDetails foundedManga = service.getMangaById(id);
         return ResponseEntity.ok(
                 ResponseFactory.success(foundedManga)
         );
@@ -54,7 +54,7 @@ public class MangaController {
         }
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<SuccessResponse> post(@RequestBody @Valid MangaRequest manga) {
         Integer newRowID = service.addNewManga(manga);
         return ResponseEntity.ok(
@@ -83,13 +83,14 @@ public class MangaController {
         );
     }
 
+    @Deprecated
     @GetMapping("/{id}/chapters")
     public ResponseEntity<SuccessResponse> chapters(
         @PathVariable Integer id
     ) {
         List<ChapterOverview> chapters = service.getAllChapters(id);
         return ResponseEntity.ok(
-                ResponseFactory.success(chapters)
+            ResponseFactory.success(chapters)
         );
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import uet.ppvan.mangareader.mangas.Manga;
+import uet.ppvan.mangareader.mangas.MangaDetails;
 import uet.ppvan.mangareader.mangas.MangaOverview;
 
 import java.util.Optional;
@@ -26,5 +27,8 @@ public interface MangaRepository extends JpaRepository<Manga, Integer> {
         """)
     Optional<MangaOverview> findOverviewById(Integer id);
 
-    Optional<Manga> findMangaById(Integer id);
+    @Query("""
+        SELECT m FROM Manga m JOIN FETCH m.chapters c WHERE m.id = :id
+        """)
+    Optional<MangaDetails> findMangaById(Integer id);
 }
