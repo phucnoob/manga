@@ -29,9 +29,12 @@ public class Chapter {
     @JsonBackReference
     private Manga manga;
 
+    @Column(name = "server")
+    private String server;
+
 
     //    @OneToMany(mappedBy = "chapter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     @JoinTable(name = "chapter_images", joinColumns = @JoinColumn(name = "chapter_id"))
     private Set<String> images;
 }

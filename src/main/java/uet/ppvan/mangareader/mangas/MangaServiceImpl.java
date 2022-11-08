@@ -1,12 +1,12 @@
 package uet.ppvan.mangareader.mangas;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import uet.ppvan.mangareader.chapters.ChapterOverview;
 import uet.ppvan.mangareader.chapters.ChapterRepository;
-import uet.ppvan.mangareader.comons.exceptions.NoSuchElementFound;
 import uet.ppvan.mangareader.mangas.genres.GenreEntity;
 import uet.ppvan.mangareader.mangas.genres.GenreRepository;
 import uet.ppvan.mangareader.mangas.interfaces.MangaRepository;
@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class MangaServiceImpl implements uet.ppvan.mangareader.mangas.interfaces.MangaService {
     private final MangaRepository mangaRepository;
     private final GenreRepository genreRepository;
@@ -52,13 +53,15 @@ public class MangaServiceImpl implements uet.ppvan.mangareader.mangas.interfaces
 
     @Override
     public List<MangaRequest> getAll(int page, int size) {
-       return mangaRepository.findAll(PageRequest.of(page, size,
-               Sort.by("lastUpdate").descending()))
-                    .map(this::toDTO).getContent();
+        log.debug("MangaService::getAll(page = {}, size = {})", page, size);
+        return mangaRepository.findAll(PageRequest.of(page, size,
+                Sort.by("lastUpdate").descending()))
+            .map(this::toDTO).getContent();
     }
 
     @Override
     public List<MangaOverview> getAllOverview(int page, int size) {
+        log.debug("MangaService::getAllOverview(page = {}, size = {})", page, size);
         return mangaRepository.findAllOverview(PageRequest.of(page, size,
                 Sort.by("lastUpdate").descending()))
             .getContent();
@@ -66,18 +69,16 @@ public class MangaServiceImpl implements uet.ppvan.mangareader.mangas.interfaces
 
     @Override
     public MangaDetails getMangaById(Integer id) {
+        log.debug("MangaService::getMangaById: id = {}", id);
         return mangaRepository.findMangaById(id)
-            .orElseThrow(() -> new NoSuchElementFound(
-                String.format("Manga with id = %s not found.", id)
-            ));
+            .orElseThrow(() -> MangaNotFound.withId(id));
     }
 
     @Override
     public MangaOverview getMangaOverviewById(Integer id) {
+        log.debug("MangaService::getMangaOverviewById id = {}", id);
         return mangaRepository.findOverviewById(id)
-            .orElseThrow(() -> new NoSuchElementFound(
-                String.format("Manga with id = %s not found.", id)
-            ));
+            .orElseThrow(() -> MangaNotFound.withId(id));
     }
 
     @Override

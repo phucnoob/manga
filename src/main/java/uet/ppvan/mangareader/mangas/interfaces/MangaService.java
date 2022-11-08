@@ -15,6 +15,7 @@ public interface MangaService {
     void deleteManga(Integer id);
 
 
+    @Deprecated
     List<MangaRequest> getAll(int page, int size);
     List<MangaOverview> getAllOverview(int page, int size);
 
