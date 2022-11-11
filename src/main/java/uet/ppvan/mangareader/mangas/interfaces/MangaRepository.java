@@ -16,13 +16,13 @@ public interface MangaRepository extends JpaRepository<Manga, Integer> {
 
 
     @Query("""
-        SELECT new uet.ppvan.mangareader.mangas.MangaOverview(m.id, m.name, m.cover)
+        SELECT new uet.ppvan.mangareader.mangas.MangaOverview(m.id, m.name, m.cover, m.description)
         FROM Manga m
         """)
     Page<MangaOverview> findAllOverview(Pageable pageable);
 
     @Query("""
-        SELECT new uet.ppvan.mangareader.mangas.MangaOverview(m.id, m.name, m.cover)
+        SELECT new uet.ppvan.mangareader.mangas.MangaOverview(m.id, m.name, m.cover, m.description)
         FROM Manga m WHERE m.id = :id
         """)
     Optional<MangaOverview> findOverviewById(Integer id);

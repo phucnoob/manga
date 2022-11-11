@@ -3,11 +3,11 @@ package uet.ppvan.mangareader.chapters;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import uet.ppvan.mangareader.comons.SuccessResponse;
 import uet.ppvan.mangareader.comons.ResponseFactory;
+import uet.ppvan.mangareader.comons.SuccessResponse;
 
 @RestController
-@RequestMapping("api/v1/chapter/")
+@RequestMapping("api/v1/chapters/")
 @AllArgsConstructor
 public class ChapterController {
 

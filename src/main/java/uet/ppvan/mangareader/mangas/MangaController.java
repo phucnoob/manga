@@ -28,9 +28,7 @@ public class MangaController {
     @GetMapping("/{id}")
     public ResponseEntity<SuccessResponse> getById(@PathVariable Integer id) {
 
-        log.info("Begin get manga id = {}", id);
         MangaDetails foundedManga = service.getMangaById(id);
-        log.info("End get manga id = {}", id);
         return ResponseEntity.ok(
             ResponseFactory.success(foundedManga)
         );
@@ -47,7 +45,6 @@ public class MangaController {
         @RequestParam(required = false, defaultValue = "0") @Valid @Min(0) @Max(Integer.MAX_VALUE) Integer page,
         @RequestParam(required = false, defaultValue = "20") @Valid @Min(0) @Max(Integer.MAX_VALUE) Integer size
     ) {
-        log.info("Index page: page = {}, size = {}", page, size);
         return ResponseEntity.ok(
             ResponseFactory.success(service.getAllOverview(page, size))
         );
