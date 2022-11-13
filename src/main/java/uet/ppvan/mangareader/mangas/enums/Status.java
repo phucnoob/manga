@@ -2,10 +2,10 @@ package uet.ppvan.mangareader.mangas.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public enum Status {
     CONTINUE("Đang tiến hành"),
@@ -22,7 +22,7 @@ public enum Status {
             reverseValues.put(status.value(), status);
         });
 
-        defaultErrorMessage = "Status must be one of: " + String.join(", ", reverseValues.keySet());
+        defaultErrorMessage = "%s is not a valid Status";
     }
     private final String status;
 
@@ -37,7 +37,7 @@ public enum Status {
     @JsonCreator
     public static Status fromString(String value) {
         if (!reverseValues.containsKey(value)) {
-            throw new EnumParseException(defaultErrorMessage);
+            throw new EnumParseException(String.format(defaultErrorMessage, value));
         }
         return reverseValues.get(value);
     }

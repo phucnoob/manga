@@ -1,9 +1,9 @@
 package uet.ppvan.mangareader.chapters;
 
-import uet.ppvan.mangareader.comons.exceptions.NoSuchElementFound;
+import uet.ppvan.mangareader.comons.exceptions.ResourceNotFound;
 
 public class ChapterNotFound {
-    public static NoSuchElementFound withId(Integer id) {
-        return new NoSuchElementFound(String.format("Chapter[id=%s] not found.", id));
+    public static ResourceNotFound withId(Integer id) {
+        return new ResourceNotFound(String.format("Chapter[id=%s] not found.", id));
     }
 }

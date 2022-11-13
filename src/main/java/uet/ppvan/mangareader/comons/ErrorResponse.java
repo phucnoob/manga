@@ -1,13 +1,8 @@
 package uet.ppvan.mangareader.comons;
 
-import org.springframework.http.HttpStatus;
-
-import java.time.LocalDateTime;
+import java.util.List;
 
 public record ErrorResponse(
-    HttpStatus status,
-    Integer code,
     String message,
-    LocalDateTime timestamp,
-    String path
+    List<String> details
 ) {}

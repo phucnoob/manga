@@ -41,6 +41,11 @@ public class JwtFilter extends OncePerRequestFilter {
          */
         try {
             String authorHeader = request.getHeader(headerString);
+            if (authorHeader == null) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+
             String token = authorHeader.substring(headerPrefix.length());
 
             var jwtAuthentication = new JwtAuthentication(token);

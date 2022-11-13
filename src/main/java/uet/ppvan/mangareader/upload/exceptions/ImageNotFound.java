@@ -1,9 +1,9 @@
 package uet.ppvan.mangareader.upload.exceptions;
 
-import uet.ppvan.mangareader.comons.exceptions.NoSuchElementFound;
+import uet.ppvan.mangareader.comons.exceptions.ResourceNotFound;
 
 public class ImageNotFound {
-    public static NoSuchElementFound withUri(String uri) {
-        return new NoSuchElementFound(String.format("Image[uri=%s] not found.", uri));
+    public static ResourceNotFound withUri(String uri) {
+        return new ResourceNotFound(String.format("Image[uri=%s] not found.", uri));
     }
 }

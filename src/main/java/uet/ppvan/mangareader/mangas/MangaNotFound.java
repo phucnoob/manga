@@ -1,9 +1,9 @@
 package uet.ppvan.mangareader.mangas;
 
-import uet.ppvan.mangareader.comons.exceptions.NoSuchElementFound;
+import uet.ppvan.mangareader.comons.exceptions.ResourceNotFound;
 
 public class MangaNotFound {
-    public static NoSuchElementFound withId(Integer id) {
-        return new NoSuchElementFound(String.format("Manga[id=%s] not found.", id));
+    public static ResourceNotFound withId(Integer id) {
+        return new ResourceNotFound(String.format("Manga[id=%s] not found.", id));
     }
 }

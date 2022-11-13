@@ -3,7 +3,6 @@ package uet.ppvan.mangareader.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,10 +26,11 @@ public class SecurityConfig {
         return http
             .addFilterAt(jwtFilter, UsernamePasswordAuthenticationFilter.class)
             .authorizeRequests()
-            .mvcMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
-            .mvcMatchers("/auth/login", "/auth/register").permitAll()
-            .mvcMatchers("/auth/test").authenticated()
-            .anyRequest().authenticated()
+//            .mvcMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
+//            .mvcMatchers("/auth/login", "/auth/register").permitAll()
+//            .mvcMatchers("/auth/test").authenticated()
+//            .anyRequest().authenticated()
+            .anyRequest().permitAll()
             .and()
             .build();
 
