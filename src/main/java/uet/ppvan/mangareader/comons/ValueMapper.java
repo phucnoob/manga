@@ -13,4 +13,12 @@ public class ValueMapper {
             throw new RuntimeException(e);
         }
     }
+
+    public static <T> T jsonAsObject(Class<T> type, String json) {
+        try {
+            return mapper.readValue(json, type);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
