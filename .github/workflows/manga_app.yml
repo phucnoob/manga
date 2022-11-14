@@ -26,10 +26,11 @@ jobs:
     - name: Build with Maven
       run: mvn clean install
       env:
-          SPRING_PROFILES_ACTIVE: 'production'
-          DRIVE_FOLDER: ${{ secrets.DRIVE_FOLDER }}
-          CREDENTIALS: ${{ secrets.CREDENTIALS }}
-          DOMAIN_NAME: ${{ secrets.DOMAIN_NAME }}
+        SPRING_PROFILES_ACTIVE: 'production'
+        DRIVE_FOLDER: ${{ secrets.DRIVE_FOLDER }}
+        CREDENTIALS: ${{ secrets.CREDENTIALS }}
+        DOMAIN_NAME: ${{ secrets.DOMAIN_NAME }}
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v3

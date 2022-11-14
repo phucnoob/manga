@@ -30,6 +30,7 @@ jobs:
           DRIVE_FOLDER: ${{ secrets.DRIVE_FOLDER }}
           CREDENTIALS: ${{ secrets.CREDENTIALS }}
           DOMAIN_NAME: ${{ secrets.DOMAIN_NAME }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
       - name: Update dependency graph
