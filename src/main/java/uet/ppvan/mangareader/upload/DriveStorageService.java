@@ -5,6 +5,17 @@ import com.google.api.client.http.InputStreamContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import uet.ppvan.mangareader.upload.exceptions.ImageNotFound;
+import uet.ppvan.mangareader.upload.exceptions.InvalidUploadFile;
+import uet.ppvan.mangareader.upload.exceptions.UploadFileInterupt;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -13,17 +24,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import uet.ppvan.mangareader.upload.exceptions.ImageNotFound;
-import uet.ppvan.mangareader.upload.exceptions.InvalidUploadFile;
-import uet.ppvan.mangareader.upload.exceptions.UploadFileInterupt;
-
 @Service
+@Profile("!default")
 @RequiredArgsConstructor
 public class DriveStorageService implements StorageService {
 
