@@ -26,6 +26,7 @@ public class MangaController {
     private final SearchMangaService searchService;
 
     @GetMapping("/{id}")
+//    @Operation(method = "GET", )
     public ResponseEntity<SuccessResponse> getById(@PathVariable Integer id) {
 
         MangaDetails foundedManga = service.getMangaById(id);
