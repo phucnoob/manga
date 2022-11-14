@@ -2,8 +2,8 @@ package uet.ppvan.mangareader.comons.exceptions;
 
 import org.springframework.http.HttpStatus;
 
-public class NoSuchElementFound extends BaseException {
-    public NoSuchElementFound(String message) {
+public class ResourceNotFound extends BaseException {
+    public ResourceNotFound(String message) {
         super(message);
     }
 

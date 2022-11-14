@@ -83,7 +83,7 @@ public enum Genre {
             }
         });
 
-        defaultErrorMessage = "'%s' is not valid genre.Must be one of: " + String.join(", ", reverseValues.keySet());
+        defaultErrorMessage = "'%s' is not valid genre";
     }
     private final ArrayList<String> values;
 
