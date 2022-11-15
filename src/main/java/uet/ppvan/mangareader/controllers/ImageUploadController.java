@@ -15,7 +15,7 @@ import uet.ppvan.mangareader.utils.ResponseFactory;
 @RestController
 @Profile("!default")
 @RequestMapping("/api/v2/image")
-public class ImageUpload {
+public class ImageUploadController {
 
     public static final String API_END_POINTS = "/api/v2/image";
 
@@ -25,7 +25,7 @@ public class ImageUpload {
     private String hostName;
 
     @Autowired
-    public ImageUpload(DriveStorageService storage) {
+    public ImageUploadController(DriveStorageService storage) {
         this.storage = storage;
     }
 
