@@ -1,6 +1,8 @@
 package uet.ppvan.mangareader.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Column;
@@ -13,6 +15,8 @@ import javax.persistence.Table;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class RoleEntity extends BaseEntity {
 
     @Column(name = "role")

@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import uet.ppvan.mangareader.dtos.ErrorResponse;
-import uet.ppvan.mangareader.exceptions.EnumParseException;
 import uet.ppvan.mangareader.exceptions.ResourceNotFound;
 
 import java.util.ArrayList;
@@ -53,10 +52,13 @@ public class ResponseAdvice extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
         String message = "Can't not parse requestBody";
-        var cause = (EnumParseException) ex.getCause().getCause();
-
-        String detail = cause.getMessage();
-        var response = new ErrorResponse(message, List.of(detail));
+        Throwable cause = ex;
+        List<String> details = new ArrayList<>();
+        while (cause.getCause() != null) {
+            details.add(cause.getMessage());
+            cause = cause.getCause();
+        }
+        var response = new ErrorResponse(message, details);
 
         return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)
             .body(response);

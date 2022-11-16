@@ -1,4 +1,4 @@
-package uet.ppvan.mangareader.services;
+package uet.ppvan.mangareader.services.impl;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +15,7 @@ import uet.ppvan.mangareader.models.Manga;
 import uet.ppvan.mangareader.repositories.ChapterRepository;
 import uet.ppvan.mangareader.repositories.GenreRepository;
 import uet.ppvan.mangareader.repositories.MangaRepository;
+import uet.ppvan.mangareader.services.MangaService;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;

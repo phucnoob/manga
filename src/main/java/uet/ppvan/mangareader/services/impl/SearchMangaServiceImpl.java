@@ -1,4 +1,4 @@
-package uet.ppvan.mangareader.services;
+package uet.ppvan.mangareader.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.hibernate.search.engine.search.query.SearchResult;
@@ -7,8 +7,10 @@ import org.hibernate.search.mapper.orm.scope.SearchScope;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uet.ppvan.mangareader.models.Manga;
 import uet.ppvan.mangareader.dtos.MangaOverview;
+import uet.ppvan.mangareader.models.Manga;
+import uet.ppvan.mangareader.services.MangaService;
+import uet.ppvan.mangareader.services.SearchMangaService;
 
 import javax.persistence.EntityManager;
 import java.util.List;

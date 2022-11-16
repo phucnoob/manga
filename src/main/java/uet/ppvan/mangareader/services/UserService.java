@@ -1,14 +1,20 @@
 package uet.ppvan.mangareader.services;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import uet.ppvan.mangareader.dtos.ProfileRequest;
+import uet.ppvan.mangareader.dtos.UserRequest;
+import uet.ppvan.mangareader.models.User;
 
-@Service
-@RequiredArgsConstructor
-public class UserService {
+public interface UserService {
+    User findUserByUsername(String username) throws UsernameNotFoundException;
 
+    void createUser(UserRequest request);
 
-//    public boolean findUserBy
+    void deleteUser(Integer userId);
 
+    void createProfile(ProfileRequest request);
 
+    void updateProfile(ProfileRequest request);
+
+    ProfileRequest getProfile();
 }

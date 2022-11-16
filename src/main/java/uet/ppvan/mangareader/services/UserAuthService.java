@@ -27,7 +27,7 @@ public class UserAuthService {
             throw PasswordNotMatchException.defaultValue();
         }
 
-        AuthUserDetail authUser = new AuthUserDetail(user.getUsername(), user.getRole().getRole());
+        AuthUserDetail authUser = new AuthUserDetail(user.getId(), user.getUsername(), user.getRole().getRole());
 
         return jwtAuthentication.generateJWT(authUser);
     }

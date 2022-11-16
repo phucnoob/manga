@@ -1,4 +1,4 @@
-package uet.ppvan.mangareader.services;
+package uet.ppvan.mangareader.services.impl;
 
 import com.google.api.client.http.FileContent;
 import com.google.api.client.http.InputStreamContent;
@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import uet.ppvan.mangareader.exceptions.ImageNotFound;
 import uet.ppvan.mangareader.exceptions.InvalidUploadFile;
 import uet.ppvan.mangareader.exceptions.UploadFileInterupt;
+import uet.ppvan.mangareader.services.StorageService;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

@@ -1,4 +1,4 @@
-package uet.ppvan.mangareader.services;
+package uet.ppvan.mangareader.services.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -8,6 +8,7 @@ import uet.ppvan.mangareader.models.Chapter;
 import uet.ppvan.mangareader.models.Manga;
 import uet.ppvan.mangareader.repositories.ChapterRepository;
 import uet.ppvan.mangareader.repositories.MangaRepository;
+import uet.ppvan.mangareader.services.ChapterService;
 
 import java.time.LocalDate;
 import java.time.ZoneOffset;

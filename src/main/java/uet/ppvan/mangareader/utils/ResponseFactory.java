@@ -2,6 +2,7 @@ package uet.ppvan.mangareader.utils;
 
 import uet.ppvan.mangareader.dtos.SuccessResponse;
 
+// TODO return ResponseEntity.
 public class ResponseFactory {
     public static SuccessResponse success(Object data) {
         return new SuccessResponse(true, "", data);
