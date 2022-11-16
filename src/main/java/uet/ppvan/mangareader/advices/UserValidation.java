@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import uet.ppvan.mangareader.dtos.SuccessResponse;
 import uet.ppvan.mangareader.utils.ResponseFactory;
 
 import java.util.HashMap;
@@ -18,7 +17,7 @@ import java.util.Map;
 public class UserValidation {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<SuccessResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, WebRequest request) {
+    protected ResponseEntity<?> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, WebRequest request) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
@@ -26,8 +25,7 @@ public class UserValidation {
             errors.put(fieldName, errorMessage);
         });
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(ResponseFactory.failure("User register form is invalid.", errors));
+        return ResponseFactory.failure("User register form is invalid.", errors, HttpStatus.BAD_REQUEST);
     }
 
 }
