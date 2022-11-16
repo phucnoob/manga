@@ -14,6 +14,6 @@ public class PasswordMatchesValidator implements ConstraintValidator<PasswordMat
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext context) {
         UserRequest user = (UserRequest) obj;
-        return user.getPassword().equals(user.getConfirmPassword());
+        return user.password().equals(user.confirmPassword());
     }
 }
