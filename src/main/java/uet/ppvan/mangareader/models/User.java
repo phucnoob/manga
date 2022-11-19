@@ -34,4 +34,6 @@ public class User extends BaseEntity {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Profile profile;
 
+    @Column(name = "verified")
+    private Boolean verified;
 }

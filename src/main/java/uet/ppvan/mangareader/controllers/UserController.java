@@ -50,12 +50,20 @@ public class UserController {
         return ResponseEntity.ok(ResponseFactory.success(authService.validateUserLogin(request)));
     }
 
+    @GetMapping("/verify")
+    public ResponseEntity<?> verifyEmail(@RequestParam String token) {
+        authService.verifyEmail(token);
+
+        return ResponseFactory.success("Your email is verified, You can login now.");
+    }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerNewAccount(@RequestBody @Valid UserRequest request) {
         userService.createUser(request);
+        authService.sendVerificationEmail(request.email());
+        String message = "Verification email sent, please check your email.";
 
-        return ResponseEntity.ok(ResponseFactory.success("Register successfully.", ""));
+        return ResponseEntity.ok(ResponseFactory.success("Register successfully.", message));
 
     }
 }

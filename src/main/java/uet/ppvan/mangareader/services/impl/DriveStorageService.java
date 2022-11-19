@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import uet.ppvan.mangareader.exceptions.ImageNotFound;
 import uet.ppvan.mangareader.exceptions.InvalidUploadFile;
+import uet.ppvan.mangareader.exceptions.ResourceNotFound;
 import uet.ppvan.mangareader.exceptions.UploadFileInterupt;
 import uet.ppvan.mangareader.services.StorageService;
 
@@ -79,7 +79,7 @@ public class DriveStorageService implements StorageService {
         try {
             googleDrive.files().delete(imageURI).execute();
         } catch (IOException e) {
-            throw ImageNotFound.withUri(imageURI);
+            throw ResourceNotFound.imageNotFound(imageURI);
         }
     }
 
@@ -94,7 +94,7 @@ public class DriveStorageService implements StorageService {
 
             return outputStream.toByteArray();
         } catch (IOException exception) {
-            throw ImageNotFound.withUri(imageURI);
+            throw ResourceNotFound.imageNotFound(imageURI);
         }
     }
 
@@ -105,7 +105,7 @@ public class DriveStorageService implements StorageService {
                 .setFields("id,webContentLink,webViewLink").execute();
             return URI.create(fileInfo.getWebContentLink());
         } catch (IOException exception) {
-            throw ImageNotFound.withUri(id);
+            throw ResourceNotFound.imageNotFound(id);
         }
     }
 

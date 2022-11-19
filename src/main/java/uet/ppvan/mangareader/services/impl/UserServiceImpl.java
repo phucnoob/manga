@@ -45,6 +45,7 @@ public class UserServiceImpl implements UserService {
         var defaultProfile = toProfileEntity(profileRequest);
         defaultProfile.setUser(user);
         user.setProfile(defaultProfile);
+        user.setVerified(false);
         userRepository.save(user);
     }
 

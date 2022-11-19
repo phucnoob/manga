@@ -11,4 +11,12 @@ public class ResourceNotFound extends BaseException {
     public HttpStatus getStatus() {
         return HttpStatus.NOT_FOUND;
     }
+
+    public static ResourceNotFound mangaNotFound(Integer id) {
+        return new ResourceNotFound(String.format("Manga[id=%s] not found.", id));
+    }
+
+    public static ResourceNotFound imageNotFound(String uri) {
+        return new ResourceNotFound(String.format("Image[uri=%s] not found.", uri));
+    }
 }
