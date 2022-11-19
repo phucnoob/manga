@@ -12,6 +12,7 @@ import uet.ppvan.mangareader.services.UserService;
 import uet.ppvan.mangareader.utils.ResponseFactory;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
 
 
 @RequiredArgsConstructor
@@ -65,5 +66,25 @@ public class UserController {
 
         return ResponseEntity.ok(ResponseFactory.success("Register successfully.", message));
 
+    }
+
+    @PostMapping("/password-reset-request")
+    public ResponseEntity<?> requestResetPassword(
+    @Email(regexp = "(([a-zA-Z0-9]+)([\\.\\-_]?)([a-zA-Z0-9]+)([\\.\\-_]?)([a-zA-Z0-9]+)?)(@)([a-zA-Z]+.[A-Za-z]+\\.?([a-zA-Z0-9]+)\\.?([a-zA-Z0-9]+))")
+    @RequestParam String email
+    ) {
+        authService.sendPasswordResetEmail(email);
+
+        return ResponseFactory.success("Email sent. Check your mail for reset link");
+    }
+
+    @PostMapping("/password-reset")
+    public ResponseEntity<?> handlePasswordResetRequest(
+    @RequestParam String token,
+    @RequestBody String newPassword
+    ) {
+        authService.resetPassword(token, newPassword);
+
+        return ResponseFactory.success("Password has been reset. Please login again");
     }
 }

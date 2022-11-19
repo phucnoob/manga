@@ -1,7 +1,10 @@
 package uet.ppvan.mangareader.utils;
 
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,9 +19,6 @@ import java.util.Date;
 @Component
 public class JwtUtils {
 
-    private static final Duration EXPIRE_DURATION = Duration.ofHours(24);
-
-
     @Value("${jwt.secret-key}")
     private void setSecretKey(String secretKey) {
         JwtUtils.SECRET_KEY = secretKey;
@@ -26,8 +26,16 @@ public class JwtUtils {
 
     private static String SECRET_KEY; // default
 
+    @SuppressWarnings("unused")
     public static String generateJWT(Object obj) {
-        return generateJWT(obj, EXPIRE_DURATION);
+        String json = ValueMapper.objectAsJson(obj);
+
+        return Jwts.builder()
+        .setSubject(json)
+        .setIssuer("Unknown")
+        .setIssuedAt(Date.from(Instant.now()))
+        .signWith(getKey())
+        .compact();
     }
 
     public static String generateJWT(Object obj, Duration expiredTime) {
@@ -43,15 +51,11 @@ public class JwtUtils {
     }
 
     public static <T> T parseJWT(Class<T> type, String jwt) throws ExpiredJwtException, MalformedJwtException {
-        try {
-            var parser = jwtParser();
-            var claims = parser.parseClaimsJws(jwt);
-            String json = claims.getBody().getSubject();
+        var parser = jwtParser();
+        var claims = parser.parseClaimsJws(jwt);
+        String json = claims.getBody().getSubject();
 
-            return ValueMapper.jsonAsObject(type, json);
-        } catch (ExpiredJwtException | MalformedJwtException ex) {
-            throw new JwtException(ex.getMessage());
-        }
+        return ValueMapper.jsonAsObject(type, json);
     }
 
     @Bean

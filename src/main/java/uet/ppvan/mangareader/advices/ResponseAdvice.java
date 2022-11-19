@@ -1,5 +1,6 @@
 package uet.ppvan.mangareader.advices;
 
+import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,6 +71,11 @@ public class ResponseAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(VerifyEmailFailed.class)
     public ResponseEntity<?> handleVerifyEmailFailed(VerifyEmailFailed ex, WebRequest request) {
         return ResponseFactory.failure("Invalid or expired token");
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<?> handleJwtException(JwtException ex, WebRequest request) {
+        return ResponseFactory.failure(ex.getMessage());
     }
 
     @ExceptionHandler(AuthenticationException.class)

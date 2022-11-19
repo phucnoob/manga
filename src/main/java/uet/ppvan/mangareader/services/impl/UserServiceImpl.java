@@ -1,7 +1,6 @@
 package uet.ppvan.mangareader.services.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -56,7 +55,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void createProfile(ProfileRequest request) {
-        throw new NotImplementedException();
+
     }
 
     @Override

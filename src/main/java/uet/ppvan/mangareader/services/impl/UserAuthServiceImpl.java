@@ -1,10 +1,14 @@
 package uet.ppvan.mangareader.services.impl;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,6 +20,8 @@ import uet.ppvan.mangareader.exceptions.VerifyEmailFailed;
 import uet.ppvan.mangareader.repositories.UserRepository;
 import uet.ppvan.mangareader.services.UserAuthService;
 import uet.ppvan.mangareader.utils.JwtUtils;
+
+import java.time.Duration;
 
 @RequiredArgsConstructor
 @Service
@@ -45,14 +51,15 @@ public class UserAuthServiceImpl implements UserAuthService {
 
         AuthUserDetail authUser = new AuthUserDetail(user.getId(), user.getUsername(), user.getRole().getRole());
 
-        return JwtUtils.generateJWT(authUser);
+        return JwtUtils.generateJWT(authUser, Duration.ofDays(30));
     }
 
     @Override
+    @Async
     public void sendVerificationEmail(String email) {
         var message = new SimpleMailMessage();
         message.setSubject("Verification email");
-        String token = JwtUtils.generateJWT(email);
+        String token = JwtUtils.generateJWT(email, Duration.ofHours(24));
 
         // FIXME: 11/19/22 Hard-code but i don't know how to fix.
         message.setText(String.format("%s/api/v1/users/verify?token=%s", domainName, token));
@@ -63,13 +70,49 @@ public class UserAuthServiceImpl implements UserAuthService {
 
     @Override
     public void verifyEmail(String token) throws VerifyEmailFailed {
-        String email = JwtUtils.parseJWT(String.class, token);
-        var user = repository.findUserByEmail(email)
-        .orElseThrow(() -> new VerifyEmailFailed("Email is not verified."));
+        try {
+            String email = JwtUtils.parseJWT(String.class, token);
+            var user = repository.findUserByEmail(email)
+            .orElseThrow(() -> new VerifyEmailFailed("Email is not verified."));
 
-        user.setVerified(true);
-        repository.save(user);
-        log.debug("{} is verified", email);
+            user.setVerified(true);
+            repository.save(user);
+            log.debug("{} is verified", email);
+        } catch (ExpiredJwtException ex) {
+            throw new JwtException("JWT is expired, Please request a new one.", ex);
+        } catch (MalformedJwtException ex) {
+            throw new JwtException("JWT is not valid, Please ensure you get it from out server");
+        }
+    }
+
+    @Override
+    @Async
+    public void sendPasswordResetEmail(String email) {
+        var message = new SimpleMailMessage();
+        message.setSubject("Password Reset email");
+        String token = JwtUtils.generateJWT(email, Duration.ofHours(24));
+
+        // FIXME: 11/19/22 Hard-code but i don't know how to fix.
+        message.setText(String.format("%s/api/v1/users/password-reset?email=%s", domainName, token));
+        message.setTo(email);
+
+        mailSender.send(message);
+    }
+
+    @Override
+    public void resetPassword(String token, String password) {
+        try {
+            String email = JwtUtils.parseJWT(String.class, token);
+            repository.findUserByEmail(email)
+            .ifPresent(user -> {
+                user.setPassword(password);
+                repository.save(user);
+            });
+        } catch (ExpiredJwtException ex) {
+            throw new JwtException("JWT is expired, Please request a new one.", ex);
+        } catch (MalformedJwtException ex) {
+            throw new JwtException("JWT is not valid, Please ensure you get it from out server");
+        }
     }
 
 }

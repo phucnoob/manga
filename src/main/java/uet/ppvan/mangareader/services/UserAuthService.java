@@ -10,4 +10,8 @@ public interface UserAuthService {
     void sendVerificationEmail(String email);
 
     void verifyEmail(String token) throws VerifyEmailFailed;
+
+    void sendPasswordResetEmail(String email);
+
+    void resetPassword(String token, String password);
 }
