@@ -5,7 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import uet.ppvan.mangareader.dtos.*;
+import uet.ppvan.mangareader.dtos.ChapterOverview;
+import uet.ppvan.mangareader.dtos.MangaDetails;
+import uet.ppvan.mangareader.dtos.MangaOverview;
+import uet.ppvan.mangareader.dtos.MangaRequest;
 import uet.ppvan.mangareader.services.MangaService;
 import uet.ppvan.mangareader.services.SearchMangaService;
 import uet.ppvan.mangareader.utils.ResponseFactory;
@@ -25,12 +28,10 @@ public class MangaController {
     private final SearchMangaService searchService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<SuccessResponse> getById(@PathVariable Integer id) {
+    public ResponseEntity<?> getById(@PathVariable Integer id) {
 
         MangaDetails foundedManga = service.getMangaById(id);
-        return ResponseEntity.ok(
-            ResponseFactory.success(foundedManga)
-        );
+        return ResponseFactory.success(foundedManga);
     }
 
 
@@ -40,59 +41,47 @@ public class MangaController {
     }
 
     @GetMapping("")
-    public ResponseEntity<SuccessResponse> getOverview(
+    public ResponseEntity<?> getOverview(
         @RequestParam(required = false, defaultValue = "0") @Valid @Min(0) @Max(Integer.MAX_VALUE) Integer page,
         @RequestParam(required = false, defaultValue = "20") @Valid @Min(0) @Max(Integer.MAX_VALUE) Integer size
     ) {
-        return ResponseEntity.ok(
-            ResponseFactory.success(service.getAllOverview(page, size))
-        );
+        return ResponseFactory.success(service.getAllOverview(page, size));
     }
 
     @GetMapping("/popular")
-    public ResponseEntity<SuccessResponse> popularManga() {
-        return ResponseEntity.ok(
-            ResponseFactory.success(service.getAllOverview(0, 4))
-        );
+    public ResponseEntity<?> popularManga() {
+        return ResponseFactory.success(service.getAllOverview(0, 4));
     }
 
     @PostMapping("")
-    public ResponseEntity<SuccessResponse> post(@RequestBody @Valid MangaRequest manga) {
+    public ResponseEntity<?> post(@RequestBody @Valid MangaRequest manga) {
         Integer newRowID = service.addNewManga(manga);
-        return ResponseEntity.ok(
-            ResponseFactory.success("Manga saved", newRowID)
-        );
+        return ResponseFactory.success("Manga saved", newRowID);
     }
 
     @PutMapping("/{id}/update")
-    public ResponseEntity<SuccessResponse> update(
+    public ResponseEntity<?> update(
         @PathVariable Integer id,
         @RequestBody MangaRequest updateManga
     ) {
         service.updateManga(id, updateManga);
-        return ResponseEntity.ok(
-            ResponseFactory.success("Update manga successfully", updateManga)
-        );
+        return ResponseFactory.success("Update manga successfully", updateManga);
     }
 
     @DeleteMapping("/{id}/delete")
-    public ResponseEntity<SuccessResponse> deleteById(
+    public ResponseEntity<?> deleteById(
         @PathVariable Integer id
     ) {
         service.deleteManga(id);
-        return ResponseEntity.ok(
-            ResponseFactory.success("Manga deleted.", "")
-        );
+        return ResponseFactory.success("Manga deleted.", "");
     }
 
     @Deprecated
     @GetMapping("/{id}/chapters")
-    public ResponseEntity<SuccessResponse> chapters(
+    public ResponseEntity<?> chapters(
         @PathVariable Integer id
     ) {
         List<ChapterOverview> chapters = service.getAllChapters(id);
-        return ResponseEntity.ok(
-            ResponseFactory.success(chapters)
-        );
+        return ResponseFactory.success(chapters);
     }
 }

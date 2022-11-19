@@ -29,15 +29,13 @@ public class ChapterController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<SuccessResponse> addChapter(
-            @RequestParam(name = "manga_id") Integer mangaId,
-            @RequestBody ChapterRequest request
+    public ResponseEntity<?> addChapter(
+        @RequestParam(name = "manga_id") Integer mangaId,
+        @RequestBody ChapterRequest request
     ) {
         service.addNewChapter(request, mangaId);
 
-        return ResponseEntity.ok(
-            ResponseFactory.success(request)
-        );
+        return ResponseFactory.success(request);
     }
 
     /**
