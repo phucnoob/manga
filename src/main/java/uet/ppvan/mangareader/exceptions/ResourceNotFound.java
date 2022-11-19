@@ -19,4 +19,8 @@ public class ResourceNotFound extends BaseException {
     public static ResourceNotFound imageNotFound(String uri) {
         return new ResourceNotFound(String.format("Image[uri=%s] not found.", uri));
     }
+
+    public static ResourceNotFound chapterNotFound(Integer id) {
+        return new ResourceNotFound(String.format("Chapter[id=%s] not found.", id));
+    }
 }

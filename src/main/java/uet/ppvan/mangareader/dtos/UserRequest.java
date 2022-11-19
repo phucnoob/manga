@@ -4,6 +4,14 @@ package uet.ppvan.mangareader.dtos;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+
+/**
+ * DTO to register account.
+ * @param username
+ * @param email
+ * @param password
+ * @param confirmPassword
+ */
 public record UserRequest(
 
 @NotBlank(message = "Username can't be blank")

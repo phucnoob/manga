@@ -10,6 +10,7 @@ import uet.ppvan.mangareader.dtos.ProfileRequest;
 import uet.ppvan.mangareader.dtos.UserRequest;
 import uet.ppvan.mangareader.exceptions.NotAuthenticatedException;
 import uet.ppvan.mangareader.exceptions.ResourceNotFound;
+import uet.ppvan.mangareader.exceptions.UserAlreadyExistException;
 import uet.ppvan.mangareader.models.Profile;
 import uet.ppvan.mangareader.models.Role;
 import uet.ppvan.mangareader.models.RoleEntity;
@@ -37,6 +38,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void createUser(UserRequest request) {
+        if (userRepository.existsUserByEmail(request.email())) {
+            throw UserAlreadyExistException.emailTaken();
+        }
+
+        if (userRepository.existsUserByUsername(request.username())) {
+            throw UserAlreadyExistException.usernameTaken();
+        }
+
         var user = toUserEntity(request);
 
         // Create a default profile for new user.

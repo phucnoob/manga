@@ -14,13 +14,16 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import uet.ppvan.mangareader.dtos.ErrorResponse;
 import uet.ppvan.mangareader.exceptions.ResourceNotFound;
+import uet.ppvan.mangareader.exceptions.UserAlreadyExistException;
 import uet.ppvan.mangareader.exceptions.VerifyEmailFailed;
 import uet.ppvan.mangareader.utils.ResponseFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Global ResponseAdvice.
+ */
 @RestControllerAdvice
 @SuppressWarnings("unused")
 public class ResponseAdvice extends ResponseEntityExceptionHandler {
@@ -38,6 +41,14 @@ public class ResponseAdvice extends ResponseEntityExceptionHandler {
         .body(error);
     }
 
+    /**
+     * Default handler if {@link javax.validation.Valid @Valid} annotation failed.
+     * @param ex the exception
+     * @param headers the headers to be written to the response
+     * @param status the selected response status
+     * @param request the current request
+     * @return {@link ResponseEntity}
+     */
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         List<String> details = new ArrayList<>();
@@ -52,6 +63,15 @@ public class ResponseAdvice extends ResponseEntityExceptionHandler {
             .body(response);
     }
 
+    /**
+     * Default handler if JSON can't be parsed in
+     * {@link org.springframework.web.bind.annotation.RequestBody @RequestBody}.
+     * @param ex the exception
+     * @param headers the headers to be written to the response
+     * @param status the selected response status
+     * @param request the current request
+     * @return {@link ResponseEntity}
+     */
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
@@ -68,22 +88,56 @@ public class ResponseAdvice extends ResponseEntityExceptionHandler {
         .body(response);
     }
 
+    /**
+     * Handler if user had registered but hasn't verified email.
+     * @param ex the exception
+     * @param request the current request
+     * @return {@link ResponseEntity}
+     */
     @ExceptionHandler(VerifyEmailFailed.class)
     public ResponseEntity<?> handleVerifyEmailFailed(VerifyEmailFailed ex, WebRequest request) {
         return ResponseFactory.failure("Invalid or expired token");
     }
 
+    /**
+     * Handler if a JWT-related Exception is thrown.
+     * @param ex the exception
+     * @param request the current request
+     * @return {@link ResponseEntity}
+     */
     @ExceptionHandler(JwtException.class)
     public ResponseEntity<?> handleJwtException(JwtException ex, WebRequest request) {
         return ResponseFactory.failure(ex.getMessage());
     }
 
+    /**
+     * Default handler for Spring security {@link AuthenticationException} Exception.
+     * @param ex The exception
+     * @param request current request
+     * @return {@link ResponseEntity}
+     */
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<?> handleVerifyEmailFailed(AuthenticationException ex, WebRequest request) {
-        return ResponseFactory
-        .failure("Authentication failed.",
-        ex.getLocalizedMessage(),
-        HttpStatus.UNAUTHORIZED
+        return ResponseFactory.failure(
+        "Authentication failed.",
+            ex.getLocalizedMessage(),
+            HttpStatus.UNAUTHORIZED
+        );
+    }
+
+
+    /**
+     * Handle if username or email or any user info already existed in database.
+     * @param ex The exception
+     * @param request current request
+     * @return {@link ResponseEntity}
+     */
+    @ExceptionHandler(UserAlreadyExistException.class)
+    public ResponseEntity<?> handleUserAlreadyExist(AuthenticationException ex, WebRequest request) {
+        return ResponseFactory.failure(
+    "User already exists",
+            ex.getLocalizedMessage(),
+            HttpStatus.EXPECTATION_FAILED
         );
     }
 }

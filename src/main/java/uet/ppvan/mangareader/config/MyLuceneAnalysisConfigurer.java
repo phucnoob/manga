@@ -4,6 +4,9 @@ import org.hibernate.search.backend.lucene.analysis.LuceneAnalysisConfigurationC
 import org.hibernate.search.backend.lucene.analysis.LuceneAnalysisConfigurer;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Config for search engine.
+ */
 @Configuration
 public class MyLuceneAnalysisConfigurer implements LuceneAnalysisConfigurer {
     @Override

@@ -6,6 +6,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * Custom cache config to cache image.
+ */
 @Component
 public class SimpleCacheCustom implements CacheManagerCustomizer<ConcurrentMapCacheManager> {
 

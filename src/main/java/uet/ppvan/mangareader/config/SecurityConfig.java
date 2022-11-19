@@ -12,6 +12,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import uet.ppvan.mangareader.security.JwtFilter;
 
+/**
+ * Spring security authorization config.
+ */
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {

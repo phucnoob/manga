@@ -1,5 +1,11 @@
 package uet.ppvan.mangareader.dtos;
 
+/**
+ * Response format to make is easy to handle in client.
+ * @param success
+ * @param message
+ * @param data
+ */
 public record SuccessResponse
     (
         Boolean success,
