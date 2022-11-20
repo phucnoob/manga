@@ -27,6 +27,10 @@ public class Profile extends BaseEntity {
         bio = "";
     }
 
+    public static Profile defaultProfile() {
+        return new Profile();
+    }
+
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @JsonBackReference

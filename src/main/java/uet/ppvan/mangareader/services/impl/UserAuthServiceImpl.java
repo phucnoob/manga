@@ -39,7 +39,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     public String validateUserLogin(AuthRequest request) {
 
         var user = repository.findUserByUsername(request.username())
-        .orElseThrow(() -> new UsernameNotFoundException(String.format("%s doesn't exists", request.username())));
+                       .orElseThrow(() -> new UsernameNotFoundException(String.format("%s doesn't exists", request.username())));
 
         if (!encoder.matches(request.password(), user.getPassword())) {
             throw PasswordNotMatchException.defaultValue();
@@ -73,7 +73,7 @@ public class UserAuthServiceImpl implements UserAuthService {
         try {
             String email = JwtUtils.parseJWT(String.class, token);
             var user = repository.findUserByEmail(email)
-            .orElseThrow(() -> new VerifyEmailFailed("Email is not verified."));
+                           .orElseThrow(() -> new VerifyEmailFailed("Email is not verified."));
 
             user.setVerified(true);
             repository.save(user);

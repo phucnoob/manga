@@ -12,13 +12,12 @@ import uet.ppvan.mangareader.exceptions.NotAuthenticatedException;
 import uet.ppvan.mangareader.exceptions.ResourceNotFound;
 import uet.ppvan.mangareader.exceptions.UserAlreadyExistException;
 import uet.ppvan.mangareader.models.Profile;
-import uet.ppvan.mangareader.models.Role;
-import uet.ppvan.mangareader.models.RoleEntity;
 import uet.ppvan.mangareader.models.User;
 import uet.ppvan.mangareader.repositories.ProfileRepository;
 import uet.ppvan.mangareader.repositories.RoleRepository;
 import uet.ppvan.mangareader.repositories.UserRepository;
 import uet.ppvan.mangareader.services.UserService;
+import uet.ppvan.mangareader.utils.ValueMapper;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +36,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void createUser(UserRequest request) {
+    public User createUser(UserRequest request) {
         if (userRepository.existsUserByEmail(request.email())) {
             throw UserAlreadyExistException.emailTaken();
         }
@@ -46,15 +45,15 @@ public class UserServiceImpl implements UserService {
             throw UserAlreadyExistException.usernameTaken();
         }
 
-        var user = toUserEntity(request);
+        var user = ValueMapper.toUserEntity(request);
 
         // Create a default profile for new user.
         var profileRequest = new ProfileRequest();
-        var defaultProfile = toProfileEntity(profileRequest);
+        var defaultProfile = ValueMapper.toProfileEntity(profileRequest);
         defaultProfile.setUser(user);
         user.setProfile(defaultProfile);
         user.setVerified(false);
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     @Override
@@ -62,13 +61,9 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(userId);
     }
 
-    @Override
-    public void createProfile(ProfileRequest request) {
-
-    }
 
     @Override
-    public void updateProfile(ProfileRequest request) {
+    public Profile updateProfile(ProfileRequest request) {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
 
         // Unreachable if not authenticated with spring security, just a double check
@@ -76,15 +71,15 @@ public class UserServiceImpl implements UserService {
             AuthUserDetail authUserDetail = (AuthUserDetail) authentication.getPrincipal();
             var user = userRepository.getReferenceById(authUserDetail.id());
             var profile = profileRepository
-                .findProfileByUser(user)
-                .orElseThrow(() -> new ResourceNotFound("Profile not found."));
+                              .findProfileByUser(user)
+                              .orElseThrow(() -> new ResourceNotFound("Profile not found."));
 
             profile.setUser(user);
             profile.setAvatar(request.avatar());
             profile.setBio(request.bio());
             profile.setCover(request.cover());
 
-            profileRepository.save(profile);
+            return profileRepository.save(profile);
         } else throw new NotAuthenticatedException();
     }
 
@@ -100,42 +95,10 @@ public class UserServiceImpl implements UserService {
                 .findProfileByUser(user)
                 .orElseThrow(() -> new ResourceNotFound("Profile not found."));
 
-            return toProfileRequest(profile);
+            return ValueMapper.toProfileRequest(profile);
         } else throw new NotAuthenticatedException();
 
     }
 
-    private Profile toProfileEntity(ProfileRequest request) {
-        Profile profile = new Profile();
-        profile.setAvatar(request.avatar());
-        profile.setCover(request.cover());
-        profile.setBio(request.bio());
 
-        profile.setUser(null); // will be set by others, which has authentication context
-
-        return profile;
-    }
-
-    private ProfileRequest toProfileRequest(Profile profile) {
-        return new ProfileRequest(
-            profile.getAvatar(),
-            profile.getCover(),
-            profile.getBio()
-
-        );
-    }
-
-    private User toUserEntity(UserRequest request) {
-
-        String password = passwordEncoder.encode(request.password());
-
-        User user = new User();
-        user.setUsername(request.username());
-        user.setPassword(password);
-        user.setEmail(request.email());
-        RoleEntity role = roleRepository.findByRole(Role.ROLE_USER);
-        user.setRole(role);
-
-        return user;
-    }
 }
