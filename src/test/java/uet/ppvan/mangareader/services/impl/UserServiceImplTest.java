@@ -1,5 +1,6 @@
 package uet.ppvan.mangareader.services.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -48,18 +49,17 @@ class UserServiceImplTest {
 
     private UserService userService;
 
+    private ValueMapper valueMapper;
+
     @BeforeEach
     public void init() {
+        valueMapper = new ValueMapper(new ObjectMapper(), new BCryptPasswordEncoder(12), roleRepository);
         userService = new UserServiceImpl(
             userRepository,
             profileRepository,
-            roleRepository,
-            passwordEncoder
+            valueMapper
         );
 
-        var mockValue = new ValueMapper();
-        mockValue.setPasswordEncoder(passwordEncoder);
-        mockValue.setRoleRepository(roleRepository);
     }
 
     @Test
@@ -110,7 +110,7 @@ class UserServiceImplTest {
             "pass"
         );
         var profileRequest = new ProfileRequest();
-        var profile = ValueMapper.toProfileEntity(profileRequest);
+        var profile = valueMapper.toProfileEntity(profileRequest);
         Mockito.when(userRepository.save(Mockito.any(User.class))).then(returnsFirstArg());
 
 
@@ -148,7 +148,7 @@ class UserServiceImplTest {
 
         var request = new ProfileRequest("avatar", "cover", "bio");
         var actualProfile = userService.updateProfile(request);
-        var expectProfile = ValueMapper.toProfileEntity(request);
+        var expectProfile = valueMapper.toProfileEntity(request);
 
         Assertions.assertThat(actualProfile)
             .usingRecursiveComparison()

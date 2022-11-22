@@ -25,8 +25,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final ProfileRepository profileRepository;
-    private final RoleRepository roleRepository;
-    private final PasswordEncoder passwordEncoder;
+
+    private final ValueMapper valueMapper;
 
 
     @Override
@@ -45,11 +45,11 @@ public class UserServiceImpl implements UserService {
             throw UserAlreadyExistException.usernameTaken();
         }
 
-        var user = ValueMapper.toUserEntity(request);
+        var user = valueMapper.toUserEntity(request);
 
         // Create a default profile for new user.
         var profileRequest = new ProfileRequest();
-        var defaultProfile = ValueMapper.toProfileEntity(profileRequest);
+        var defaultProfile = valueMapper.toProfileEntity(profileRequest);
         defaultProfile.setUser(user);
         user.setProfile(defaultProfile);
         user.setVerified(false);
