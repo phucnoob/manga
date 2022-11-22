@@ -8,27 +8,19 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-//public interface MangaDetails {
-//    String getName();
-//
-//    String getCover();
-//
-//    String getDescription();
-//
-//    String getAuthor();
-//
-//    Set<GenreView> getGenres();
-//
-//    Status getStatus();
-//
-//    LocalDateTime getLastUpdate();
-//
-//    List<ChapterOverview> getChapters();
-//
-//    interface GenreView {
-//        Genre getGenre();
-//    }
-//}
+/**
+ * DTO of {@link uet.ppvan.mangareader.models.Manga Manga}
+ * @param name
+ * @param cover Manga cover image link
+ * @param description
+ * @param author
+ * @param genres String representation of {@link Genre}
+ * @see uet.ppvan.mangareader.converters.GenreConverter
+ * @param status String representation of {@link Status}
+ * @see uet.ppvan.mangareader.converters.StatusConverter
+ * @param lastUpdate
+ * @param chapters
+ */
 
 @Builder
 public record MangaDetails(

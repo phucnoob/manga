@@ -8,6 +8,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+/**
+ * Base JPA entity.
+ */
 @MappedSuperclass
 @Getter
 public abstract class BaseEntity {

@@ -1,35 +1,48 @@
 package uet.ppvan.mangareader.services;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
+import org.springframework.security.core.AuthenticationException;
 import uet.ppvan.mangareader.dtos.AuthRequest;
-import uet.ppvan.mangareader.dtos.AuthUserDetail;
-import uet.ppvan.mangareader.exceptions.PasswordNotMatchException;
-import uet.ppvan.mangareader.repositories.UserRepository;
-import uet.ppvan.mangareader.security.JwtAuthenticationProvider;
+import uet.ppvan.mangareader.exceptions.VerifyEmailFailed;
 
-@RequiredArgsConstructor
-@Service
-public class UserAuthService {
-    private final UserRepository repository;
-    private final PasswordEncoder encoder;
+/**
+ * User authentication service.
+ */
+public interface UserAuthService {
+    /**
+     * Check if user provided credentials is correct.
+     * @param request Login info
+     * @return JWT String if login succeed
+     * @throws AuthenticationException if credentials is not valid.
+     */
+    String validateUserLogin(AuthRequest request) throws AuthenticationException;
 
-    private final JwtAuthenticationProvider jwtAuthentication;
+    /**
+     * Send email to user after register.
+     * @param email Valid user email
+     */
+    void sendVerificationEmail(String email);
 
-    public String validateUserLogin(AuthRequest request) {
+    /**
+     * Validate the token link which user receive in the mail.
+     * @see #sendVerificationEmail(String) 
+     * @param token generated JWT 
+     * @throws VerifyEmailFailed if the request is not from user email (Malformed JWT)
+     */
 
-        var user = repository.findUserByUsername(request.username())
-            .orElseThrow(() -> new UsernameNotFoundException(String.format("%s doesn't exists", request.username())));
+    void verifyEmail(String token) throws VerifyEmailFailed;
 
-        if (!encoder.matches(request.password(), user.getPassword())) {
-            throw PasswordNotMatchException.defaultValue();
-        }
+    /**
+     * Send the password reset link.
+     * The link will be expired in 24 hours
+     * @param email Valid user email
+     */
+    void sendPasswordResetEmail(String email);
 
-        AuthUserDetail authUser = new AuthUserDetail(user.getId(), user.getUsername(), user.getRole().getRole());
-
-        return jwtAuthentication.generateJWT(authUser);
-    }
-
+    /**
+     * Handle user request to set new password 
+     * @param token JWT token
+     * @param password newPassword
+     * @see #sendPasswordResetEmail(String) 
+     */
+    void resetPassword(String token, String password);
 }

@@ -8,6 +8,7 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
@@ -21,8 +22,12 @@ import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Manager to authenticate and authorize Google Drive.
+ */
 @Service
 @Profile("!default")
+@Slf4j
 public class DriveManager {
     private static final String APPLICATION_NAME = "Testing";
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
@@ -32,10 +37,17 @@ public class DriveManager {
     @Value("${config.credentials}")
     private String CREDENTIALS_FILE;
 
+    /**
+     * Get a single {@link Drive} instance.
+     * Not safe to call in multi-thread context.
+     * @return {@link Drive}
+     * @throws GeneralSecurityException Google API Exception
+     * @throws IOException Google API specific
+     */
     @Bean
     public Drive getInstance() throws GeneralSecurityException, IOException {
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-        final var credentials = new HttpCredentialsAdapter(getCredentials(HTTP_TRANSPORT));
+        final var credentials = new HttpCredentialsAdapter(getCredentials());
 
         return new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credentials)
                 .setApplicationName(APPLICATION_NAME)
@@ -43,42 +55,19 @@ public class DriveManager {
     }
 
     /**
-     * {deprecated}
-     * @param HTTP_TRANSPORT
-     * @return
-     * @throws IOException
+     * Load credentials from ENV.
+     * @return {@link GoogleCredentials} - The Credentials holder.
      */
-//    private Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
-//        // Load client secrets.
-//        InputStream in = getClass().getResourceAsStream(CREDENTIALS_FILE_PATH);
-//        if (in == null) {
-//            throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
-//        }
-//        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
-//        // Build flow and trigger user authorization request.
-//        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-//                HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
-//                .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
-//                .setAccessType("offline")
-//                .build();
-//        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setHost("127.0.0.1").setPort(8089).build();
-//
-//        return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
-//    }
-
-    private GoogleCredentials getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
+    private GoogleCredentials getCredentials() {
 
         try (InputStream in = new ByteArrayInputStream(CREDENTIALS_FILE.getBytes(StandardCharsets.UTF_8))) {
 
-            final GoogleCredentials credential = GoogleCredentials.fromStream(in)
+            return GoogleCredentials.fromStream(in)
                     .createScoped(SCOPES);
 
-            return credential;
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
+            log.debug(ex.getMessage());
         }
-
         throw new AssertionError("Unauthorized google.");
     }
 }

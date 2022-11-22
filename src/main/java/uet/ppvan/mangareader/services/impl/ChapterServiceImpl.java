@@ -3,7 +3,7 @@ package uet.ppvan.mangareader.services.impl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import uet.ppvan.mangareader.dtos.ChapterRequest;
-import uet.ppvan.mangareader.exceptions.ChapterNotFound;
+import uet.ppvan.mangareader.exceptions.ResourceNotFound;
 import uet.ppvan.mangareader.models.Chapter;
 import uet.ppvan.mangareader.models.Manga;
 import uet.ppvan.mangareader.repositories.ChapterRepository;
@@ -43,7 +43,7 @@ public class ChapterServiceImpl implements ChapterService {
 
             chapterRepository.save(chapter);
         } else {
-            throw ChapterNotFound.withId(id);
+            throw ResourceNotFound.chapterNotFound(id);
         }
     }
 
@@ -52,7 +52,7 @@ public class ChapterServiceImpl implements ChapterService {
         if (chapterRepository.existsById(id)) {
             chapterRepository.deleteById(id);
         } else {
-            throw ChapterNotFound.withId(id);
+            throw ResourceNotFound.chapterNotFound(id);
         }
     }
 
@@ -60,7 +60,7 @@ public class ChapterServiceImpl implements ChapterService {
     public ChapterRequest getChapter(Integer id) {
         return chapterRepository.findById(id)
             .map(ChapterServiceImpl::toChapterDTO)
-                .orElseThrow(() -> ChapterNotFound.withId(id));
+                .orElseThrow(() -> ResourceNotFound.chapterNotFound(id));
     }
 
 //    public List<Image>

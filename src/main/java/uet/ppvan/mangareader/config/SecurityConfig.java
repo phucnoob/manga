@@ -12,6 +12,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import uet.ppvan.mangareader.security.JwtFilter;
 
+/**
+ * Spring security authorization config.
+ */
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
@@ -25,10 +28,10 @@ public class SecurityConfig {
         http.csrf().disable();
 
         return http
-            .addFilterAt(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-            .authorizeRequests()
-            .mvcMatchers(HttpMethod.GET, "/api/v1/users/**").authenticated()
-            .mvcMatchers("/api/v1/users/login", "/api/v1/users/register").permitAll()
+        .addFilterAt(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+        .authorizeRequests()
+        .mvcMatchers("/api/v1/users/profile").authenticated()
+        .mvcMatchers("/api/v1/users/login", "/api/v1/users/register", "/api/v1/users/verify").permitAll()
             .mvcMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
             .anyRequest().authenticated()
 //            .anyRequest().permitAll()

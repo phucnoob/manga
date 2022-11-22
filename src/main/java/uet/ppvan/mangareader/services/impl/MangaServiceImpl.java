@@ -9,7 +9,7 @@ import uet.ppvan.mangareader.dtos.ChapterOverview;
 import uet.ppvan.mangareader.dtos.MangaDetails;
 import uet.ppvan.mangareader.dtos.MangaOverview;
 import uet.ppvan.mangareader.dtos.MangaRequest;
-import uet.ppvan.mangareader.exceptions.MangaNotFound;
+import uet.ppvan.mangareader.exceptions.ResourceNotFound;
 import uet.ppvan.mangareader.models.GenreEntity;
 import uet.ppvan.mangareader.models.Manga;
 import uet.ppvan.mangareader.repositories.ChapterRepository;
@@ -77,14 +77,14 @@ public class MangaServiceImpl implements MangaService {
     public MangaDetails getMangaById(Integer id) {
         log.debug("MangaService::getMangaById: id = {}", id);
         return mangaRepository.findMangaById(id)
-            .orElseThrow(() -> MangaNotFound.withId(id));
+        .orElseThrow(() -> ResourceNotFound.mangaNotFound(id));
     }
 
     @Override
     public MangaOverview getMangaOverviewById(Integer id) {
         log.debug("MangaService::getMangaOverviewById id = {}", id);
         return mangaRepository.findOverviewById(id)
-            .orElseThrow(() -> MangaNotFound.withId(id));
+        .orElseThrow(() -> ResourceNotFound.mangaNotFound(id));
     }
 
     @Override

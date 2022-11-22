@@ -10,15 +10,29 @@ import uet.ppvan.mangareader.dtos.AuthUserDetail;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * Custom Authentication to use JWT authentication method.
+ * @see JwtFilter
+ * @see JwtAuthenticationManager
+ * @see JwtAuthenticationProvider
+ * @see uet.ppvan.mangareader.utils.JwtUtils
+ */
 @RequiredArgsConstructor
 @Getter
 @Setter
 public class JwtAuthentication implements Authentication {
 
+    /**
+     * The token passed by client
+     */
     private final String token;
 
-    // user maybe null.
-    // The provider will set the user from info parse from token,
+    /**
+     * Object represent user info.
+     * user can be null (not authenticated).
+     * @implNote The provider will set the user with info parsed from token (if success).
+     */
+    //
     private AuthUserDetail user;
     private boolean authenticated;
 

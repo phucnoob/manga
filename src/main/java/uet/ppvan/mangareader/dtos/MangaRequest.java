@@ -8,6 +8,16 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
+/**
+ * DTO to post Manga to API as {@link org.springframework.web.bind.annotation.RequestBody @RequestBody}
+ * @param name
+ * @param cover
+ * @param description
+ * @param author
+ * @param otherName
+ * @param status
+ * @param genres
+ */
 public record MangaRequest(
     @NotBlank(message = "Manga name can't be blank.")
     String name,

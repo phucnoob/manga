@@ -4,7 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import uet.ppvan.mangareader.dtos.SuccessResponse;
 
-// TODO return ResponseEntity.
+/**
+ * Factory to quickly create ResponseEntity in controller.
+ */
 public class ResponseFactory {
     public static ResponseEntity<?> success(Object data) {
         return ResponseEntity.ok(

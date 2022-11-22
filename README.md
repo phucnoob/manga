@@ -2,6 +2,13 @@
 
 Manga Reader is a backend-service for a reader website.
 
+## Todo List
+
+- Add comments to system
+- Add user password forget and mail verify.
+- Document API
+- Write test to looks cools
+
 ## Functionalities
 
 - User register, login, profile
