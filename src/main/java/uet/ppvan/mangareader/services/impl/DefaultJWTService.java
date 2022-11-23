@@ -1,4 +1,4 @@
-package uet.ppvan.mangareader.utils;
+package uet.ppvan.mangareader.services.impl;
 
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
+import uet.ppvan.mangareader.services.JWTService;
+import uet.ppvan.mangareader.utils.ValueMapper;
 
 import java.security.Key;
 import java.time.Duration;
@@ -22,7 +24,7 @@ import java.util.Date;
  */
 @Component
 @RequiredArgsConstructor
-public class JwtUtils {
+public class DefaultJWTService implements JWTService {
 
     private final ValueMapper valueMapper;
 
@@ -48,6 +50,7 @@ public class JwtUtils {
      * @param expiredTime Expired time
      * @return JWT have JSON string as Subject claims
      */
+    @Override
     public String generateJWT(Object obj, Duration expiredTime) {
         String json = valueMapper.objectAsJson(obj);
 
@@ -69,6 +72,7 @@ public class JwtUtils {
      * @throws ExpiredJwtException if JWT is expired
      * @throws MalformedJwtException if JWT is not valid
      */
+    @Override
     public <T> T parseJWT(Class<T> type, String jwt) throws ExpiredJwtException, MalformedJwtException {
         var parser = jwtParser();
         var claims = parser.parseClaimsJws(jwt);

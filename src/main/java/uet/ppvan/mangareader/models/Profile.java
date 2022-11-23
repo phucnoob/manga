@@ -1,6 +1,7 @@
 package uet.ppvan.mangareader.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,5 +35,6 @@ public class Profile extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @JsonBackReference
+    @JsonIgnore
     private User user;
 }

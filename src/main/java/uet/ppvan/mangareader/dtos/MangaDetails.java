@@ -6,7 +6,6 @@ import uet.ppvan.mangareader.enums.Status;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 /**
  * DTO of {@link uet.ppvan.mangareader.models.Manga Manga}
@@ -24,13 +23,13 @@ import java.util.Set;
 
 @Builder
 public record MangaDetails(
-String name,
-String cover,
-String description,
-String author,
-Set<Genre> genres,
-Status status,
-LocalDateTime lastUpdate,
-List<ChapterOverview> chapters
+    String name,
+    String cover,
+    String description,
+    String author,
+    List<Genre> genres,
+    Status status,
+    LocalDateTime lastUpdate,
+    List<ChapterOverview> chapters
 ) {
 }

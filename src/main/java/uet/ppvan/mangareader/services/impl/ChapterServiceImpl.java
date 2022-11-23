@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import uet.ppvan.mangareader.dtos.ChapterRequest;
 import uet.ppvan.mangareader.exceptions.ResourceNotFound;
+import uet.ppvan.mangareader.mappers.ChapterMapper;
 import uet.ppvan.mangareader.models.Chapter;
 import uet.ppvan.mangareader.models.Manga;
 import uet.ppvan.mangareader.repositories.ChapterRepository;
@@ -20,20 +21,23 @@ public class ChapterServiceImpl implements ChapterService {
     private final ChapterRepository chapterRepository;
     private final MangaRepository mangaRepository;
 
-
+    private final ChapterMapper chapterMapper;
 
     @Override
-    public void addNewChapter(ChapterRequest requestData, Integer mangaId) {
+    public Chapter addNewChapter(ChapterRequest requestData, Integer mangaId) {
 
-        Chapter chapter = mangaRepository.findById(mangaId).map(
-            manga -> ChapterServiceImpl.toChapter(requestData, manga)
-        ).orElseThrow();
+        if (!mangaRepository.existsById(mangaId)) {
+            throw ResourceNotFound.mangaNotFound(mangaId);
+        }
 
-        chapterRepository.save(chapter);
+        Manga manga = mangaRepository.getReferenceById(mangaId);
+        Chapter chapter = chapterMapper.buildChapterEntity(requestData, manga);
+
+        return chapterRepository.save(chapter);
     }
 
     @Override
-    public void updateChapter(ChapterRequest request, Integer id) {
+    public Chapter updateChapter(ChapterRequest request, Integer id) {
         var founded = chapterRepository.findById(id);
         if (founded.isPresent()) {
             var chapter = founded.get();
@@ -41,7 +45,7 @@ public class ChapterServiceImpl implements ChapterService {
             chapter.setImages(request.images());
             chapter.setUpdatedDate(LocalDate.now(ZoneOffset.UTC));
 
-            chapterRepository.save(chapter);
+            return chapterRepository.save(chapter);
         } else {
             throw ResourceNotFound.chapterNotFound(id);
         }
@@ -49,37 +53,17 @@ public class ChapterServiceImpl implements ChapterService {
 
     @Override
     public void removeChapter(Integer id) {
-        if (chapterRepository.existsById(id)) {
-            chapterRepository.deleteById(id);
-        } else {
+        if (!chapterRepository.existsById(id)) {
             throw ResourceNotFound.chapterNotFound(id);
         }
+
+        chapterRepository.deleteById(id);
     }
 
     @Override
     public ChapterRequest getChapter(Integer id) {
         return chapterRepository.findById(id)
-            .map(ChapterServiceImpl::toChapterDTO)
+                   .map(chapterMapper::buildChapterDTO)
                 .orElseThrow(() -> ResourceNotFound.chapterNotFound(id));
-    }
-
-//    public List<Image>
-
-    public static Chapter toChapter(ChapterRequest chapterRequest, Manga manga) {
-        Chapter chapter = new Chapter();
-        chapter.setName(chapterRequest.name());
-        chapter.setUpdatedDate(LocalDate.now(ZoneOffset.UTC)); // Auto now
-        // TODO Maybe need timezone fix.
-        chapter.setManga(manga);
-        chapter.setImages(chapterRequest.images());
-
-        return chapter;
-    }
-
-    public static ChapterRequest toChapterDTO(Chapter chapter) {
-        return new ChapterRequest(
-            chapter.getName(),
-            chapter.getImages()
-        );
     }
 }

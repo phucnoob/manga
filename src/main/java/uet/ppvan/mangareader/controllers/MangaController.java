@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import uet.ppvan.mangareader.dtos.ChapterOverview;
-import uet.ppvan.mangareader.dtos.MangaDetails;
 import uet.ppvan.mangareader.dtos.MangaOverview;
 import uet.ppvan.mangareader.dtos.MangaRequest;
 import uet.ppvan.mangareader.services.MangaService;
@@ -30,7 +29,7 @@ public class MangaController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable Integer id) {
 
-        MangaDetails foundedManga = service.getMangaById(id);
+        var foundedManga = service.getMangaById(id);
         return ResponseFactory.success(foundedManga);
     }
 

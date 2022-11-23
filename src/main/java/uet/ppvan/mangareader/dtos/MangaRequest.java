@@ -10,6 +10,8 @@ import java.util.Set;
 
 /**
  * DTO to post Manga to API as {@link org.springframework.web.bind.annotation.RequestBody @RequestBody}
+ * Not include any lazy field.
+ *
  * @param name
  * @param cover
  * @param description

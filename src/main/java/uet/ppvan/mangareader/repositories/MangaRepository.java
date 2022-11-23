@@ -5,10 +5,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import uet.ppvan.mangareader.dtos.MangaDetails;
 import uet.ppvan.mangareader.dtos.MangaOverview;
 import uet.ppvan.mangareader.models.Manga;
 
+import javax.persistence.Tuple;
 import java.util.Optional;
 
 @Repository
@@ -27,8 +27,20 @@ public interface MangaRepository extends JpaRepository<Manga, Integer> {
         """)
     Optional<MangaOverview> findOverviewById(Integer id);
 
+    //     Nested projection not work.
     @Query("""
-        SELECT m FROM Manga m JOIN FETCH m.chapters c WHERE m.id = :id
+        SELECT
+            m.name as name,
+            m.lastUpdate as last_update,
+            m.status as status,
+            m.author as author,
+            m.cover as cover,
+            m.description as description,
+            m.otherName as other_name
+                
+        FROM Manga m WHERE m.id = :id
         """)
-    Optional<MangaDetails> findMangaById(Integer id);
+    Optional<Tuple> findMangaById(Integer id);
+
+//    Optional<MangaDetails> findMangaById(Integer id);
 }

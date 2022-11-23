@@ -1,11 +1,12 @@
 package uet.ppvan.mangareader.services;
 
 import uet.ppvan.mangareader.dtos.ChapterRequest;
+import uet.ppvan.mangareader.models.Chapter;
 
 public interface ChapterService {
-    void addNewChapter(ChapterRequest requestData, Integer mangaId);
+    Chapter addNewChapter(ChapterRequest requestData, Integer mangaId);
 
-    void updateChapter(ChapterRequest request, Integer id);
+    Chapter updateChapter(ChapterRequest request, Integer id);
 
     void removeChapter(Integer id);
 
