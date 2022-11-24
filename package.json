@@ -1,0 +1,27 @@
+{
+  "name": "web",
+  "version": "1.0.0",
+  "description": "Manga Reader is a backend-service for a reader website.",
+  "main": "index.js",
+  "scripts": {
+    "build:postcss": "postcss src/main/resources/public/css/tailwind.main.css -o target/classes/public/css/tailwind.main.css",
+    "watch:postcss": "postcss src/main/resources/public/css/tailwind.main.css -o target/classes/public/css/tailwind.main.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phucnoob/manga-be.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/phucnoob/manga-be/issues"
+  },
+  "homepage": "https://github.com/phucnoob/manga-be#readme",
+  "devDependencies": {
+    "autoprefixer": "^10.4.13",
+    "postcss": "^8.4.19",
+    "postcss-cli": "^10.0.0",
+    "tailwindcss": "^3.2.4"
+  }
+}

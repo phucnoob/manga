@@ -2,6 +2,7 @@ package uet.ppvan.mangareader.services.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import uet.ppvan.mangareader.dtos.ChapterRequest;
 import uet.ppvan.mangareader.exceptions.ResourceNotFound;
 import uet.ppvan.mangareader.mappers.ChapterMapper;
@@ -11,11 +12,13 @@ import uet.ppvan.mangareader.repositories.ChapterRepository;
 import uet.ppvan.mangareader.repositories.MangaRepository;
 import uet.ppvan.mangareader.services.ChapterService;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 
 @Service
 @AllArgsConstructor
+@Validated
 public class ChapterServiceImpl implements ChapterService {
 
     private final ChapterRepository chapterRepository;
@@ -24,7 +27,7 @@ public class ChapterServiceImpl implements ChapterService {
     private final ChapterMapper chapterMapper;
 
     @Override
-    public Chapter addNewChapter(ChapterRequest requestData, Integer mangaId) {
+    public Chapter addNewChapter(@Valid ChapterRequest requestData, Integer mangaId) {
 
         if (!mangaRepository.existsById(mangaId)) {
             throw ResourceNotFound.mangaNotFound(mangaId);
@@ -37,7 +40,7 @@ public class ChapterServiceImpl implements ChapterService {
     }
 
     @Override
-    public Chapter updateChapter(ChapterRequest request, Integer id) {
+    public Chapter updateChapter(@Valid ChapterRequest request, Integer id) {
         var founded = chapterRepository.findById(id);
         if (founded.isPresent()) {
             var chapter = founded.get();

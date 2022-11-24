@@ -3,11 +3,8 @@ package uet.ppvan.mangareader.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import uet.ppvan.mangareader.security.JwtFilter;
@@ -28,13 +25,13 @@ public class SecurityConfig {
         http.csrf().disable();
 
         return http
-        .addFilterAt(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-        .authorizeRequests()
-        .mvcMatchers("/api/v1/users/profile").authenticated()
-        .mvcMatchers("/api/v1/users/login", "/api/v1/users/register", "/api/v1/users/verify").permitAll()
-            .mvcMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
-            .anyRequest().authenticated()
-//            .anyRequest().permitAll()
+                   .addFilterAt(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                   .authorizeRequests()
+//        .mvcMatchers("/api/v1/users/profile").authenticated()
+//        .mvcMatchers("/api/v1/users/login", "/api/v1/users/register", "/api/v1/users/verify").permitAll()
+//            .mvcMatchers(HttpMethod.GET, "/**").permitAll()
+//            .anyRequest().authenticated()
+                   .anyRequest().permitAll()
             .and()
             .build();
 

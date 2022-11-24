@@ -5,20 +5,20 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
-@RestController
+@Controller
 @EnableCaching
 @EnableAsync
 public class MangaReaderApplication {
 
     @GetMapping("/")
     public String index() {
-        return "<h1>Hello world</h1>";
+        return "index";
     }
 
     public static void main(String[] args) {
