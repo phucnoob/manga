@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import uet.ppvan.mangareader.dtos.AuthUserDetail;
 import uet.ppvan.mangareader.dtos.UserRequest;
 import uet.ppvan.mangareader.models.Role;
@@ -12,7 +13,10 @@ import uet.ppvan.mangareader.models.User;
 import uet.ppvan.mangareader.repositories.RoleRepository;
 import uet.ppvan.mangareader.repositories.UserRepository;
 
+import javax.validation.Valid;
+
 @Service
+@Validated
 @RequiredArgsConstructor
 public class UserMapper {
 
@@ -21,7 +25,7 @@ public class UserMapper {
 
     private final UserRepository userRepository;
 
-    public User buildUserEntity(UserRequest request) {
+    public User buildUserEntity(@Valid UserRequest request) {
 
         String password = passwordEncoder.encode(request.password());
 
@@ -35,7 +39,7 @@ public class UserMapper {
         return user;
     }
 
-    public User buildUserFromAuth(AuthUserDetail userDetail) {
+    public User buildUserFromAuth(@Valid AuthUserDetail userDetail) {
         return userRepository
                    .findUserByUsername(userDetail.username())
                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));

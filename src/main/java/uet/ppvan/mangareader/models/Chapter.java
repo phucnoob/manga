@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -19,7 +20,11 @@ public class Chapter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @NotNull
     private String name;
+
+    @NotNull
     @Column(name = "updated_date")
     private LocalDate updatedDate;
 
@@ -28,6 +33,7 @@ public class Chapter {
     @JsonBackReference
     private Manga manga;
 
+    @NotNull
     @Column(name = "server")
     private String server;
 

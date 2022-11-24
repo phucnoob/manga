@@ -2,6 +2,7 @@ package uet.ppvan.mangareader.mappers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import uet.ppvan.mangareader.dtos.ChapterOverview;
 import uet.ppvan.mangareader.dtos.MangaDetails;
 import uet.ppvan.mangareader.dtos.MangaRequest;
@@ -12,13 +13,16 @@ import uet.ppvan.mangareader.models.Manga;
 import uet.ppvan.mangareader.repositories.GenreRepository;
 
 import javax.persistence.Tuple;
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Validated
 public class MangaMapper {
 
     private final GenreRepository genreRepository;
@@ -41,7 +45,7 @@ public class MangaMapper {
         );
     }
 
-    public MangaRequest buildMangaRequest(Manga manga) {
+    public MangaRequest buildMangaRequest(@Valid Manga manga) {
         return new MangaRequest(
             manga.getName(),
             manga.getCover(),
@@ -53,21 +57,29 @@ public class MangaMapper {
         );
     }
 
-    public Manga buildMangaEntity(MangaRequest mangaRequest) {
-        Manga manga = new Manga();
-        manga.setName(mangaRequest.name());
-        manga.setAuthor(mangaRequest.author());
-        manga.setDescription(mangaRequest.description());
-        manga.setCover(mangaRequest.cover());
-        manga.setStatus(mangaRequest.status());
-        manga.setOtherName(mangaRequest.otherName());
-        manga.setLastUpdate(LocalDateTime.now(ZoneOffset.UTC));
-        var genres = mangaRequest.genres().stream()
-                         .map(g -> genreRepository.findGenreEntityByGenre(g))
-                         .collect(Collectors.toSet());
+    public Manga buildMangaEntity(@Valid MangaRequest mangaRequest) {
+        try {
+            Manga manga = new Manga();
+            manga.setId(0);
+            manga.setName(mangaRequest.name());
+            manga.setChapters(Collections.emptyList());
+            manga.setAuthor(mangaRequest.author());
+            manga.setDescription(mangaRequest.description());
+            manga.setCover(mangaRequest.cover());
+            manga.setStatus(mangaRequest.status());
+            manga.setOtherName(mangaRequest.otherName());
+            manga.setLastUpdate(LocalDateTime.now(ZoneOffset.UTC));
+            var genres = mangaRequest.genres().stream()
+                             .map(genreRepository::findGenreEntityByGenre)
+                             .collect(Collectors.toSet());
 
-        manga.setGenres(genres);
+            manga.setGenres(genres);
 
-        return manga;
+            return manga;
+        } catch (NullPointerException ex) {
+            throw new IllegalArgumentException("Null data is not allowed.", ex);
+        } catch (Exception ex) {
+            throw new RuntimeException("Unknown Exception");
+        }
     }
 }

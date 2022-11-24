@@ -5,6 +5,7 @@ import uet.ppvan.mangareader.enums.Genre;
 import uet.ppvan.mangareader.enums.Status;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
@@ -36,8 +37,10 @@ public record MangaRequest(
     @NotNull(message = "Other name can't be null.")
     String otherName,
 
+    @NotNull(message = "Status can't be null")
     Status status,
 
+    @NotEmpty(message = "At least one Genre required")
     Set<Genre> genres
 ) {
 }
