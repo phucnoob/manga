@@ -7,6 +7,7 @@ import org.hibernate.search.mapper.orm.massindexing.MassIndexer;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
 import uet.ppvan.mangareader.models.Manga;
 
@@ -15,7 +16,7 @@ import javax.persistence.EntityManager;
 /**
  * Only turn on the @Configuration if index has not been created.
  */
-//@Configuration
+@Configuration
 @RequiredArgsConstructor
 @Slf4j
 public class SearchIndexInit implements ApplicationListener<ApplicationReadyEvent> {

@@ -7,7 +7,11 @@ Manga Reader is a backend-service for a reader website.
 - Add comments to system
 - Add user password forget and mail verify. ok
 - Document API. ok
-- Write test to look cools
+- Write test to look cools. ok
+- Write front-end
+- Spring security formLogin?
+- Optimize JPA query, index...
+- Write controller test (too lazy)
 
 ## Functionalities
 

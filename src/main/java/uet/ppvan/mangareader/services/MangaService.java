@@ -6,12 +6,13 @@ import uet.ppvan.mangareader.dtos.MangaOverview;
 import uet.ppvan.mangareader.dtos.MangaRequest;
 import uet.ppvan.mangareader.models.Manga;
 
+import javax.validation.Valid;
 import java.util.List;
 
 public interface MangaService {
-    Integer addNewManga(MangaRequest requestData);
+    Integer addNewManga(@Valid MangaRequest requestData);
 
-    Manga updateManga(Integer id, MangaRequest requestData);
+    Manga updateManga(Integer id,@Valid MangaRequest requestData);
 
     void deleteManga(Integer id);
 

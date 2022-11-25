@@ -1,8 +1,15 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-    content: ["src/main/resources/templates/**.html"],
+    content: ["src/main/resources/templates/*.html"],
     theme: {
-        extend: {},
+        extend: {
+            fontFamily: {
+                'code': ['Source Code Pro', 'sans-serif']
+            },
+        },
     },
-    plugins: [],
+    plugins: [
+        require('tailwind-scrollbar'),
+        require('@tailwindcss/line-clamp'),
+    ],
 }

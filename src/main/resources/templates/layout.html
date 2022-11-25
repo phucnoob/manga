@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Cosma</title>
+    <link rel="stylesheet" th:href="@{/css/tailwind.dev.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body class="bg-white">
+    <!-- Begin header -->
+    <header class="w-full bg-[#1e293b] h-12 border-b border-slate-900">
+        <div class="container flex mx-auto h-full items-center justify-between">
+            <a href="#/">
+                <img class="rounded cursor-pointer h-10 px-4 block bg-[#40739e]" alt="App logo" src="/images/logo.png">
+            </a>
+    
+            <div class="text-sm py-2 flex justify-between gap-2 items-center w-5/12 text-stone-100 font-semibold">
+                <div class="search-bar grow flex flex-col relative">
+                    <div class="bg-[#2c3e50] focus-within:ring-slate-900 ring-2 flex ring-transparent outline-none h-7 rounded-[0.4rem] mx-2">
+                        <input id="search-field" class="w-full text-neutral-100 outline-none bg-transparent p-1 px-4 caret-[#3498db]">
+                        <button class="outline-none px-2 hover:bg-slate-900 rounded">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </div>
+                    <div id="search-result" class="hidden bg-[#1a2937] overflow-y-auto max-h-96 absolute left-0 right-0 top-full mx-2 mt-1 cursor-pointer rounded min-h-[6rem] border-2 border-slate-900">
+                        
+                    </div>
+                </div>
+                <a href="#" class="sign-in font-code font-semibold">Đăng nhập</a>
+            </div>
+        </div>
+    </header>
+    <!-- End header -->
+
+    <div class="min-h-screen bg-[#13293D] flex justify-center">
+        <div layout:fragment="content" class="container min-h-screen bg-[#13293D]">
+            <p>Changing contents</p>
+        </div>
+    </div>
+
+    <!-- Templates -->
+    <div id="template" class="hidden">
+        <a class="search-entry mt-1 first:mt-0 flex w-full rounded h-20 hover:brightness-[80%] hover:border-slate-900 border border-transparent">
+            <div class="h-full flex w-[4.2rem] min-w-[4.2rem]">
+                <img class="image object-cover h-full rounded" src="https://st.ntcdntempv3.com/data/comics/183/than-hon-vo-de.jpg" alt="">
+            </div>
+
+            <div class="px-1 grow rounded text-clip text-justify break-normal overflow-hidden flex flex-col justify-around">
+                <p class="title font-bold">Thần Hồn Võ Đế</p>
+                <p class="description min-h-[2rem] font-light line-clamp-3 text-xs">Truyện tranh Thần Hồn Võ Đế được cập nhật nhanh và đầy đủ nhất tại NetTruyen. Bạn đọc đừng quên để lại bình luận và chia sẻ, ủng hộ NetTruyen ra các chương mới nhất của truyện</p>
+            </div>
+        </a>
+    </div>
+
+
+    <!-- Begin footer -->
+    <footer class="w-full h-12 bg-slate-800 flex border-t border-slate-900">
+        <div class="container flex justify-between m-auto">
+            <div class="text-slate-200">
+                <span class="m-auto">© Hello world</span>
+            </div>
+            <div class="text-slate-200">Liên hệ: <a target="blank" class="hover:text-cyan-500 p-1" href="https://github.com/phucnoob">phucnoob</a></div>
+        </div>
+    </footer>
+    <!-- End footer -->
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="http://localhost:35729/livereload.js"></script>
+    <script src="/js/search.js"></script>
+</body>
+</html>
