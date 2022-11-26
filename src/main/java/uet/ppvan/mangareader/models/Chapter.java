@@ -8,7 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -41,5 +41,5 @@ public class Chapter {
     //    @OneToMany(mappedBy = "chapter", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @ElementCollection(fetch = FetchType.LAZY)
     @JoinTable(name = "chapter_images", joinColumns = @JoinColumn(name = "chapter_id"))
-    private Set<String> images;
+    private List<String> images;
 }

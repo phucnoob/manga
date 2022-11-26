@@ -15,7 +15,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 class ChapterMapperTest {
@@ -33,7 +33,7 @@ class ChapterMapperTest {
     @Test
     @DisplayName("Validate data with @Valid")
     void shouldValidateProperly() {
-        ChapterRequest request = new ChapterRequest(null, Set.of("hihi"));
+        ChapterRequest request = new ChapterRequest(null, List.of("hihi"));
         var requestViolations = validator.validate(request);
         Assertions.assertThat(requestViolations).isNotEmpty();
 
@@ -49,7 +49,7 @@ class ChapterMapperTest {
     @Test
     @DisplayName("Return exact data in normal case")
     void buildEntityNormal() {
-        ChapterRequest request = new ChapterRequest("name", Set.of("hihi"));
+        ChapterRequest request = new ChapterRequest("name", List.of("hihi"));
         Manga manga = new Manga();
         manga.setId(12);
         Chapter ch = new Chapter();
@@ -58,7 +58,7 @@ class ChapterMapperTest {
         ch.setUpdatedDate(LocalDate.EPOCH);
         ch.setManga(manga);
         ch.setServer("");
-        ch.setImages(Set.of("hihi"));
+        ch.setImages(List.of("hihi"));
 
         Chapter chapter = chapterMapper.buildChapterEntity(request, manga);
 
@@ -71,7 +71,7 @@ class ChapterMapperTest {
     @Test
     @DisplayName("Throw if manga is null or id is null")
     void shouldThrowIfMangaIdNull() {
-        ChapterRequest request = new ChapterRequest("name", Set.of("hihi"));
+        ChapterRequest request = new ChapterRequest("name", List.of("hihi"));
         Manga manga = new Manga();
         manga.setId(null);
 
@@ -82,7 +82,7 @@ class ChapterMapperTest {
     @Test
     @DisplayName("Return expected data")
     void buildChapterDTO() {
-        ChapterRequest request = new ChapterRequest("name", Set.of("hihi"));
+        ChapterRequest request = new ChapterRequest("name", List.of("hihi"));
         Manga manga = new Manga();
         manga.setId(12);
         Chapter ch = new Chapter();
@@ -91,7 +91,7 @@ class ChapterMapperTest {
         ch.setUpdatedDate(LocalDate.EPOCH);
         ch.setManga(manga);
         ch.setServer("");
-        ch.setImages(Set.of("hihi"));
+        ch.setImages(List.of("hihi"));
 
 
         Assertions.assertThat(chapterMapper.buildChapterDTO(ch))

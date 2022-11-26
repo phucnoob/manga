@@ -2,7 +2,7 @@ package uet.ppvan.mangareader.dtos;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.Set;
+import java.util.List;
 
 /**
  * DTO to post new {@link uet.ppvan.mangareader.models.Chapter Chapter}
@@ -14,6 +14,6 @@ public record ChapterRequest(
     @NotNull
     String name,
     @NotEmpty(message = "Chapter must have at least 1 images.")
-    Set<String> images
+    List<String> images
 )
 { }
