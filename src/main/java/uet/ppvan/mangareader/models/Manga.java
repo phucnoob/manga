@@ -48,9 +48,9 @@ public class Manga {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "mangas_genres",
-            joinColumns = @JoinColumn(name = "genre_id"),
-            inverseJoinColumns = @JoinColumn(name = "manga_id")
+        name = "mangas_genres",
+        joinColumns = @JoinColumn(name = "manga_id"),
+        inverseJoinColumns = @JoinColumn(name = "genre_id")
     )
     private Set<GenreEntity> genres;
 

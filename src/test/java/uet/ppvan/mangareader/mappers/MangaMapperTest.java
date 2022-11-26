@@ -50,6 +50,7 @@ class MangaMapperTest {
         List<ChapterOverview> chapterOverviews = List.of(new ChapterOverview(12, "DENO", LocalDate.EPOCH));
         MangaDetails details = new MangaDetails(
             "name",
+            "otherName",
             "cover",
             "description",
             "author",
@@ -77,6 +78,7 @@ class MangaMapperTest {
         List<ChapterOverview> chapterOverviews = List.of(new ChapterOverview(12, "DENO", LocalDate.EPOCH));
         MangaDetails details = new MangaDetails(
             "name",
+            "otherName",
             "cover",
             "description",
             "author",

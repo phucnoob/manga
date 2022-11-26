@@ -73,7 +73,7 @@ jQuery(function () {
         setTimeout(() => {
             $("#search-result").addClass("hidden");
             $(this).val("");
-        }, 100);
+        }, 300);
     });
 
 });

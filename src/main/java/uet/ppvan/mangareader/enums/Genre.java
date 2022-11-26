@@ -104,4 +104,9 @@ public enum Genre {
         }
         return reverseValues.get(value.toLowerCase());
     }
+
+    @Override
+    public String toString() {
+        return getValue();
+    }
 }

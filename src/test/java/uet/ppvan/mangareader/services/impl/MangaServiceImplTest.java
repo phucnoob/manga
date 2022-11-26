@@ -73,6 +73,7 @@ class MangaServiceImplTest {
         chapterOverviews.add(new ChapterOverview(1, "Test chap", LocalDate.EPOCH));
         MangaDetails details = new MangaDetails(
             "name",
+            "otherName",
             "cover",
             "description",
             "author",

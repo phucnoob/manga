@@ -31,12 +31,12 @@ public interface MangaRepository extends JpaRepository<Manga, Integer> {
     @Query("""
         SELECT
             m.name as name,
+            m.otherName as other_name,
             m.lastUpdate as last_update,
             m.status as status,
             m.author as author,
             m.cover as cover,
-            m.description as description,
-            m.otherName as other_name
+            m.description as description
                 
         FROM Manga m WHERE m.id = :id
         """)

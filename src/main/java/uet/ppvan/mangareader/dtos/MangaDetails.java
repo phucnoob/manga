@@ -24,6 +24,7 @@ import java.util.List;
 @Builder
 public record MangaDetails(
     String name,
+    String otherName,
     String cover,
     String description,
     String author,

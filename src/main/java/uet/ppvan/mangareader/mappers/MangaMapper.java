@@ -35,6 +35,7 @@ public class MangaMapper {
 
         return new MangaDetails(
             mangaData.get("name", String.class),
+            mangaData.get("other_name", String.class),
             mangaData.get("cover", String.class),
             mangaData.get("description", String.class),
             mangaData.get("author", String.class),

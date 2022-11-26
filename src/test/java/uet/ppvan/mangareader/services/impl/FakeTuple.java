@@ -34,6 +34,7 @@ public class FakeTuple implements Tuple {
         try {
             return switch (alias) {
                 case "name" -> (X) details.name();
+                case "other_name" -> (X) details.otherName();
                 case "cover" -> (X) details.cover();
                 case "description" -> (X) details.description();
                 case "author" -> (X) details.author();
