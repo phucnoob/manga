@@ -30,6 +30,7 @@ public class UserMapper {
         String password = passwordEncoder.encode(request.password());
 
         User user = new User();
+        user.setId(0);
         user.setUsername(request.username());
         user.setPassword(password);
         user.setEmail(request.email());
