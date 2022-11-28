@@ -1,5 +1,6 @@
 package uet.ppvan.mangareader.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -11,7 +12,6 @@ import uet.ppvan.mangareader.models.User;
 import uet.ppvan.mangareader.services.ProfileService;
 import uet.ppvan.mangareader.utils.ResponseFactory;
 
-import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor

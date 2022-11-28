@@ -1,8 +1,8 @@
 package uet.ppvan.mangareader.dtos;
 
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.URL;
 
-import javax.validation.constraints.NotNull;
 
 /**
  * DTO to update the {@link uet.ppvan.mangareader.models.Profile}

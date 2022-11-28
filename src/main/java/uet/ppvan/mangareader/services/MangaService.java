@@ -1,12 +1,12 @@
 package uet.ppvan.mangareader.services;
 
+import jakarta.validation.Valid;
 import uet.ppvan.mangareader.dtos.ChapterOverview;
 import uet.ppvan.mangareader.dtos.MangaDetails;
 import uet.ppvan.mangareader.dtos.MangaOverview;
 import uet.ppvan.mangareader.dtos.MangaRequest;
 import uet.ppvan.mangareader.models.Manga;
 
-import javax.validation.Valid;
 import java.util.List;
 
 public interface MangaService {

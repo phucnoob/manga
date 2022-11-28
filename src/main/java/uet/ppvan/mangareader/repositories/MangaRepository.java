@@ -1,5 +1,6 @@
 package uet.ppvan.mangareader.repositories;
 
+import jakarta.persistence.Tuple;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import uet.ppvan.mangareader.dtos.MangaOverview;
 import uet.ppvan.mangareader.models.Manga;
 
-import javax.persistence.Tuple;
 import java.util.Optional;
 
 @Repository

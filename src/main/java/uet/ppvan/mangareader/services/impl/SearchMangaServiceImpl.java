@@ -1,5 +1,6 @@
 package uet.ppvan.mangareader.services.impl;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.search.engine.search.query.SearchResult;
 import org.hibernate.search.mapper.orm.Search;
@@ -12,7 +13,6 @@ import uet.ppvan.mangareader.models.Manga;
 import uet.ppvan.mangareader.services.MangaService;
 import uet.ppvan.mangareader.services.SearchMangaService;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.stream.Collectors;
 

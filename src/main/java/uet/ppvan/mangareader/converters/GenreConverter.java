@@ -1,9 +1,9 @@
 package uet.ppvan.mangareader.converters;
 
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 import uet.ppvan.mangareader.enums.Genre;
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
 
 @Converter(autoApply = true)
 public class GenreConverter implements AttributeConverter<Genre, String> {

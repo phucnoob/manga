@@ -1,12 +1,12 @@
 package uet.ppvan.mangareader.mappers;
 
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import uet.ppvan.mangareader.dtos.ProfileRequest;
 import uet.ppvan.mangareader.models.Profile;
 import uet.ppvan.mangareader.models.User;
 
-import javax.validation.Valid;
 
 @Service
 @Validated

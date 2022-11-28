@@ -1,5 +1,6 @@
 package uet.ppvan.mangareader.services.impl;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -10,8 +11,6 @@ import uet.ppvan.mangareader.models.Profile;
 import uet.ppvan.mangareader.models.User;
 import uet.ppvan.mangareader.repositories.ProfileRepository;
 import uet.ppvan.mangareader.services.ProfileService;
-
-import javax.validation.Valid;
 
 @Service
 @RequiredArgsConstructor

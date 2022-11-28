@@ -1,12 +1,12 @@
 package uet.ppvan.mangareader.mappers;
 
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import uet.ppvan.mangareader.dtos.ChapterRequest;
 import uet.ppvan.mangareader.models.Chapter;
 import uet.ppvan.mangareader.models.Manga;
 
-import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 

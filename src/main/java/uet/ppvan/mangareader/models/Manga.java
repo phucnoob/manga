@@ -1,6 +1,8 @@
 package uet.ppvan.mangareader.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,8 +12,6 @@ import org.hibernate.validator.constraints.URL;
 import org.springframework.validation.annotation.Validated;
 import uet.ppvan.mangareader.enums.Status;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;

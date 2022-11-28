@@ -14,26 +14,38 @@ import com.google.auth.Credentials;
 import com.google.auth.oauth2.UserCredentials;
 import com.google.photos.library.v1.PhotosLibraryClient;
 import com.google.photos.library.v1.PhotosLibrarySettings;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Path;
 import java.security.GeneralSecurityException;
 import java.util.List;
 
-@Component
+@Configuration
 public class PhotosManager {
 
-    private final File DATA_STORE_DIR = new File("./credentials");
-    private final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
+
+    // This is directory, not a file.
+    private final File DATA_STORE_DIR;
+    private final JsonFactory JSON_FACTORY;
+
+    private final String credentialPath;
+
+    public PhotosManager(@Value("${config.credentials-path}") String credentialPath) {
+        this.credentialPath = credentialPath;
+        this.DATA_STORE_DIR = new File(credentialPath);
+        this.JSON_FACTORY = GsonFactory.getDefaultInstance();
+    }
 
 
     @Bean
     public PhotosLibraryClient photosLibraryClient() throws IOException, GeneralSecurityException {
-        String credentialsPath = "credentials/credentials.json";
+        String credentialsPath = Path.of(credentialPath, "credentials.json").toString();
 
         List<String> scopes = List.of(
             "https://www.googleapis.com/auth/photoslibrary.sharing",

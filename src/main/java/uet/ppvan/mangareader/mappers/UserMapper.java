@@ -1,5 +1,6 @@
 package uet.ppvan.mangareader.mappers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,7 +14,6 @@ import uet.ppvan.mangareader.models.User;
 import uet.ppvan.mangareader.repositories.RoleRepository;
 import uet.ppvan.mangareader.repositories.UserRepository;
 
-import javax.validation.Valid;
 
 @Service
 @Validated
@@ -30,7 +30,7 @@ public class UserMapper {
         String password = passwordEncoder.encode(request.password());
 
         User user = new User();
-        user.setId(0);
+        user.setId(null);
         user.setUsername(request.username());
         user.setPassword(password);
         user.setEmail(request.email());

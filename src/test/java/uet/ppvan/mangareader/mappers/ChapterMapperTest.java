@@ -1,5 +1,7 @@
 package uet.ppvan.mangareader.mappers;
 
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,8 +13,6 @@ import uet.ppvan.mangareader.dtos.ChapterRequest;
 import uet.ppvan.mangareader.models.Chapter;
 import uet.ppvan.mangareader.models.Manga;
 
-import javax.validation.Validation;
-import javax.validation.Validator;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;

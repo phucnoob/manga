@@ -1,9 +1,9 @@
 package uet.ppvan.mangareader.services.impl;
 
+import jakarta.persistence.Tuple;
+import jakarta.persistence.TupleElement;
 import uet.ppvan.mangareader.dtos.MangaDetails;
 
-import javax.persistence.Tuple;
-import javax.persistence.TupleElement;
 import java.util.List;
 
 public class FakeTuple implements Tuple {
@@ -55,7 +55,7 @@ public class FakeTuple implements Tuple {
             case "description" -> details.description();
             case "author" -> details.author();
             case "status" -> details.status();
-            case "last_update" -> details.cover();
+            case "last_update" -> details.lastUpdate();
             default -> null;
         };
     }

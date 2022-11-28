@@ -1,9 +1,9 @@
 package uet.ppvan.mangareader.converters;
 
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 import uet.ppvan.mangareader.models.Role;
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
 
 @Converter(autoApply = true)
 public class RoleConverter implements AttributeConverter<Role, String> {

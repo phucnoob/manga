@@ -1,6 +1,8 @@
 package uet.ppvan.mangareader.controllers;
 
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -11,8 +13,6 @@ import uet.ppvan.mangareader.services.UserAuthService;
 import uet.ppvan.mangareader.services.UserService;
 import uet.ppvan.mangareader.utils.ResponseFactory;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Email;
 
 
 @RequiredArgsConstructor

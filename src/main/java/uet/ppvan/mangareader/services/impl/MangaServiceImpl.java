@@ -1,5 +1,7 @@
 package uet.ppvan.mangareader.services.impl;
 
+import jakarta.persistence.Tuple;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -19,8 +21,6 @@ import uet.ppvan.mangareader.repositories.GenreRepository;
 import uet.ppvan.mangareader.repositories.MangaRepository;
 import uet.ppvan.mangareader.services.MangaService;
 
-import javax.persistence.Tuple;
-import javax.validation.Valid;
 import java.util.List;
 import java.util.NoSuchElementException;
 

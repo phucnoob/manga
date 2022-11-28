@@ -27,10 +27,10 @@ public class SecurityConfig {
 
         return http
                    .addFilterAt(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                   .authorizeRequests()
-        .mvcMatchers("/api/v1/users/profile").authenticated()
-        .mvcMatchers("/api/v1/users/login", "/api/v1/users/register", "/api/v1/users/verify").permitAll()
-            .mvcMatchers(HttpMethod.GET, "/**").permitAll()
+                   .authorizeHttpRequests()
+                   .requestMatchers("/api/v1/users/profile").authenticated()
+                   .requestMatchers("/api/v1/users/login", "/api/v1/users/register", "/api/v1/users/verify").permitAll()
+                   .requestMatchers(HttpMethod.GET, "/**").permitAll()
             .anyRequest().authenticated()
 //                   .anyRequest().permitAll()
             .and()

@@ -1,5 +1,6 @@
 package uet.ppvan.mangareader.services.impl;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -12,7 +13,6 @@ import uet.ppvan.mangareader.repositories.ChapterRepository;
 import uet.ppvan.mangareader.repositories.MangaRepository;
 import uet.ppvan.mangareader.services.ChapterService;
 
-import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 

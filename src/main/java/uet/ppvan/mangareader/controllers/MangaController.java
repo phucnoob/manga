@@ -1,5 +1,8 @@
 package uet.ppvan.mangareader.controllers;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +15,6 @@ import uet.ppvan.mangareader.services.MangaService;
 import uet.ppvan.mangareader.services.SearchMangaService;
 import uet.ppvan.mangareader.utils.ResponseFactory;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import java.util.List;
 
 @AllArgsConstructor

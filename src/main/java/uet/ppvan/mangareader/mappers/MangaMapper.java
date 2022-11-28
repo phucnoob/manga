@@ -1,5 +1,7 @@
 package uet.ppvan.mangareader.mappers;
 
+import jakarta.persistence.Tuple;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -12,8 +14,6 @@ import uet.ppvan.mangareader.models.GenreEntity;
 import uet.ppvan.mangareader.models.Manga;
 import uet.ppvan.mangareader.repositories.GenreRepository;
 
-import javax.persistence.Tuple;
-import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Collections;

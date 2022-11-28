@@ -1,9 +1,10 @@
 package uet.ppvan.mangareader.services;
 
+import jakarta.validation.Valid;
 import uet.ppvan.mangareader.dtos.ChapterRequest;
 import uet.ppvan.mangareader.models.Chapter;
 
-import javax.validation.Valid;
+
 public interface ChapterService {
     Chapter addNewChapter(@Valid ChapterRequest requestData, Integer mangaId);
 
