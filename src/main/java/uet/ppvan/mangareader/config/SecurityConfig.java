@@ -5,10 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import uet.ppvan.mangareader.security.JwtFilter;
 
 /**
  * Spring security authorization config.
@@ -17,24 +14,32 @@ import uet.ppvan.mangareader.security.JwtFilter;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtFilter jwtFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.csrf().disable();
 
+
         return http
-                   .addFilterAt(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                    .authorizeHttpRequests()
-                   .requestMatchers("/api/v1/users/profile").authenticated()
-                   .requestMatchers("/api/v1/users/login", "/api/v1/users/register", "/api/v1/users/verify").permitAll()
-                   .requestMatchers(HttpMethod.GET, "/**").permitAll()
-            .anyRequest().authenticated()
-//                   .anyRequest().permitAll()
-            .and()
-            .build();
+                   .requestMatchers("/user/login", "/user/login-error", "/js/**", "/css/**", "/images/**")
+                   .permitAll()
+                   .requestMatchers(HttpMethod.GET, "/**")
+                   .permitAll()
+                   .anyRequest()
+                   .authenticated()
+                   .and()
+                   .formLogin()
+                   .loginPage("/user/login")
+//                   .loginProcessingUrl("/user/login")
+                   .failureForwardUrl("/user/login-error")
+                   .defaultSuccessUrl("/")
+                   .and()
+                   .logout()
+                   .logoutUrl("/user/logout")
+                   .logoutSuccessUrl("/")
+                   .and().build();
 
     }
 }

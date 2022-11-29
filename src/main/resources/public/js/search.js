@@ -26,9 +26,6 @@ jQuery(function () {
     }
 
 
-    let data = getSearchResult("/api/v1/mangas/ajax/search", {name: "Komi"});
-    console.log(data);
-
     /**
      * Update search result and show the #search-result.
      * @param {string} searchStr

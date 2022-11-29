@@ -4,12 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.stereotype.Component;
 import uet.ppvan.mangareader.dtos.AuthUserDetail;
 import uet.ppvan.mangareader.services.JWTService;
 
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 

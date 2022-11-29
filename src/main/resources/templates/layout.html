@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
 
     <meta charset="UTF-8">
     <title>Cosma</title>
+    <link href="/favicon.ico" rel="icon" th:href="@{/favicon.ico}" type="image/x-icon">
     <link rel="stylesheet" th:href="@{/css/tailwind.dev.css}">
     <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
           integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
@@ -15,14 +18,14 @@
     <!-- Begin header -->
     <header class="w-full bg-[#1e293b] h-12 border-b border-slate-900">
         <div class="container flex mx-auto h-full items-center justify-between">
-            <a href="#/">
+            <a href="#/" th:href="@{/}">
                 <img class="rounded cursor-pointer h-10 px-4 block bg-[#40739e]" alt="App logo" src="/images/logo.png">
             </a>
 
             <div class="text-sm py-2 flex justify-between gap-2 items-center w-1/2 text-stone-100 font-semibold">
                 <div class="search-bar grow flex flex-col relative">
-                    <div
-                            class="bg-[#2c3e50] focus-within:ring-slate-900 ring-2 flex ring-transparent outline-none h-7 rounded-[0.4rem] mx-2">
+                    <div>
+                        <label class="bg-[#2c3e50] focus-within:ring-slate-900 ring-2 flex ring-transparent outline-none h-7 rounded-[0.4rem] mx-2"></label>
                         <input class="w-full text-neutral-100 outline-none bg-transparent p-1 px-4 caret-[#3498db]"
                                id="search-field">
                         <button class="outline-none px-2 hover:bg-slate-900 rounded">
@@ -34,7 +37,11 @@
 
                     </div>
                 </div>
-                <a href="#" class="sign-in font-code font-semibold">Đăng nhập</a>
+
+                <a class="sign-in font-code font-semibold" href="#" sec:authorize="isAnonymous()"
+                   th:href="@{/user/login}">Đăng nhập</a>
+                <a class="sign-in font-code font-semibold" href="#" sec:authentication="name"
+                   sec:authorize="isAuthenticated()" th:href="@{/user/logout}"></a>
             </div>
         </div>
     </header>
