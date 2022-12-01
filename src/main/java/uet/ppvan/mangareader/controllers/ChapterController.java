@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uet.ppvan.mangareader.dtos.ChapterRequest;
-import uet.ppvan.mangareader.dtos.SuccessResponse;
 import uet.ppvan.mangareader.services.ChapterService;
 import uet.ppvan.mangareader.utils.ResponseFactory;
 
@@ -16,16 +15,10 @@ public class ChapterController {
     private final ChapterService service;
 
     @GetMapping("/{id}")
-    public ResponseEntity<SuccessResponse> getById(
+    public ResponseEntity<?> getById(
         @PathVariable Integer id
     ) {
-        return ResponseEntity.ok(
-                new SuccessResponse(
-                        SuccessResponse.SUCCESS,
-                        "Query successfully.",
-                        service.getChapter(id)
-                )
-        );
+        return ResponseFactory.success(service.getChapter(id));
     }
 
     @PostMapping("/add")
@@ -42,26 +35,20 @@ public class ChapterController {
      * Update
      */
     @PutMapping("/update")
-    public ResponseEntity<Object> updateChapter(
-            @RequestParam(name = "id") Integer id,
-            @RequestBody ChapterRequest chapter
+    public ResponseEntity<?> updateChapter(
+        @RequestParam(name = "id") Integer id,
+        @RequestBody ChapterRequest chapter
     ) {
         service.updateChapter(chapter, id);
-        return ResponseEntity.ok(ResponseFactory.success("Chapter updated.", chapter));
+        return ResponseFactory.success("Chapter updated.", chapter);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<SuccessResponse> delete(
+    public ResponseEntity<?> delete(
         @PathVariable Integer id
     ) {
         service.removeChapter(id);
-        return ResponseEntity.ok(
-            new SuccessResponse(
-                SuccessResponse.SUCCESS,
-                "Delete chapter successfully",
-                ""
-            )
-        );
+        return ResponseFactory.success("Delete chapter successfully", "");
     }
 
 }

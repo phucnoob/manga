@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Document</title>
+</head>
+<body>
+<div class="border-[#0c0a29] bg-[#0c0a29]  rounded border-2 flex h-full min-h-screen" layout:fragment="form(title)">
+    <div class="w-2/3 m-auto flex flex-col justify-center items-center" id="form-container">
+        <h2 class="text-4xl m-4 mb-6 text-left w-2/3" th:text="${title}">Title</h2>
+
+        <div layout:fragment="form-errors">
+            Error goes here.
+        </div>
+
+        <form layout:fragment="form-content">
+            Content goes here.
+        </form>
+    </div>
+
+</div>
+</body>
+</html>

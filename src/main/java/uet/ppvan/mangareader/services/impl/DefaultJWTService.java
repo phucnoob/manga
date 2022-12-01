@@ -1,4 +1,4 @@
-package uet.ppvan.mangareader.utils;
+package uet.ppvan.mangareader.services.impl;
 
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -7,9 +7,12 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
+import uet.ppvan.mangareader.services.JWTService;
+import uet.ppvan.mangareader.utils.ValueMapper;
 
 import java.security.Key;
 import java.time.Duration;
@@ -20,18 +23,17 @@ import java.util.Date;
  * Unity class to handle JWT.
  */
 @Component
-public class JwtUtils {
+@RequiredArgsConstructor
+public class DefaultJWTService implements JWTService {
+
+    private final ValueMapper valueMapper;
 
     @Value("${jwt.secret-key}")
-    private void setSecretKey(String secretKey) {
-        JwtUtils.SECRET_KEY = secretKey;
-    }
-
-    private static String SECRET_KEY; // default
+    private String SECRET_KEY; // default
 
     @SuppressWarnings("unused")
-    public static String generateJWT(Object obj) {
-        String json = ValueMapper.objectAsJson(obj);
+    public String generateJWT(Object obj) {
+        String json = valueMapper.objectAsJson(obj);
 
         return Jwts.builder()
         .setSubject(json)
@@ -48,8 +50,9 @@ public class JwtUtils {
      * @param expiredTime Expired time
      * @return JWT have JSON string as Subject claims
      */
-    public static String generateJWT(Object obj, Duration expiredTime) {
-        String json = ValueMapper.objectAsJson(obj);
+    @Override
+    public String generateJWT(Object obj, Duration expiredTime) {
+        String json = valueMapper.objectAsJson(obj);
 
         return Jwts.builder()
         .setSubject(json)
@@ -69,21 +72,22 @@ public class JwtUtils {
      * @throws ExpiredJwtException if JWT is expired
      * @throws MalformedJwtException if JWT is not valid
      */
-    public static <T> T parseJWT(Class<T> type, String jwt) throws ExpiredJwtException, MalformedJwtException {
+    @Override
+    public <T> T parseJWT(Class<T> type, String jwt) throws ExpiredJwtException, MalformedJwtException {
         var parser = jwtParser();
         var claims = parser.parseClaimsJws(jwt);
         String json = claims.getBody().getSubject();
 
-        return ValueMapper.jsonAsObject(type, json);
+        return valueMapper.jsonAsObject(type, json);
     }
 
     @Bean
-    private static Key getKey() {
+    private Key getKey() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
     }
 
     @Bean
-    private static JwtParser jwtParser() {
+    private JwtParser jwtParser() {
         return Jwts.parserBuilder()
         .setSigningKey(getKey())
         .build();

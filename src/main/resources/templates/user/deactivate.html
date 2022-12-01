@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+<body>
+<div layout:fragment="content">
+    <div layout:insert="~{components :: form(title='Xóa tài khoản')}">
+        <div layout:fragment="form-errors">
+        </div>
+
+        <form
+                action="#"
+                class="text-sm flex flex-col w-2/3 gap-2"
+                layout:fragment="form-content"
+                method="post"
+                th:action="@{/user/delete}"
+        >
+            <div class="flex focus-within:ring-[#3498db] ring-2 rounded ring-transparent shadow-none bg-slate-700">
+                <label class="min-w-[2rem] flex justify-center items-center" for="username"><i
+                        class="fa-solid fa-envelope"></i></label>
+                <input class="bg-transparent p-1 px-1 shadow-none grow text-neutral-100 outline-none rounded caret-[#3498db]"
+                       id="username" name="username" placeholder="username" required type="text"/>
+            </div>
+
+            <div class="flex mt-8">
+                <input class="mx-auto rounded border-2 border-transparent hover:border-[#1e5154] hover:bg-slate-900 cursor-pointer w-full h-full p-1 bg-slate-700"
+                       type="submit" value="Yêu cầu đặt lại mật khẩu"/>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

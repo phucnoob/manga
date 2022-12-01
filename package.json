@@ -1,0 +1,37 @@
+{
+  "name": "web",
+  "version": "1.0.0",
+  "description": "Manga Reader is a backend-service for a reader website.",
+  "main": "index.js",
+  "scripts": {
+    "build:postcss": "postcss src/main/resources/public/css/tailwind.main.css -o target/classes/public/css/tailwind.dev.css",
+    "watch:postcss": "postcss src/main/resources/public/css/tailwind.main.css -o target/classes/public/css/tailwind.dev.css --watch",
+    "watch:html": "copy-and-watch --watch src/main/resources/templates/*.html target/classes/templates/",
+    "watch:js": "copy-and-watch --watch src/main/resources/public/js/**.js target/classes/public/js/",
+    "watch:manga-html": "copy-and-watch --watch src/main/resources/templates/manga/*.html target/classes/templates/manga/",
+    "watch:user-html": "copy-and-watch --watch src/main/resources/templates/user/*.html target/classes/templates/user/",
+    "watch:chapter-html": "copy-and-watch --watch src/main/resources/templates/chapter/*.html target/classes/templates/chapter/",
+    "dev": "npm-run-all --parallel watch:postcss watch:html watch:js watch:chapter-html watch:manga-html watch:user-html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phucnoob/manga-be.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/phucnoob/manga-be/issues"
+  },
+  "homepage": "https://github.com/phucnoob/manga-be#readme",
+  "devDependencies": {
+    "@tailwindcss/line-clamp": "^0.4.2",
+    "autoprefixer": "^10.4.13",
+    "copy-and-watch": "^0.1.6",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.4.19",
+    "postcss-cli": "^10.0.0",
+    "tailwind-scrollbar": "^2.0.1",
+    "tailwindcss": "^3.2.4"
+  }
+}

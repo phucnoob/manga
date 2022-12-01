@@ -6,16 +6,18 @@ import lombok.Setter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import uet.ppvan.mangareader.dtos.AuthUserDetail;
+import uet.ppvan.mangareader.services.impl.DefaultJWTService;
 
 import java.util.Collection;
 import java.util.Collections;
 
 /**
  * Custom Authentication to use JWT authentication method.
+ *
  * @see JwtFilter
  * @see JwtAuthenticationManager
  * @see JwtAuthenticationProvider
- * @see uet.ppvan.mangareader.utils.JwtUtils
+ * @see DefaultJWTService
  */
 @RequiredArgsConstructor
 @Getter

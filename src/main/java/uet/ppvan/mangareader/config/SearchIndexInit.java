@@ -1,5 +1,6 @@
 package uet.ppvan.mangareader.config;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.search.mapper.orm.Search;
@@ -10,7 +11,6 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.transaction.annotation.Transactional;
 import uet.ppvan.mangareader.models.Manga;
 
-import javax.persistence.EntityManager;
 
 /**
  * Only turn on the @Configuration if index has not been created.

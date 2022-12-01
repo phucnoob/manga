@@ -1,22 +1,23 @@
 package uet.ppvan.mangareader.controllers;
 
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import uet.ppvan.mangareader.dtos.AuthRequest;
-import uet.ppvan.mangareader.dtos.ProfileRequest;
 import uet.ppvan.mangareader.dtos.UserRequest;
 import uet.ppvan.mangareader.services.UserAuthService;
 import uet.ppvan.mangareader.services.UserService;
 import uet.ppvan.mangareader.utils.ResponseFactory;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Email;
 
 
 @RequiredArgsConstructor
 @RestController
+@Validated
 @RequestMapping("/api/v1/users")
 public class UserController {
 
@@ -29,24 +30,8 @@ public class UserController {
         return "user";
     }
 
-    @GetMapping("/profile")
-    public ResponseEntity<?> getProfile() {
-
-        var profile = userService.getProfile();
-
-        return ResponseEntity.ok(ResponseFactory.success(profile));
-    }
-
-    @PutMapping("/profile")
-    public ResponseEntity<?> updateProfile(@RequestBody ProfileRequest request) {
-
-        userService.updateProfile(request);
-
-        return ResponseEntity.ok().body("Ok");
-    }
-
     @PostMapping("/login")
-    public ResponseEntity<?> userLogin(@RequestBody AuthRequest request) {
+    public ResponseEntity<?> userLogin(@RequestBody @Valid AuthRequest request) {
 
         return ResponseEntity.ok(ResponseFactory.success(authService.validateUserLogin(request)));
     }

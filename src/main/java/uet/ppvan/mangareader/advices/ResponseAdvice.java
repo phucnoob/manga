@@ -3,6 +3,7 @@ package uet.ppvan.mangareader.advices;
 import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.core.AuthenticationException;
@@ -42,15 +43,16 @@ public class ResponseAdvice extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Default handler if {@link javax.validation.Valid @Valid} annotation failed.
-     * @param ex the exception
+     * Default handler if {@link jakarta.validation.Valid @Valid} annotation failed.
+     *
+     * @param ex      the exception
      * @param headers the headers to be written to the response
-     * @param status the selected response status
+     * @param status  the selected response status
      * @param request the current request
      * @return {@link ResponseEntity}
      */
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         List<String> details = new ArrayList<>();
 
         for (ObjectError error : ex.getBindingResult().getAllErrors()) {
@@ -60,21 +62,21 @@ public class ResponseAdvice extends ResponseEntityExceptionHandler {
         var response = new ErrorResponse("Data validation failed.", details);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(response);
+                   .body(response);
     }
 
     /**
      * Default handler if JSON can't be parsed in
      * {@link org.springframework.web.bind.annotation.RequestBody @RequestBody}.
-     * @param ex the exception
+     *
+     * @param ex      the exception
      * @param headers the headers to be written to the response
-     * @param status the selected response status
+     * @param status  the selected response status
      * @param request the current request
      * @return {@link ResponseEntity}
      */
     @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         String message = "Can't not parse requestBody";
         Throwable cause = ex;
         List<String> details = new ArrayList<>();
@@ -85,7 +87,7 @@ public class ResponseAdvice extends ResponseEntityExceptionHandler {
         var response = new ErrorResponse(message, details);
 
         return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)
-        .body(response);
+                   .body(response);
     }
 
     /**

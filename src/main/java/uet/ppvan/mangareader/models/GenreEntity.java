@@ -1,10 +1,10 @@
 package uet.ppvan.mangareader.models;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import uet.ppvan.mangareader.enums.Genre;
 
-import javax.persistence.*;
 import java.util.Set;
 
 @Entity

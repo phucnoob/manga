@@ -18,8 +18,8 @@ import uet.ppvan.mangareader.exceptions.EmailNotVerified;
 import uet.ppvan.mangareader.exceptions.PasswordNotMatchException;
 import uet.ppvan.mangareader.exceptions.VerifyEmailFailed;
 import uet.ppvan.mangareader.repositories.UserRepository;
+import uet.ppvan.mangareader.services.JWTService;
 import uet.ppvan.mangareader.services.UserAuthService;
-import uet.ppvan.mangareader.utils.JwtUtils;
 
 import java.time.Duration;
 
@@ -28,9 +28,12 @@ import java.time.Duration;
 @Slf4j
 public class UserAuthServiceImpl implements UserAuthService {
     private final UserRepository repository;
-    private final PasswordEncoder encoder;
+
+    private final PasswordEncoder passwordEncoder;
 
     private final JavaMailSender mailSender;
+
+    private final JWTService defaultJWTService;
 
     @Value("${config.host}")
     private String domainName;
@@ -41,7 +44,7 @@ public class UserAuthServiceImpl implements UserAuthService {
         var user = repository.findUserByUsername(request.username())
                        .orElseThrow(() -> new UsernameNotFoundException(String.format("%s doesn't exists", request.username())));
 
-        if (!encoder.matches(request.password(), user.getPassword())) {
+        if (!passwordEncoder.matches(request.password(), user.getPassword())) {
             throw PasswordNotMatchException.defaultValue();
         }
 
@@ -51,7 +54,7 @@ public class UserAuthServiceImpl implements UserAuthService {
 
         AuthUserDetail authUser = new AuthUserDetail(user.getId(), user.getUsername(), user.getRole().getRole());
 
-        return JwtUtils.generateJWT(authUser, Duration.ofDays(30));
+        return defaultJWTService.generateJWT(authUser, Duration.ofDays(30));
     }
 
     @Override
@@ -59,7 +62,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     public void sendVerificationEmail(String email) {
         var message = new SimpleMailMessage();
         message.setSubject("Verification email");
-        String token = JwtUtils.generateJWT(email, Duration.ofHours(24));
+        String token = defaultJWTService.generateJWT(email, Duration.ofHours(24));
 
         // FIXME: 11/19/22 Hard-code but i don't know how to fix.
         message.setText(String.format("%s/api/v1/users/verify?token=%s", domainName, token));
@@ -71,7 +74,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     @Override
     public void verifyEmail(String token) throws VerifyEmailFailed {
         try {
-            String email = JwtUtils.parseJWT(String.class, token);
+            String email = defaultJWTService.parseJWT(String.class, token);
             var user = repository.findUserByEmail(email)
                            .orElseThrow(() -> new VerifyEmailFailed("Email is not verified."));
 
@@ -90,7 +93,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     public void sendPasswordResetEmail(String email) {
         var message = new SimpleMailMessage();
         message.setSubject("Password Reset email");
-        String token = JwtUtils.generateJWT(email, Duration.ofHours(24));
+        String token = defaultJWTService.generateJWT(email, Duration.ofHours(24));
 
         // FIXME: 11/19/22 Hard-code but i don't know how to fix.
         message.setText(String.format("%s/api/v1/users/password-reset?email=%s", domainName, token));
@@ -102,7 +105,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     @Override
     public void resetPassword(String token, String password) {
         try {
-            String email = JwtUtils.parseJWT(String.class, token);
+            String email = defaultJWTService.parseJWT(String.class, token);
             repository.findUserByEmail(email)
             .ifPresent(user -> {
                 user.setPassword(password);

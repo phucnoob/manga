@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<body>
+<head>
+    <title>Đăng ký</title>
+</head>
+
+<div layout:fragment="content">
+    <div class="border-[#0c0a29] bg-[#0c0a29]  rounded border-2 flex h-full min-h-screen">
+        <div class="w-2/3 m-auto flex flex-col justify-center items-center" id="form-container">
+            <h2 class="text-4xl m-4 mb-6 text-left w-2/3">Đăng ký</h2>
+
+            <div class="flex flex-col pl-6 items-start rounded text-xs bg-[#eb4d4b] w-2/3 p-1 m-6 mb-2 ring-2 ring-transparent shadow-none"
+                 th:if="${registerError}" th:object="${registerForm}">
+                <p th:text="${message}">Email này không tồn tại</p>
+                <p th:errors="*{username}" th:if="${#fields.hasErrors('username')}">Username errors.</p>
+                <p th:errors="*{email}" th:if="${#fields.hasErrors('email')}">Email errors.</p>
+                <p th:errors="*{password}" th:if="${#fields.hasErrors('password')}">Password errors.</p>
+            </div>
+
+            <form action="#" class="text-sm flex flex-col w-2/3 gap-2" method="POST" th:action="@{/user/register}"
+                  th:object="${registerForm}">
+                <div class="flex focus-within:ring-[#3498db] ring-2 rounded ring-transparent shadow-none bg-slate-700">
+                    <label class="min-w-[2rem] flex justify-center items-center" for="username"><i
+                            class="fa-solid fa-user"></i></label>
+                    <input autofocus="autofocus"
+                           class="inset-0 bg-transparent p-1 px-1 grow text-neutral-100 outline-none rounded caret-[#3498db]"
+                           id="username" name="username" placeholder="username" required th:field="*{username}"
+                           type="text"/>
+                </div>
+
+                <div class="flex focus-within:ring-[#3498db] ring-2 rounded ring-transparent shadow-none bg-slate-700">
+                    <label class="min-w-[2rem] flex justify-center items-center" for="email"><i
+                            class="fa-solid fa-envelope"></i></label>
+                    <input class="bg-transparent p-1 px-1 shadow-none grow text-neutral-100 outline-none rounded caret-[#3498db]"
+                           id="email" name="email" placeholder="email" required th:field="*{email}" type="email"/>
+                </div>
+
+                <div class="flex focus-within:ring-[#3498db] ring-2 rounded ring-transparent shadow-none bg-slate-700">
+                    <label class="min-w-[2rem] flex justify-center items-center" for="password"><i
+                            class="fa-solid fa-lock"></i></label>
+                    <input class="bg-transparent p-1 px-1 shadow-none grow text-neutral-100 outline-none rounded caret-[#3498db]"
+                           id="password" maxlength="255" minlength="8" name="password" placeholder="password" required
+                           th:field="*{password}" type="password"/>
+                </div>
+
+
+                <div class="flex mt-8">
+                    <input class="mx-auto rounded border-2 border-transparent hover:border-[#1e5154] hover:bg-slate-900 cursor-pointer w-full h-full p-1 bg-slate-700"
+                           type="submit" value="Đăng ký"/>
+                </div>
+
+                <div class="flex justify-between text-xs py-6 px-1  ">
+                    <p>Đã có tài khoản?</p>
+                    <a class="hover:text-[#686de0] italic" href="#" th:href="@{/user/login}">Đăng nhập</a>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

@@ -1,6 +1,9 @@
 package uet.ppvan.mangareader.dtos;
 
-import java.util.Set;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
+import java.util.List;
 
 /**
  * DTO to post new {@link uet.ppvan.mangareader.models.Chapter Chapter}
@@ -9,7 +12,9 @@ import java.util.Set;
  * @param images Chapter images link
  */
 public record ChapterRequest(
+    @NotNull
     String name,
-    Set<String> images
+    @NotEmpty(message = "Chapter must have at least 1 images.")
+    List<String> images
 )
 { }

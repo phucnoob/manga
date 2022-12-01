@@ -1,55 +1,59 @@
 package uet.ppvan.mangareader.services.impl;
 
+import jakarta.persistence.Tuple;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import uet.ppvan.mangareader.dtos.ChapterOverview;
 import uet.ppvan.mangareader.dtos.MangaDetails;
 import uet.ppvan.mangareader.dtos.MangaOverview;
 import uet.ppvan.mangareader.dtos.MangaRequest;
+import uet.ppvan.mangareader.enums.Genre;
 import uet.ppvan.mangareader.exceptions.ResourceNotFound;
-import uet.ppvan.mangareader.models.GenreEntity;
+import uet.ppvan.mangareader.mappers.MangaMapper;
 import uet.ppvan.mangareader.models.Manga;
 import uet.ppvan.mangareader.repositories.ChapterRepository;
 import uet.ppvan.mangareader.repositories.GenreRepository;
 import uet.ppvan.mangareader.repositories.MangaRepository;
 import uet.ppvan.mangareader.services.MangaService;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.NoSuchElementException;
 
 @Service
 @AllArgsConstructor
 @Slf4j
+@Validated
 public class MangaServiceImpl implements MangaService {
     private final MangaRepository mangaRepository;
     private final GenreRepository genreRepository;
-
     private final ChapterRepository chapterRepository;
+
+    private final MangaMapper mangaMapper;
 
     @Override
     public Integer addNewManga(MangaRequest requestData) {
-        Manga manga = toManga(requestData);
+        Manga manga = mangaMapper.buildMangaEntity(requestData);
         mangaRepository.save(manga);
 
         return manga.getId();
     }
 
     @Override
-    public void updateManga(Integer id, MangaRequest requestData) {
-        Manga manga = toManga(requestData);
+    public Manga updateManga(Integer id, @Valid MangaRequest requestData) {
 
-        if (mangaRepository.existsById(id)) {
-            manga.setId(id);// update
-        } else {
-            // add new manga
+        if (!mangaRepository.existsById(id)) {
+            throw ResourceNotFound.mangaNotFound(id);
         }
 
-        mangaRepository.save(manga);
+        Manga manga = mangaMapper.buildMangaEntity(requestData);
+        manga.setId(id);// update
+
+        return mangaRepository.save(manga);
     }
 
     @Override
@@ -62,7 +66,7 @@ public class MangaServiceImpl implements MangaService {
         log.debug("MangaService::getAll(page = {}, size = {})", page, size);
         return mangaRepository.findAll(PageRequest.of(page, size,
                 Sort.by("lastUpdate").descending()))
-            .map(this::toDTO).getContent();
+                   .map(mangaMapper::buildMangaRequest).getContent();
     }
 
     @Override
@@ -76,8 +80,16 @@ public class MangaServiceImpl implements MangaService {
     @Override
     public MangaDetails getMangaById(Integer id) {
         log.debug("MangaService::getMangaById: id = {}", id);
-        return mangaRepository.findMangaById(id)
-        .orElseThrow(() -> ResourceNotFound.mangaNotFound(id));
+        try {
+            Tuple mangaData = mangaRepository.findMangaById(id).orElseThrow();
+            List<ChapterOverview> chapters = chapterRepository.findByManga_Id(id);
+            List<Genre> genres = genreRepository.findGenreEntitiesByMangaId(id);
+
+            return mangaMapper.buildMangaDetail(mangaData, chapters, genres);
+
+        } catch (NoSuchElementException ex) {
+            throw ResourceNotFound.mangaNotFound(id);
+        }
     }
 
     @Override
@@ -92,37 +104,4 @@ public class MangaServiceImpl implements MangaService {
         return chapterRepository.findByManga_Id(id);
     }
 
-
-    private MangaRequest toDTO(Manga manga) {
-        return new MangaRequest(
-            manga.getName(),
-            manga.getCover(),
-            manga.getDescription(),
-            manga.getAuthor(),
-            manga.getOtherName(),
-            manga.getStatus(),
-            manga.getGenres().stream().map(GenreEntity::getGenre).collect(Collectors.toSet())
-        );
-    }
-
-    private Manga toManga(MangaRequest mangaRequest) {
-        Manga manga = new Manga();
-        manga.setName(mangaRequest.name());
-        manga.setAuthor(mangaRequest.author());
-        manga.setDescription(mangaRequest.description());
-        manga.setCover(mangaRequest.cover());
-        manga.setStatus(mangaRequest.status());
-        manga.setOtherName(mangaRequest.otherName());
-        manga.setLastUpdate(LocalDateTime.now(ZoneOffset.UTC));
-        var genres = mangaRequest.genres().stream()
-            .map(g -> {
-                System.out.println(g);
-                return genreRepository.findGenreEntityByGenre(g);
-            })
-            .collect(Collectors.toSet());
-
-        manga.setGenres(genres);
-
-        return manga;
-    }
 }

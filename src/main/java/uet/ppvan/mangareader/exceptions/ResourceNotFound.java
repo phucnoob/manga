@@ -7,6 +7,10 @@ public class ResourceNotFound extends BaseException {
         super(message);
     }
 
+    public static ResourceNotFound userNotFound() {
+        return new ResourceNotFound("User is not found.");
+    }
+
     @Override
     public HttpStatus getStatus() {
         return HttpStatus.NOT_FOUND;
