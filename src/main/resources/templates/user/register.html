@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="en"
-      layout:decorate="layout"
+      layout:decorate="~{layout}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <body>
+<head>
+    <title>Đăng ký</title>
+</head>
+
 <div layout:fragment="content">
     <div class="border-[#0c0a29] bg-[#0c0a29]  rounded border-2 flex h-full min-h-screen">
         <div class="w-2/3 m-auto flex flex-col justify-center items-center" id="form-container">
@@ -12,7 +16,7 @@
                  th:if="${registerError}" th:object="${registerForm}">
                 <p th:text="${message}">Email này không tồn tại</p>
                 <p th:errors="*{username}" th:if="${#fields.hasErrors('username')}">Username errors.</p>
-                <p th:errors="*{email}" th:if="${#fields.hasErrors('username')}">Email errors.</p>
+                <p th:errors="*{email}" th:if="${#fields.hasErrors('email')}">Email errors.</p>
                 <p th:errors="*{password}" th:if="${#fields.hasErrors('password')}">Password errors.</p>
             </div>
 

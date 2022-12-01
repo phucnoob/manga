@@ -3,6 +3,7 @@ package uet.ppvan.mangareader.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import uet.ppvan.mangareader.models.Profile;
 import uet.ppvan.mangareader.models.User;
 
 import java.util.Collection;
@@ -45,6 +46,10 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return user.getVerified();
+    }
+
+    public Profile getProfile() {
+        return user.getProfile();
     }
 }

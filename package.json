@@ -4,7 +4,7 @@
   "description": "Manga Reader is a backend-service for a reader website.",
   "main": "index.js",
   "scripts": {
-    "build:postcss": "postcss src/main/resources/public/css/tailwind.main.css -o target/classes/public/css/tailwind.main.css",
+    "build:postcss": "postcss src/main/resources/public/css/tailwind.main.css -o target/classes/public/css/tailwind.dev.css",
     "watch:postcss": "postcss src/main/resources/public/css/tailwind.main.css -o target/classes/public/css/tailwind.dev.css --watch",
     "watch:html": "copy-and-watch --watch src/main/resources/templates/*.html target/classes/templates/",
     "watch:js": "copy-and-watch --watch src/main/resources/public/js/**.js target/classes/public/js/",

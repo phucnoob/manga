@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" layout:decorate="layout" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html lang="en" layout:decorate="~{layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org">
 
 <body>
@@ -63,7 +63,7 @@
                     <div class="border-x overflow-hidden rounded border-[#34495e]">
                         <th:block th:each="chap: ${manga.chapters}">
                             <a class="cursor-pointer hover:bg-[#144362] p-1 font-normal text-justify text-xs flex items-center odd:bg-[#34495e]"
-                               href="#" th:href="@{~/chapter/{id}(id=${chap.id})}">
+                               href="#" th:href="@{/chapter/{id}(id=${chap.id})}">
                                 <span th:text="${chap.name}">...</span>
                                 <span class="grow text-right" th:text="${chap.updatedDate}">...</span>
                             </a>

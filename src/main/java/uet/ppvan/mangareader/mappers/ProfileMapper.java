@@ -13,7 +13,7 @@ import uet.ppvan.mangareader.models.User;
 public class ProfileMapper {
     public Profile buildProfileEntity(User user, @Valid ProfileRequest request) {
 
-        if (user == null || user.getId() == null) {
+        if (user == null) {
             throw new IllegalArgumentException("User can't be null");
         }
 
@@ -21,7 +21,7 @@ public class ProfileMapper {
         profile.setAvatar(request.avatar());
         profile.setCover(request.cover());
         profile.setBio(request.bio());
-        profile.setId(0); // zero means no id
+        profile.setId(null); // zero means no id
 
         profile.setUser(user);
 

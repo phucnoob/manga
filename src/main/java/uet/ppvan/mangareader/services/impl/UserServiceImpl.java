@@ -1,7 +1,6 @@
 package uet.ppvan.mangareader.services.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import uet.ppvan.mangareader.dtos.ProfileRequest;
 import uet.ppvan.mangareader.dtos.UserRequest;
@@ -21,12 +20,6 @@ public class UserServiceImpl implements UserService {
 
     private final ProfileService profileService;
 
-
-    @Override
-    public User findUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findUserByUsername(username)
-            .orElseThrow(() -> new UsernameNotFoundException(String.format("%s is not found", username)));
-    }
 
     @Override
     public User createUser(UserRequest request) {
